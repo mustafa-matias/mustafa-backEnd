@@ -1,0 +1,29 @@
+[
+	{
+		"title": "Coca Cola",
+		"desctiption": "Gaseosa",
+		"price": 3,
+		"thumbnail": "images/coca.pjg",
+		"code": 100,
+		"stock": 450,
+		"id": 1
+	},
+	{
+		"title": "Galletas",
+		"desctiption": "Saladas",
+		"price": 100000,
+		"thumbnail": "images/galletas.pjg",
+		"code": 120,
+		"stock": 750,
+		"id": 3
+	},
+	{
+		"title": "Alfajor",
+		"desctiption": "Triple",
+		"price": 1,
+		"thumbnail": "images/alfajor.pjg",
+		"code": 50,
+		"stock": 500,
+		"id": 4
+	}
+]
