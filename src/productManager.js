@@ -1,5 +1,4 @@
 import fs from "fs";
-
 export default class ProductManager {
     constructor() {
         this.path = "./products.json";
@@ -15,9 +14,10 @@ export default class ProductManager {
         }
     }
 
-    addProduct = async (title, desctiption, price, thumbnail, code, stock) => {
-        if (title == null || desctiption == null || price == null || thumbnail == null || code == null || stock == null) {
+    addProduct = async (title, description, price, thumbnail, code, stock, status, category) => {
+        if (!title || !description || !price || !thumbnail || !code || !stock || !status || !category) {
             console.log('Debe llenar todos los campos');
+            return
         }
 
         const products = await this.getProducts();
@@ -29,7 +29,7 @@ export default class ProductManager {
             return;
         }
 
-        const product = { title, desctiption, price, thumbnail, code, stock }
+        const product = { title, description, price, thumbnail, code, stock, status, category }
 
         if (products.length === 0) {
             product.id = 1
@@ -50,7 +50,7 @@ export default class ProductManager {
             console.log(`El id: ${id} no existe!`);
             return;
         } else {
-            console.log(`El id: ${id} corresponde al producto:\n${product.title}!\nDescripción: ${product.desctiption}\nPrecio: ${product.price}\nimagen: ${product.thumbnail}\nStock: ${product.stock}\nCode: ${product.code}`);
+            console.log(`El id: ${id} corresponde al producto:\n${product.title}!\nDescripción: ${product.description}\nPrecio: ${product.price}\nimagen: ${product.thumbnail}\nStock: ${product.stock}\nCode: ${product.code}`);
         }
         return product;
     }
@@ -79,48 +79,19 @@ export default class ProductManager {
             console.log(`El Id: ${id} no existe!`);
             return;
         }
-        const indice = products.findIndex((product) => product.id == id);
-        products[indice] = { ...products[indice], ...update }
-        console.log(`Se acualizo el producto: ${products[indice].title}.`)
-        await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
+        if (update.id) {
+            console.log(`No se puede actualizar la categoria ID`);
+            return;
+        }
+        if (update.title || update.description || update.price || update.thumbnail || update.code || update.stock || update.status || update.category) {
+            const indice = products.findIndex((product) => product.id == id);
+            products[indice] = { ...products[indice], ...update }
+            console.log(`Se acualizo el producto: ${products[indice].title}.`)
+            await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));
+            return
+        } else {
+            console.log(`Campo inexiste para ser actualizado`);
+        }
     }
 }
-
-const testProducts = new ProductManager;
-
-const testFn = async () => {
-    await testProducts.addProduct(
-        "Coca Cola",
-        "Gaseosa",
-        3,
-        "images/coca.pjg",
-        100,
-        450
-    );
-    await testProducts.addProduct(
-        "Alfajor",
-        "Triple",
-        1,
-        "images/alfajor.pjg",
-        50,
-        500
-    );
-    await testProducts.addProduct(
-        "Galletas",
-        "Saladas",
-        5,
-        "images/galletas.pjg",
-        120,
-        750
-    );
-    await testProducts.getProducts();
-    await testProducts.getProductByid(1);
-    await testProducts.updateProduct(3, { price: 100000 });
-    await testProducts.deleteProductByid(2);
-};
-
-await testFn();
-
-
-
 

@@ -1,29 +1,24 @@
 [
 	{
-		"title": "Coca Cola",
-		"desctiption": "Gaseosa",
+		"title": "Pan",
+		"description": "Integral",
 		"price": 3,
-		"thumbnail": "images/coca.pjg",
-		"code": 100,
-		"stock": 450,
+		"thumbnail": "images/pan.pjg",
+		"code": "898989",
+		"stock": 50,
+		"status": true,
+		"category": "comida",
 		"id": 1
 	},
 	{
-		"title": "Galletas",
-		"desctiption": "Saladas",
-		"price": 100000,
-		"thumbnail": "images/galletas.pjg",
-		"code": 120,
-		"stock": 750,
-		"id": 3
-	},
-	{
-		"title": "Alfajor",
-		"desctiption": "Triple",
-		"price": 1,
-		"thumbnail": "images/alfajor.pjg",
-		"code": 50,
-		"stock": 500,
-		"id": 4
+		"title": "Coca Cola",
+		"description": "Refresco",
+		"price": 3,
+		"thumbnail": "images/cocaCola.pjg",
+		"code": "1000",
+		"stock": 150,
+		"status": true,
+		"category": "bebida",
+		"id": 2
 	}
 ]
