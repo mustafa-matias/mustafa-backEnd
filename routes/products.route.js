@@ -4,8 +4,8 @@ const router = Router();
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json())
 import ProductManager from "../src/productManager.js";
-
 const productManager = new ProductManager();
+import socketServer from "../src/app.js";
 
 router.get('/', async (req, res) => {
     const products = await productManager.getProducts();

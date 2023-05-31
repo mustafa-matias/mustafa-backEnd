@@ -1,10 +1,12 @@
 import fs from "fs";
 import ProductManager from "./productManager.js";
 const productManager = new ProductManager();
+import __dirname from "../utils.js";
+
 
 export default class CartManager {
     constructor() {
-        this.path = "./carts.json";
+        this.path = __dirname + "/file/carts.json";
     }
     getCarts = async () => {
         if (fs.existsSync(this.path)) {

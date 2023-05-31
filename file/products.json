@@ -1,0 +1,24 @@
+[
+	{
+		"title": "Pan",
+		"description": "Producto perecedero resultante de la cocción de una masa obtenida por la mezcla de harina de trigo, sal comestible y agua potable, fermentada por especies propias de la fermentación panaria",
+		"price": 3,
+		"thumbnail": "https://cdn.pixabay.com/photo/2016/03/26/18/23/bread-1281053_1280.jpg",
+		"code": "898989",
+		"stock": 50,
+		"status": true,
+		"category": "comida",
+		"id": 1
+	},
+	{
+		"title": "Coca-Cola",
+		"description": "Bebida azucarada gaseosa vendida a nivel mundial en más de doscientos países o territorios.",
+		"price": 3,
+		"thumbnail": "https://cdn.pixabay.com/photo/2015/01/08/04/18/box-592367_1280.jpg",
+		"code": "1000",
+		"stock": 150,
+		"status": true,
+		"category": "bebida",
+		"id": 2
+	}
+]

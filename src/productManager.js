@@ -1,7 +1,9 @@
 import fs from "fs";
+import __dirname from "../utils.js";
+
 export default class ProductManager {
     constructor() {
-        this.path = "./products.json";
+        this.path = __dirname + "/file/products.json";
     }
 
     getProducts = async () => {
