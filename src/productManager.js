@@ -1,5 +1,6 @@
 import fs from "fs";
 import __dirname from "../utils.js";
+import {v4 as uuidv4} from 'uuid';
 
 export default class ProductManager {
     constructor() {
@@ -32,12 +33,13 @@ export default class ProductManager {
         }
 
         const product = { title, description, price, thumbnail, code, stock, status, category }
+        product.id = uuidv4();
 
-        if (products.length === 0) {
-            product.id = 1
-        } else {
-            product.id = products[products.length - 1].id + 1;
-        }
+        // if (products.length === 0) {
+        //     // product.id = 1
+        // } else {
+        //     product.id = products[products.length - 1].id + 1;
+        // }
 
         products.push(product);
 

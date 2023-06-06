@@ -2,7 +2,7 @@ import fs from "fs";
 import ProductManager from "./productManager.js";
 const productManager = new ProductManager();
 import __dirname from "../utils.js";
-
+import {v4 as uuidv4} from 'uuid';
 
 export default class CartManager {
     constructor() {
@@ -22,11 +22,13 @@ export default class CartManager {
         const carts = await this.getCarts();
         let cart = {};
 
-        if (carts.length === 0) {
-            cart.id = 1
-        } else {
-            cart.id = carts[carts.length - 1].id + 1;
-        }
+        cart.id = uuidv4();
+
+        // if (carts.length === 0) {
+        //     cart.id = 1
+        // } else {
+        //     cart.id = carts[carts.length - 1].id + 1;
+        // }
         cart.products = [];
 
         carts.push(cart);
