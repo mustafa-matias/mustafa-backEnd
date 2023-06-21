@@ -3,7 +3,7 @@ import { Router } from "express";
 const router = Router();
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json())
-import ProductManager from "../src/productManager.js";
+import ProductManager from "../src/daos/mongoDb/productManager.class.js";
 const productManager = new ProductManager();
 
 router.get('/', async (req, res) => {
@@ -40,14 +40,15 @@ router.post('/', async (req, res) => {
         return;
     }
 
-    const products = await productManager.getProducts();
+    let products = await productManager.getProducts();
     const aux = await products.find((product) => product.code == code);
     if (aux) {
         res.send(`ya existe el codigo ${code} `);
         return;
     }
+    await productManager.addProduct({title, description, price, thumbnail, code, stock, status, category});
 
-    await productManager.addProduct(title, description, price, thumbnail, code, stock, status, category);
+    req.socketServer.sockets.emit('newProductRouter', newProduct)
     res.send(`se agregó ${title}`)
 })
 

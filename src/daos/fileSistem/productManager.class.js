@@ -1,10 +1,10 @@
 import fs from "fs";
-import __dirname from "../utils.js";
+import __dirname from "../../../utils.js";
 import {v4 as uuidv4} from 'uuid';
 
 export default class ProductManager {
     constructor() {
-        this.path = __dirname + "/file/products.json";
+        this.path = __dirname + "/files/products.json";
     }
 
     getProducts = async () => {

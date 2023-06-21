@@ -3,12 +3,14 @@ import handlebars from "express-handlebars";
 import __dirname from "../utils.js";
 import { Server } from "socket.io";
 
-import routerProducts from "../routes/products.route.js";
-import routerCarts from "../routes/carts.route.js";
+import routerProducts from "../routes/products.router.js";
+import routerCarts from "../routes/carts.router.js";
 import viewsRouter from "../routes/views.router.js"
+import ChatManager from "./daos/mongoDb/chatManager.class.js";
 
-import ProductManager from "./productManager.js";
+import ProductManager from "./daos/mongoDb/productManager.class.js";
 const productManager = new ProductManager();
+const chatManager = new ChatManager();
 
 const app = express();
 
@@ -19,27 +21,40 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-
 const expressServer = app.listen(8080, () => (console.log('Server puerto 8080')));
 const socketServer = new Server(expressServer);
-
-socketServer.on('connection', (socket) => {
-    console.log('nueva conexión');
-    console.log(socket.id);
-    socket.on("newProduct", async (data) => {
-        await productManager.addProduct(data.title, data.description, data.price, data.thumbnail, data.code, data.stock, true, data.category);
-        socketServer.emit("imprimir", data);
-    })
-})
 
 app.use(function (req, res, next) {
     req.socketServer = socketServer;
     next();
 })
+socketServer.on('connection', (socket) => {
+    console.log('nueva conexión');
+    console.log(socket.id);
+    socket.on("newProductForm", async (data) => {
+        const {title, description, price, thumbnail, code, stock, status, category} = data
+        await productManager.addProduct({title, description, price, thumbnail, code, stock, status: true, category});
+        socketServer.emit("imprimir", data);
+    })
+    socket.on("newProductRouter", async (data) => {
+        console.log("esta es data")
+        console.log(data)
+        socketServer.emit("postNewProduct", data);
+    })
+    socket.on("message",async(data)=>{
+        await chatManager.addMessage(data)
+        socketServer.emit("mostrarMesajes", data)
 
+    })
+    socket.on('autenticación',async(data)=>{
+        socket.broadcast.emit('newUserAlert', data)
+    })
+})
+
+app.use("/", viewsRouter);
 app.use("/api/products/", routerProducts);
 app.use("/api/carts/", routerCarts);
-app.use("/", viewsRouter);
+
 
 export default socketServer;
 

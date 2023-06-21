@@ -3,8 +3,8 @@ import { Router } from "express";
 const router = Router();
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json())
-import CartManager from "../src/cartManager.js";
-import ProductManager from "../src/productManager.js";
+import CartManager from "../src/daos/mongoDb/cartManager.class.js";
+import ProductManager from "../src/daos/mongoDb/productManager.class.js";
 
 const productManager = new ProductManager();
 const cartManager = new CartManager();
@@ -21,7 +21,17 @@ router.get('/:cid', async (req, res) => {
     if (!cartByID) {
         res.send(`El id N°${cid} no existe! `)
     } else {
-        res.send(cartByID.products);
+        res.send(cartByID);
+    }
+})
+
+router.get('/', async (req, res) => {
+    const carts = await cartManager.getCarts();
+    if (!carts) {
+        res.send(`No se encontraron carritos!`)
+        return
+    } else {
+        res.send(carts);
     }
 })
 

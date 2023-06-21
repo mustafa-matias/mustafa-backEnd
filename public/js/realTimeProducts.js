@@ -25,7 +25,7 @@ const objetoEvento = (e) =>{
 form.addEventListener('submit', (e) => {
     objetoEvento(e);
     e.preventDefault();
-    socket.emit('newProduct', newProduct)
+    socket.emit('newProductForm', newProduct)
     form.reset();
 })
 
@@ -59,6 +59,6 @@ socket.on('imprimir', (product) => {
     imprimir(product);
 });
 
-socket.om('postNewProduct', (product) => {
+socket.on('postNewProduct', (product) => {
     imprimir(product);
 });
