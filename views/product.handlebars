@@ -1,22 +1,24 @@
 <div>
-    <h2 class='text-light text-center fw-bold'>Productos Agregados</h2>
-    {{#each products}}
+    <h2 class='text-light text-center fw-bold'>Descripcion del producto</h2>
     <div class=" d-flex justify-content-center mb-3 rounded">
         <div class="card shadow-sm border-dark rounded w-25">
             <img src={{this.thumbnail}} alt={{this.title}} srcset="">
             <div class="card-body bg-secondary-subtle text-center">
                 <div class="d-flex justify-content-between">
                     <p class="text-center fw-bold text-uppercase">{{this.title}}</p>
+                    <p class="text-center fst-italic text-capitalize text-secondary">{{this.category}}</p>
                 </div>
                 <p class="card-text">{{this.description}}</p>
                 <div class="d-flex justify-content-between align-items-center">
                     <small class="text-body-secondary fw-bold">${{this.price}}</small>
-                    <div class="btn-group">
-                    </div>
+                    <form action="http://localhost:8080/api/carts/649a335414f21659a0add45b/product/{{this._id}}"
+                        method="POST">
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">Agregar al Carrito</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    {{/each}}
 </div>
-

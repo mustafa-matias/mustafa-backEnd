@@ -4,21 +4,35 @@ const router = Router();
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json())
 import ProductManager from "../src/daos/mongoDb/productManager.class.js";
+
 const productManager = new ProductManager();
 
 router.get('/', async (req, res) => {
-    const products = await productManager.getProducts();
-    const queryLimit = req.query.limit
-    if (queryLimit && queryLimit <= products.length) {
-        const productsLimits = await products.slice(0, queryLimit);
-        res.send(productsLimits);
+    let limit = Number(req.query.limit);
+    let page = Number(req.query.page);
+    let sort = Number(req.query.sort);
+    let filter = req.query.filter;
+    let filterValue = req.query.filterValue;
+
+    if(!limit){
+        limit = 10;
     }
-    if (queryLimit && queryLimit > products.length) {
-        res.send(`No existen ${queryLimit} productos. Solo existen ${products.length} producto/s`);
+
+    if(!page){
+        page = 1;
     }
-    if (!queryLimit) {
-        res.send(products);
+
+    if(!sort){
+        sort = 0;
     }
+
+    let products = await productManager.getProductsFilter(limit,page,sort,filter,filterValue);
+
+    if(products){
+        products.status = "success";
+    }
+
+    res.send(products);
 })
 
 router.get('/:pid', async (req, res) => {

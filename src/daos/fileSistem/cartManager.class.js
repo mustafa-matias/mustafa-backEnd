@@ -24,11 +24,6 @@ export default class CartManager {
 
         cart.id = uuidv4();
 
-        // if (carts.length === 0) {
-        //     cart.id = 1
-        // } else {
-        //     cart.id = carts[carts.length - 1].id + 1;
-        // }
         cart.products = [];
 
         carts.push(cart);

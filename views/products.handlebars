@@ -1,0 +1,45 @@
+{{#if products.isValid}}
+<h2 class='text-light text-center fw-bold'>Productos Agregados</h2>
+<div class="d-flex">
+    {{#each products.docs}}
+    <div class=" d-flex justify-content-center mb-3 rounded w-25 m-3">
+        <div class="card shadow-sm border-dark rounded w-100">
+            <a href="http://localhost:8080/product/{{this._id}}">
+                <img src={{this.thumbnail}} alt={{this.title}} srcset="" class="w-25">
+            </a>
+            <div class="card-body bg-secondary-subtle text-center">
+                <div class="d-flex justify-content-between">
+                    <p class="text-center fw-bold text-uppercase">{{this.title}}</p>
+                    <p class="text-center fst-italic text-capitalize text-secondary">{{this.category}}</p>
+                </div>
+                <form action="http://localhost:8080/api/carts/649a335414f21659a0add45b/product/{{this._id}}"
+                    method="POST">
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-sm btn-outline-secondary">Agregar al Carrito</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
+
+</div>
+<div>
+    <div class="text-center">
+        {{#if products.hasPrevPage}}
+        <a href={{products.prevLink}}>
+            << Anterior</a>
+                {{/if}}
+                &nbsp;<span class="text-light">
+                    {{products.page}}
+                </span>
+                &nbsp;
+                {{#if products.hasNextPage}}
+                <a href={{products.nextLink}}>Siguiente >></a>
+                {{/if}}
+    </div>
+    {{else}}
+    <h1>No hay productos para mostrar</h1>
+    {{/if}}
+</div>

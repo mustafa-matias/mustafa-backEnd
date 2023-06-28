@@ -9,6 +9,22 @@ export default class ProductManager {
         return products;
     }
 
+    getProductsFilter = async (limit, page, sort, filter = null, filterValue =  null) => {
+        
+        let whereOptions = {};
+
+        if(filter!="" && filterValue!=""){
+            whereOptions = {[filter]: filterValue};
+        }
+
+        let products = await productsModel.paginate(whereOptions,{
+            limit: limit, page: page, sort: { price: sort},
+        });
+
+        return products;
+    }
+
+
     addProduct = async (product) => {
         let result = await productsModel.create(product);
         return result;
@@ -16,7 +32,7 @@ export default class ProductManager {
 
     getProductByid = async (id) => {
         try {
-            let product = await productsModel.findOne({ _id: id });
+            const product = await productsModel.findOne({ _id: id });
             return product;
         } catch (error) {
             console.log(`No se encontró el ${id} requerido`);

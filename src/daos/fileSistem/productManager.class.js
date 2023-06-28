@@ -35,12 +35,6 @@ export default class ProductManager {
         const product = { title, description, price, thumbnail, code, stock, status, category }
         product.id = uuidv4();
 
-        // if (products.length === 0) {
-        //     // product.id = 1
-        // } else {
-        //     product.id = products[products.length - 1].id + 1;
-        // }
-
         products.push(product);
 
         await fs.promises.writeFile(this.path, JSON.stringify(products, null, '\t'));

@@ -3,7 +3,8 @@
     <form class='w-50 mx-auto' id='form-product' action='/api/guardar' method='post'>
 
         <div class='input-group mb-3 border border-black rounded'>
-            <label for="producto" class='input-group-text bg-secondary fw-bold border border-black w-25'>Producto</label>
+            <label for="producto"
+                class='input-group-text bg-secondary fw-bold border border-black w-25'>Producto</label>
             <input type='text' id='producto' name='title' class='form-control border border-black'
                 placeholder='Nombre del producto' autofocus aria-label='title' />
         </div>
@@ -22,7 +23,8 @@
         </div>
 
         <div class='input-group mb-3 border border-black rounded'>
-            <label for="imagen" class='input-group-text bg-secondary fw-bold border border-black w-25'>URL Imagen</label>
+            <label for="imagen" class='input-group-text bg-secondary fw-bold border border-black w-25'>URL
+                Imagen</label>
             <input type='text' id='imagen' name='thumbnail' class='form-control border border-black'
                 placeholder='https://.../' />
         </div>
@@ -35,11 +37,13 @@
 
         <div class='input-group mb-3 border border-black rounded'>
             <label for="Stock" class='w-25 input-group-text bg-secondary fw-bold border border-black w-25'>Stock</label>
-            <input type='number' id='Stock' name='thumbnail' class=' form-control border border-black' placeholder='0' />
+            <input type='number' id='Stock' name='thumbnail' class=' form-control border border-black'
+                placeholder='0' />
         </div>
 
         <div class='input-group mb-3 border border-black rounded'>
-            <label for="Categoría" class='input-group-text bg-secondary fw-bold border border-black w-25'>Categoría</label>
+            <label for="Categoría"
+                class='input-group-text bg-secondary fw-bold border border-black w-25'>Categoría</label>
             <input type='text' id='Categoría' name='thumbnail' class='form-control border border-black'
                 placeholder='Indique la Categoría...' />
         </div>
@@ -56,13 +60,12 @@
 <div>
     <h2 class='text-light text-center fw-bold'>Productos Agregados</h2>
     <div id="contenedorProducts" class="  mb-3 rounded">
-    {{#each products}}
+        {{#each products}}
         <div class="card shadow-sm border-dark rounded w-25 mx-auto mb-2 mt-2">
             <img src={{this.thumbnail}} alt={{this.title}} srcset="">
             <div class="card-body bg-secondary-subtle text-center">
                 <div class="d-flex justify-content-between">
                     <p class="text-center fw-bold text-uppercase">{{this.title}}</p>
-                    {{!-- <p class="text-center fst-italic text-capitalize text-secondary">{{this.category}}</p> --}}
                 </div>
                 <p class="card-text">{{this.description}}</p>
                 <div class="d-flex justify-content-between align-items-center">
@@ -73,7 +76,7 @@
                 </div>
             </div>
         </div>
-    {{/each}}
+        {{/each}}
     </div>
 </div>
-
+<script src="/js/realTimeProducts.js"></script>

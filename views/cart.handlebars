@@ -1,0 +1,16 @@
+    <h2 class='text-light text-center fw-bold'>Carrito Id: {{this._id}} </h2>
+    <div class="d-flex">
+        {{#each this.products}}
+        <div class=" d-flex justify-content-center mb-3 rounded w-25 m-3">
+            <div class="card shadow-sm border-dark rounded w-100">
+                    <img src={{this.product.thumbnail}} alt={{this.product.title}} srcset="" class="w-100">
+                <div class="card-body bg-secondary-subtle text-center">
+                    <div class="d-flex justify-content-between">
+                        <p class="text-center fw-bold text-uppercase">{{this.product.title}}</p>
+                        <p class="text-center fst-italic text-capitalize text-secondary">{{this.product.category}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</div>

@@ -2,7 +2,8 @@ import express from "express";
 import { Router } from "express";
 const router = Router();
 router.use(express.urlencoded({ extended: true }));
-router.use(express.json())
+router.use(express.json());
+
 import CartManager from "../src/daos/mongoDb/cartManager.class.js";
 import ProductManager from "../src/daos/mongoDb/productManager.class.js";
 
@@ -38,19 +39,37 @@ router.get('/', async (req, res) => {
 router.post('/:cid/product/:pid', async (req, res) => {
     const cid = req.params.cid;
     const pid = req.params.pid;
-    await cartManager.addProductToCart(cid, pid);
-    const productById = await productManager.getProductByid(pid);
-    const cartById = await cartManager.getCartByID(cid);
-
-    if (!cartById) {
-        res.send(`No existe el carrito N°${cid}`)
-        return
-    }
-    if (!productById) {
-        res.send(`No existe el producto N°${pid}`)
-        return
-    }
+    await cartManager.addProductToCart(cid,pid)
     res.send("Se cargo de forma exitosa")
 })
+
+router.delete("/:cid/product/:pid", async (req, res) => {
+    let cartId = req.params.cid;
+    let productId = req.params.pid;
+    await cartManager.deleteProductFromCart(cartId, productId);
+    res.send({ status: "success" });
+});
+
+router.delete("/:cid", async (req, res) => {
+    let cartId = req.params.cid;
+    await cartManager.deleteAllProductsFromCart(cartId);
+    res.send({ status: "success"});
+});
+
+router.put('/:cid', async (req,res)=>{
+    let cartId = req.params.cid;
+    let newProducts = req.body;
+    await cartManager.actualizarCarrito(cartId, newProducts);
+    res.send({ status: "success"});
+    });
+
+router.put('/:cid/products/:pid', async (req,res)=>{
+    let cartId = req.params.cid;
+    let productId = req.params.pid;
+    let quantity = req.body.quantity;
+
+    await cartManager.actualizarCantidadProducto(cartId, productId, quantity);
+    res.send({ status: "success"});
+});
 
 export default router;
