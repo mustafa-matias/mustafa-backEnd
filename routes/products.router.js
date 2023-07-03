@@ -14,21 +14,21 @@ router.get('/', async (req, res) => {
     let filter = req.query.filter;
     let filterValue = req.query.filterValue;
 
-    if(!limit){
+    if (!limit) {
         limit = 10;
     }
 
-    if(!page){
+    if (!page) {
         page = 1;
     }
 
-    if(!sort){
+    if (!sort) {
         sort = 0;
     }
 
-    let products = await productManager.getProductsFilter(limit,page,sort,filter,filterValue);
+    let products = await productManager.getProductsFilter(limit, page, sort, filter, filterValue);
 
-    if(products){
+    if (products) {
         products.status = "success";
     }
 
@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
         res.send(`ya existe el codigo ${code} `);
         return;
     }
-    await productManager.addProduct({title, description, price, thumbnail, code, stock, status, category});
+    await productManager.addProduct({ title, description, price, thumbnail, code, stock, status, category });
 
     req.socketServer.sockets.emit('newProductRouter', newProduct)
     res.send(`se agregó ${title}`)

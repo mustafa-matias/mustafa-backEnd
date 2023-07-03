@@ -2,8 +2,8 @@ const socket = io.connect();
 
 const form = document.getElementById('form-product');
 
-let newProduct ={};
-const objetoEvento = (e) =>{
+let newProduct = {};
+const objetoEvento = (e) => {
     const titleProduct = e.target[0].value;
     const descriptionProduct = e.target[1].value;
     const priceProduct = e.target[2].value;
@@ -29,10 +29,10 @@ form.addEventListener('submit', (e) => {
     form.reset();
 })
 
-const imprimir = (product) =>{
+const imprimir = (product) => {
     const contenedorProducts = document.getElementById("contenedorProducts");
     const divProduct = document.createElement("div");
-    divProduct.classList.add("card", "shadow-sm", "border-dark", "rounded", "w-25","mx-auto","mb-2","mt-2");
+    divProduct.classList.add("card", "shadow-sm", "border-dark", "rounded", "w-25", "mx-auto", "mb-2", "mt-2");
 
     const estructuraProducto =
         `

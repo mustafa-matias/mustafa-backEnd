@@ -7,21 +7,20 @@ import { cartModel } from "../src/daos/mongoDb/models/carts.model.js";
 
 router.get('/', async (req, res) => {
     const products = await productManager.getProducts();
-    res.render('index', {products});
+    res.render('index', { products, title: 'Products' });
 })
 
 router.get('/products', async (req, res) => {
     let page = parseInt(req.query.page);
-    if(!page) page=1;
+    const usuario = req.session.user;
+    if (!page) page = 1;
 
-    let products = await productsModel.paginate({},{page,limit:5,lean:true})
-    products.prevLink = products.hasPrevPage?`http://localhost:8080/products?page=${products.prevPage}`:'';
-    products.nextLink = products.hasNextPage?`http://localhost:8080/products?page=${products.nextPage}`:'';
-    products.isValid= !(page<=0||page>products.totalPages);
+    let products = await productsModel.paginate({}, { page, limit: 4, lean: true })
+    products.prevLink = products.hasPrevPage ? `http://localhost:8080/products?page=${products.prevPage}` : '';
+    products.nextLink = products.hasNextPage ? `http://localhost:8080/products?page=${products.nextPage}` : '';
+    products.isValid = !(page <= 0 || page > products.totalPages);
 
-    console.log(products)
-
-    res.render('products', {products});
+    res.render('products', { products, title: 'Products', usuario });
 })
 
 router.get('/product/:pid', async (req, res) => {
@@ -30,21 +29,28 @@ router.get('/product/:pid', async (req, res) => {
     res.render('product', product)
 })
 
-router.get('/carts/:cid', async (req, res) => {
+router.get('/api/carts/:cid', async (req, res) => {
     const cid = req.params.cid;
-    const cart = await cartModel.findOne({_id: cid}).populate('products.product').lean();
+    const cart = await cartModel.findOne({ _id: cid }).populate('products.product').lean();
     res.render('cart', cart)
 })
 
-router.get('/realTimeProducts', async(req, res)=>{
+router.get('/realTimeProducts', async (req, res) => {
     const products = await productManager.getProducts();
-    res.render('realTimeProducts',{products})
+    res.render('realTimeProducts', { products, title: 'Real Time Products' })
 })
 
-router.get('/chat',(req,res)=>{
-    res.render('chat');
+router.get('/chat', (req, res) => {
+    res.render('chat', { title: 'Chat' });
 })
 
-router.post('')
+router.get('/api/sessions/register', (req, res) => {
+    res.render('register', { title: 'Register' });
+})
+
+router.get('/api/sessions/login', (req, res) => {
+    res.render('login', { title: 'login' });
+})
+
 
 export default router;

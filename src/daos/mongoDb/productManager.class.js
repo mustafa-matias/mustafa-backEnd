@@ -2,23 +2,22 @@ import mongoose from "mongoose";
 import { productsModel } from "./models/products.model.js";
 
 export default class ProductManager {
-    connection = mongoose.connect('mongodb+srv://mustafa-matias:8XjhYJrr7ajSjjg2@cluster0.3l5b4gw.mongodb.net/?retryWrites=true&w=majority');
 
     getProducts = async () => {
         let products = await productsModel.find().lean();
         return products;
     }
 
-    getProductsFilter = async (limit, page, sort, filter = null, filterValue =  null) => {
-        
+    getProductsFilter = async (limit, page, sort, filter = null, filterValue = null) => {
+
         let whereOptions = {};
 
-        if(filter!="" && filterValue!=""){
-            whereOptions = {[filter]: filterValue};
+        if (filter != "" && filterValue != "") {
+            whereOptions = { [filter]: filterValue };
         }
 
-        let products = await productsModel.paginate(whereOptions,{
-            limit: limit, page: page, sort: { price: sort},
+        let products = await productsModel.paginate(whereOptions, {
+            limit: limit, page: page, sort: { price: sort },
         });
 
         return products;
