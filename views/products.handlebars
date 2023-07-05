@@ -7,13 +7,10 @@
 
 {{#if usuario}}
 <div class="d-flex justify-content-between text-light bg-success">
-    <span class="ms-2">Bienvenido <span class="fw-bold text-uppercase">{{usuario.name}}</span></span>
-    <span class="ms-2">{{usuario.email}}</span>
-    {{#if usuario}}
-    <span class="mr-2 fw-semibold">ADMINISTRADOR</span>
-    {{else}}
-    <span class="mr-2 fw-semibold">USUARIO</span>
-    {{/if}}
+    <span class="ms-2">Bienvenido <span class="fw-bold text-uppercase fs-5 ">{{usuario.name}} </span> <span
+            class=" ">({{usuario.age}})</span></span>
+    <span><span class="ms-2 fst-italic">{{usuario.email}}</span>
+        <span class="mr-2 fw-semibold">[ {{usuario.rol}} ]</span></span>
 </div>
 {{/if}}
 

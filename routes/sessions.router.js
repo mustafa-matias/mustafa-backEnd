@@ -7,19 +7,21 @@ router.post('/register', async (req, res) => {
     const exist = await userModel.findOne({ email: email })
 
     if (exist) {
-        return res.redirect('/api/sessions/login');
+            return res.redirect('/api/sessions/login');
     }
 
     await userModel.create({
         firtName, lastName, email, age, password
     })
+
     req.session.user = {
         name: firtName + " " + lastName,
         email: email,
         age: age,
+        rol: (email == 'admincoder@coder.com') ? 'Admin' : 'Usuario'
     }
-    res.redirect('/products');
-    return
+    return res.redirect('/products');
+
 })
 
 router.post('/login', async (req, res) => {
@@ -30,10 +32,9 @@ router.post('/login', async (req, res) => {
         name: user.firtName + " " + user.lastName,
         email: user.email,
         age: user.age,
+        rol: email == 'admincoder@coder.com' ? (user.rol = 'Admin') : (user.rol = 'Usuario')
     };
     res.send({ status: "success", message: req.session.user });
 })
-
-
 
 export default router;

@@ -13,18 +13,25 @@ registerForm.addEventListener('submit', e => {
         firtName, lastName, email, age, password
     };
     registerForm.reset();
-    
+
     fetch('/api/sessions/register', {
         method: 'POST',
+        redirect: 'follow',
         body: JSON.stringify(newUsuario),
         headers: {
             'Content-Type': 'application/json',
         }
-    }).then(result => {
-        if (result.status === 200) {
-            console.log(result)
-            // window.location.replace('/products');
+    }).then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;
         }
-    }
-    )
-})
+    })
+        .catch(function (err) {
+            console.info(err + " url: " + url);
+        });
+}
+)
+
+
+
+
