@@ -1,18 +1,11 @@
 import { Router } from "express";
 const router = Router();
 import userModel from "../src/daos/mongoDb/models/users.model.js";
+import { createHash, isValidPassword } from "../utils.js";
+import passport from "passport";
 
-router.post('/register', async (req, res) => {
+router.post('/register', passport.authenticate('register'), async (req, res) => {
     const { firtName, lastName, email, age, password } = req.body;
-    const exist = await userModel.findOne({ email: email })
-
-    if (exist) {
-            return res.redirect('/api/sessions/login');
-    }
-
-    await userModel.create({
-        firtName, lastName, email, age, password
-    })
 
     req.session.user = {
         name: firtName + " " + lastName,
@@ -24,17 +17,28 @@ router.post('/register', async (req, res) => {
 
 })
 
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    const user = await userModel.findOne({ email: email, password: password });
-    if (!user) return res.redirect('/api/login')
+router.post('/login', passport.authenticate('login'), async (req, res) => {
+    if (!req.user) return res.status(400).send({ status: 'error', error: 'Invalid credentials' })
+
     req.session.user = {
-        name: user.firtName + " " + user.lastName,
-        email: user.email,
-        age: user.age,
-        rol: email == 'admincoder@coder.com' ? (user.rol = 'Admin') : (user.rol = 'Usuario')
+        name: req.user.firtName + " " + req.user.lastName,
+        email: req.user.email,
+        age: req.user.age,
+        rol: req.user.email == 'admincoder@coder.com' ? ('Admin') : ('Usuario')
     };
     res.send({ status: "success", message: req.session.user });
+})
+
+router.get('/github', passport.authenticate('github', { scope: ['user: email'] }), async (req, res) => { });
+
+router.get('/githubcallback', passport.authenticate('github'), async (req, res) => {
+    req.session.user = {
+        name: req.user.firtName,
+        email: req.user.email,
+        age: req.user.age,
+        rol: req.user.email == 'admincoder@coder.com' ? ('Admin') : ('Usuario')
+    };
+    res.redirect('/products');
 })
 
 export default router;
