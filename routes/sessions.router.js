@@ -1,20 +1,19 @@
 import { Router } from "express";
 const router = Router();
-import userModel from "../src/daos/mongoDb/models/users.model.js";
-import { createHash, isValidPassword } from "../utils.js";
 import passport from "passport";
 
 router.post('/register', passport.authenticate('register'), async (req, res) => {
-    const { firtName, lastName, email, age, password } = req.body;
+    const { firtName, lastName, email, age, role } = req.body;
 
     req.session.user = {
         name: firtName + " " + lastName,
         email: email,
         age: age,
-        rol: (email == 'admincoder@coder.com') ? 'Admin' : 'Usuario'
+        role: role,
+        cart: req.user.cart
     }
-    return res.redirect('/products');
 
+    return res.redirect('/products');
 })
 
 router.post('/login', passport.authenticate('login'), async (req, res) => {
@@ -24,7 +23,8 @@ router.post('/login', passport.authenticate('login'), async (req, res) => {
         name: req.user.firtName + " " + req.user.lastName,
         email: req.user.email,
         age: req.user.age,
-        rol: req.user.email == 'admincoder@coder.com' ? ('Admin') : ('Usuario')
+        role: req.user.role,
+        cart: req.user.cart
     };
     res.send({ status: "success", message: req.session.user });
 })
@@ -36,9 +36,17 @@ router.get('/githubcallback', passport.authenticate('github'), async (req, res) 
         name: req.user.firtName,
         email: req.user.email,
         age: req.user.age,
-        rol: req.user.email == 'admincoder@coder.com' ? ('Admin') : ('Usuario')
+        role: req.user.role,
+        cart: req.user.cart
     };
     res.redirect('/products');
+})
+
+router.get('/logout',(req,res)=>{
+    req.session.destroy(err=>{
+        if(!err) res.redirect('/api/sessions/login');
+        else res.send({status: 'logout ERROR', body: err});
+    })
 })
 
 export default router;

@@ -1,4 +1,22 @@
 <link rel="stylesheet" href="/css/product.css">
+
+{{#if usuario}}
+<div class="d-flex justify-content-between text-light bg-success">
+    <span class="ms-2"><span class="fw-bold text-uppercase fs-5 ">{{usuario.name}} </span> <span
+            class=" ">({{usuario.age}})</span></span>
+    <span><span class="ms-2 fst-italic">{{usuario.email}}</span>
+        <span class="mr-2 fw-semibold text-capitalize">[ {{usuario.role}} ]</span>
+        <a href="/api/carts/{{usuario.cart}}" class="btn btn-warning border border-solid border-dark">🛒</a>
+        <a href="/api/sessions/logout" class="btn btn-danger">LogOut</a>
+    </span>
+</div>
+{{else}}
+<div class="d-flex justify-content-end text-light bg-dark m-2">
+    <a href="/api/sessions/login" class="btn btn-success mx-2">Login</a>
+    <a href="/api/sessions/register" class="btn btn-primary">Register</a>
+</div>
+{{/if}}
+
 <div class="container mt-5">
     <div class="card">
         <div class="container-fliud">
@@ -6,28 +24,41 @@
                 <div class="preview col-md-6">
 
                     <div class="preview-pic tab-content">
-                        <div class="tab-pane active" id="pic-1"><img src="{{this.thumbnail}}" /></div>
+                        <div class="tab-pane active" id="pic-1"><img src="{{product.thumbnail}}" /></div>
                     </div>
                 </div>
                 <div class="details col-md-6">
                     <div class="d-flex justify-content-between">
-                        <span class="product-title">{{this.title}}</span>
-                        <span class="fst-italic text-capitalize text-secondary">{{this.category}}</span>
+                        <span class="product-title">{{product.title}}</span>
+                        <span class="fst-italic text-capitalize text-secondary">{{product.category}}</span>
                     </div>
-                    <p class="product-description">{{this.description}}</p>
-                    <h4 class="price">Price: <span>{{this.price}}</span></h4>
-                    <p class="vote"><strong>Stock:</strong> {{this.stock}} unidades </p>
+                    <p class="product-description">{{product.description}}</p>
+                    <h4 class="price">Price: <span>{{product.price}}</span></h4>
+                    <p class="vote"><strong>Stock:</strong> {{product.stock}} unidades </p>
                     <div class="action d-flex justify-content-between">
                     </div>
-                    <form action="http://localhost:8080/api/carts/64a186926c002f512551ea96/product/{{this._id}}"
-                        method="POST">
-                        <div class="btn-group d-flex ">
-                            <button class="add-to-cart btn btn-default" type="submit">add to Cart</button>
-                            <a href="/products" class="btn btn-primary "><span
-                                    class="mt-2 d-flex justify-content-center align-items-center">VOLVER A
-                                    PRODUCTOS</span></a>
-                        </div>
-                    </form>
+                    {{#if usuario}}
+                    <div class="d-flex justify-content-around">
+                        <span>
+                            <form action="http://localhost:8080/api/carts/{{usuario.cart}}/product/{{product._id}}"
+                                method="POST">
+                                <button class="btn btn-success">Agregar al carrito</button>
+                            </form>
+                        </span>
+                        <span>
+                            <a href="/products" class="btn btn-primary ">Volver a productos</a>
+                        </span>
+                    </div>
+                    {{else}}
+                    <div class="d-flex justify-content-around">
+                        <span>
+                            <a href="/api/sessions/login" class="btn btn-danger">Logerte para agregar</a>
+                        </span>
+                        <span>
+                            <a href="/products" class="btn btn-primary ">Volver a productos</a>
+                        </span>
+                    </div>
+                    {{/if}}
                 </div>
             </div>
         </div>

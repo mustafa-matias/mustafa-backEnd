@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 
 const collection = 'users';
 
@@ -22,6 +22,17 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    role: {
+        type: String,
+        default: 'user'
+    },
+    // cart: {
+    //     type: String,
+    // }
+    cart: {
+        type: Schema.Types.ObjectId,
+        ref: "cart"
     }
 })
 

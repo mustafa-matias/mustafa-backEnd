@@ -19,6 +19,7 @@ import MongoStore from "connect-mongo";
 
 import passport from "passport";
 import initializeStrategy from "./config/passport.config.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -69,6 +70,7 @@ app.use(session({
     saveUninitialized: true,
 }));
 
+app.use(cookieParser("palabraSecretaCookie"));
 initializeStrategy();
 app.use(passport.initialize())
 app.use("/", viewsRouter);

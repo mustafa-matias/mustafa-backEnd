@@ -2,7 +2,7 @@ const loginForm = document.getElementById('loginForm');
 
 loginForm.addEventListener('submit', e => {
     e.preventDefault();
-    const email = loginForm[0].value;
+    const email = loginForm[0].value.toLowerCase();
     const password = loginForm[1].value;
 
     let newLogin = { email, password }

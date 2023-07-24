@@ -12,21 +12,23 @@ router.get('/', async (req, res) => {
 
 router.get('/products', async (req, res) => {
     let page = parseInt(req.query.page);
-    const usuario = req.session.user;
+    let usuario = req.session.user;
+    
     if (!page) page = 1;
-
+    
     let products = await productsModel.paginate({}, { page, limit: 4, lean: true })
     products.prevLink = products.hasPrevPage ? `http://localhost:8080/products?page=${products.prevPage}` : '';
     products.nextLink = products.hasNextPage ? `http://localhost:8080/products?page=${products.nextPage}` : '';
     products.isValid = !(page <= 0 || page > products.totalPages);
-
+    
     res.render('products', { products, title: 'Products', usuario });
 })
 
 router.get('/product/:pid', async (req, res) => {
+    const usuario = req.session.user;
     let pid = req.params.pid;
     let product = await productsModel.findOne({ _id: pid }).lean();
-    res.render('product', product)
+    res.render('product', {product, title: product.title, usuario})
 })
 
 router.get('/api/carts/:cid', async (req, res) => {
@@ -51,6 +53,5 @@ router.get('/api/sessions/register', (req, res) => {
 router.get('/api/sessions/login', (req, res) => {
     res.render('login', { title: 'login' });
 })
-
 
 export default router;

@@ -4,7 +4,7 @@ const router = Router();
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 
-import CartManager from "../src/daos/mongoDb/cartManager.class.js";
+import CartManager from "../src/daos/fileSistem/cartManager.class.js";
 const cartManager = new CartManager();
 
 router.post('/', async (req, res) => {
@@ -16,6 +16,7 @@ router.post('/', async (req, res) => {
 router.get('/:cid', async (req, res) => {
     const cid = req.params.cid;
     const cartByID = await cartManager.getCartByID(cid);
+
     if (!cartByID) {
         res.send(`El id N°${cid} no existe! `)
     } else {

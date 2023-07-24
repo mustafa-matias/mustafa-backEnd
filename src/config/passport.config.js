@@ -3,21 +3,27 @@ import local from "passport-local";
 import userModel from "../daos/mongoDb/models/users.model.js";
 import { createHash, isValidPassword } from "../../utils.js";
 import GitHubStrategy from 'passport-github2';
+import CartManager from "../daos/fileSistem/cartManager.class.js";
+
+const cartManager = new CartManager();
 
 const LocalStrategy = local.Strategy;
 
 const initializeStrategy = () => {
     passport.use('register', new LocalStrategy(
         { passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
-            const { firtName, lastName, email, age } = req.body;
+            const { firtName, lastName, email, age, role } = req.body;
             try {
                 let user = await userModel.findOne({ email: username });
                 if (user) {
                     console.log('Usuario Existente');
                     return done(null, false);
                 }
+
+                const cart = await cartManager.addCart();
+
                 const newUser = {
-                    firtName, lastName, email, age, password: createHash(password)
+                    firtName, lastName, email, age, password: createHash(password), role, cart: cart._id
                 }
                 let result = await userModel.create(newUser);
                 return done(null, result)
@@ -53,15 +59,17 @@ const initializeStrategy = () => {
         { clientID: 'Iv1.2fd3123f38d67d52', clientSecret: 'eba6a01cef014aefc855e31f2f71cf658196fa49', callbackURL: 'http://localhost:8080/api/sessions/githubcallback' },
         async (accessToken, refreshToken, profile, done) => {
             try {
-                console.log(profile);
                 let user = await userModel.findOne({ email: profile.profileUrl });
                 if (!user) {
+                    const cart = await cartManager.addCart();
                     let newUser = {
                         firtName: profile.username,
                         lastName: ' ',
                         age: 18,
                         email: profile.profileUrl,
-                        password: ' '
+                        password: ' ',
+                        role: 'user',
+                        cart: cart
                     }
                     let result = await userModel.create(newUser);
                     done(null, result);

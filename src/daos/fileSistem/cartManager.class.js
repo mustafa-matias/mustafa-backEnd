@@ -1,78 +1,84 @@
-import fs from "fs";
-import ProductManager from "./productManager.class.js";
-const productManager = new ProductManager();
-import __dirname from "../../../utils.js";
-import {v4 as uuidv4} from 'uuid';
+import { cartModel } from "../mongoDb/models/carts.model.js";
+import ProductManager from "../mongoDb/productManager.class.js";
 
 export default class CartManager {
-    constructor() {
-        this.path = __dirname + "/files/carts.json";
-    }
+
+    productManager = new ProductManager();
+
     getCarts = async () => {
-        if (fs.existsSync(this.path)) {
-            const data = await fs.promises.readFile(this.path, "utf-8");
-            const carts = JSON.parse(data);
-            return carts;
-        } else {
-            return [];
-        }
-    }
-
-    addCart = async () => {
-        const carts = await this.getCarts();
-        let cart = {};
-
-        cart.id = uuidv4();
-
-        cart.products = [];
-
-        carts.push(cart);
-
-        await fs.promises.writeFile(this.path, JSON.stringify(carts, null, '\t'));
+        const carts = await cartModel.find();
         return carts;
     }
 
+    addCart = async () => {
+        const cart = await cartModel.create({ products: [] });
+        return cart;
+    }
+
     getCartByID = async (id) => {
-        const carts = await this.getCarts();
-        const cart = await carts.find((cart) => cart.id == id);
-        if (!cart) {
-            console.log(`El id: ${id} no existe!`);
-            return;
-        } else {
-            console.log(`El id: ${id}!`);
-            return cart;
-        }
+        const cart = await cartModel.findOne({ _id: id }).populate('products.product');
+        return cart;
     }
 
     addProductToCart = async (cid, pid) => {
-        const carts = await this.getCarts();
-        const productById = await productManager.getProductByid(pid);
-        const cartById = await this.getCartByID(cid);
-        const indiceCart = carts.findIndex((cart) => cart.id == cid)
-
-        if (!cartById) {
-            console.log(`No existe el carrito N°${cid}`)
-            return
+        let product = await this.productManager.getProductByid(pid);
+        const cart = await this.getCartByID(cid);
+        const item = cart.products.find(e => e.product._id.toString() == pid);
+        if (item) {
+            item.quantity += 1;
+        } else {
+            cart.products.push({ product: product, quantity: 1 });
         }
-        if (!productById) {
-            console.log(`No existe el producto N°${pid}`)
-            return
-        }
-
-        const validacionProducto = await cartById.products.find((p) => p.product == pid);
-
-        if (!validacionProducto) {
-            cartById.products.push({ "product": pid, "quantify": 1 });
-            carts[indiceCart] = { ...cartById };
-            await fs.promises.writeFile(this.path, JSON.stringify(carts, null, '\t'));
-            return
-        }
-        else {
-            validacionProducto.quantify += 1;
-            carts[indiceCart] = { ...cartById };
-            await fs.promises.writeFile(this.path, JSON.stringify(carts, null, '\t'));
-            return
-        }
+        await cart.save();
+        return;
     }
-}
+    async deleteProductFromCart(cid, pid) {
+        const cart = await this.getCartByID(cid);
+        cart.products.pull(pid);
+        await cart.save();
+        return;
+    }
+    async deleteAllProductsFromCart(cid) {
+        const cart = await this.getCartByID(cid);
+        cart.products = [];
+        await cart.save();
+        return;
+    }
 
+    actualizarCarrito = async (cid, newProducts) => {
+        let cart = await this.getCartByID(cid);
+        cart.products = [];
+
+        newProducts.forEach(product => {
+            cart.products.push({ product: product });
+        });
+
+        await cart.save();
+        return;
+    }
+
+    actualizarCarrito = async (cid, newProducts) => {
+        let cart = await this.getCartByID(cid);
+        cart.products = [];
+
+        newProducts.forEach(product => {
+            cart.products.push({ product: product });
+        });
+
+        await cart.save();
+        return;
+    }
+
+    actualizarCantidadProducto = async (cartId, productId, quantity) => {
+        let cart = await this.getCartByID(cartId);
+
+        if (cart) {
+            let product = cart.products.find(e => e._id.toString() == productId);
+            product.quantity = quantity
+        }
+
+        cart.save();
+        return
+    }
+
+}

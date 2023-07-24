@@ -10,7 +10,15 @@
     <span class="ms-2">Bienvenido <span class="fw-bold text-uppercase fs-5 ">{{usuario.name}} </span> <span
             class=" ">({{usuario.age}})</span></span>
     <span><span class="ms-2 fst-italic">{{usuario.email}}</span>
-        <span class="mr-2 fw-semibold">[ {{usuario.rol}} ]</span></span>
+        <span class="mr-2 fw-semibold text-capitalize">[ {{usuario.role}} ]</span>
+        <a href='/api/carts/{{usuario.cart}}' class="btn btn-warning border border-solid border-dark">🛒</a>
+        <a href="/api/sessions/logout" class="btn btn-danger">LogOut</a>
+    </span>
+</div>
+{{else}}
+<div class="d-flex justify-content-end text-light bg-dark m-2">
+    <a href="/api/sessions/login" class="btn btn-success mx-2">Login</a>
+    <a href="/api/sessions/register" class="btn btn-primary">Register</a>
 </div>
 {{/if}}
 
@@ -30,10 +38,14 @@
                     <p class="d-flex justify-content-around"><span class="text-dark fw-bold">{{this.title}}</span><span
                             class="text-secondary fst-italic text-capitalize">{{this.category}}</span></p>
                     <p class="text-dark fw-bold">Price: ${{this.price}}</p>
-                    <form action="http://localhost:8080/api/carts/64a186926c002f512551ea96/product/{{this._id}}"
+                    {{#if ../usuario}}
+                    <form action="http://localhost:8080/api/carts/{{../usuario.cart}}/product/{{this._id}}"
                         method="POST">
                         <button class="btn btn-success">Agregar al carrito</button>
                     </form>
+                    {{else}}
+                    <a href="/api/sessions/login" class="btn btn-danger">Logerte para agregar</a>
+                    {{/if}}
                 </div>
             </div>
         </div>
