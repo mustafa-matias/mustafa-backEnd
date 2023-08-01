@@ -2,14 +2,15 @@ import express from "express";
 import handlebars from "express-handlebars";
 import __dirname from "../utils.js";
 import { Server } from "socket.io";
+import config from "./config/config.js";
 
-import routerProducts from "../routes/products.router.js";
-import routerCarts from "../routes/carts.router.js";
-import viewsRouter from "../routes/views.router.js"
-import ChatManager from "./daos/mongoDb/chatManager.class.js";
-import routerSessions from "../routes/sessions.router.js";
+import routerProducts from "./routes/products.router.js";
+import routerCarts from "./routes/carts.router.js";
+import viewsRouter from "./routes/views.router.js"
+import ChatManager from "./persistencia/mongoDb/chatManager.class.js";
+import routerSessions from "./routes/sessions.router.js";
 
-import ProductManager from "./daos/mongoDb/productManager.class.js";
+import ProductManager from "./persistencia/mongoDb/productManager.class.js";
 const productManager = new ProductManager();
 const chatManager = new ChatManager();
 
@@ -31,7 +32,7 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-const expressServer = app.listen(8080, () => (console.log('Server puerto 8080')));
+const expressServer = app.listen(config.port, () => (console.log(`Servidor levando en puerto: ${config.port}`)));
 const socketServer = new Server(expressServer);
 
 app.use(function (req, res, next) {
@@ -60,10 +61,10 @@ socketServer.on('connection', (socket) => {
     })
 })
 
-const connection = mongoose.connect('mongodb+srv://mustafa-matias:8XjhYJrr7ajSjjg2@cluster0.3l5b4gw.mongodb.net/?retryWrites=true&w=majority');
+const connection = mongoose.connect(config.mongoUrl);
 app.use(session({
     store: new MongoStore({
-        mongoUrl: 'mongodb+srv://mustafa-matias:8XjhYJrr7ajSjjg2@cluster0.3l5b4gw.mongodb.net/?retryWrites=true&w=majority'
+        mongoUrl: config.mongoUrl
     }),
     secret: 'mongoSecret',
     resave: true,

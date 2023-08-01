@@ -8,13 +8,9 @@ registerForm.addEventListener('submit', e => {
     const email = registerForm[2].value.toLowerCase();
     const age = registerForm[3].value;
     const password = registerForm[4].value;
-    let role = 'user';
-    if (email == 'admincoder@coder.com') {
-        role = 'admin';
-    }
 
     const newUsuario = {
-        firtName, lastName, email, age, password, role
+        firtName, lastName, email, age, password
     };
     registerForm.reset();
 

@@ -1,9 +1,10 @@
 import passport from "passport";
 import local from "passport-local";
-import userModel from "../daos/mongoDb/models/users.model.js";
+import userModel from "../persistencia/mongoDb/models/users.model.js";
 import { createHash, isValidPassword } from "../../utils.js";
 import GitHubStrategy from 'passport-github2';
-import CartManager from "../daos/fileSistem/cartManager.class.js";
+import CartManager from "../persistencia/mongoDb/cartManager.class.js";
+import config from "./config.js";
 
 const cartManager = new CartManager();
 
@@ -12,7 +13,8 @@ const LocalStrategy = local.Strategy;
 const initializeStrategy = () => {
     passport.use('register', new LocalStrategy(
         { passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
-            const { firtName, lastName, email, age, role } = req.body;
+            const { firtName, lastName, email, age } = req.body;
+
             try {
                 let user = await userModel.findOne({ email: username });
                 if (user) {
@@ -21,6 +23,11 @@ const initializeStrategy = () => {
                 }
 
                 const cart = await cartManager.addCart();
+
+                let role = 'user';
+                if (email == config.adminEmail && password == config.adminPassword) {
+                    role = 'admin';
+                }
 
                 const newUser = {
                     firtName, lastName, email, age, password: createHash(password), role, cart: cart._id
@@ -69,7 +76,7 @@ const initializeStrategy = () => {
                         email: profile.profileUrl,
                         password: ' ',
                         role: 'user',
-                        cart: cart
+                        cart: cart._id
                     }
                     let result = await userModel.create(newUser);
                     done(null, result);
