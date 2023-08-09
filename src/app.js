@@ -3,16 +3,18 @@ import handlebars from "express-handlebars";
 import __dirname from "../utils.js";
 import { Server } from "socket.io";
 import config from "./config/config.js";
+import cors from 'cors';
 
 import routerProducts from "./routes/products.router.js";
 import routerCarts from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js"
-import ChatManager from "./persistencia/mongoDb/chatManager.class.js";
 import routerSessions from "./routes/sessions.router.js";
 
-import ProductManager from "./persistencia/mongoDb/productManager.class.js";
-const productManager = new ProductManager();
-const chatManager = new ChatManager();
+import ProductController from "./controller/product.controller.js";
+const productController = new ProductController();
+
+import ChatController from "./controller/chat.controller.js";
+const chatController = new ChatController();
 
 import mongoose from "mongoose";
 import session from "express-session";
@@ -31,9 +33,11 @@ app.use(express.static(__dirname + "/public"));
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
+app.use(cors({origin: 'http://localhost:5050', methods:['GET','POST','PUT','DELETE']}));
 
-const expressServer = app.listen(config.port, () => (console.log(`Servidor levando en puerto: ${config.port}`)));
+const expressServer = app.listen(config.port, () => (console.log(`Servidor levantado en puerto: ${config.port}`)));
 const socketServer = new Server(expressServer);
+
 
 app.use(function (req, res, next) {
     req.socketServer = socketServer;
@@ -41,18 +45,17 @@ app.use(function (req, res, next) {
 })
 
 socketServer.on('connection', (socket) => {
-    console.log('nueva conexión');
-    console.log(socket.id);
+    console.log('nueva conexión Socket: ',socket.id);
     socket.on("newProductForm", async (data) => {
         const { title, description, price, thumbnail, code, stock, status, category } = data
-        await productManager.addProduct({ title, description, price, thumbnail, code, stock, status: true, category });
+        await productController.addProductController({ title, description, price, thumbnail, code, stock, status: true, category });
         socketServer.emit("imprimir", data);
     })
     socket.on("newProductRouter", async (data) => {
         socketServer.emit("postNewProduct", data);
     })
     socket.on("message", async (data) => {
-        await chatManager.addMessage(data)
+        await chatController.addMessageController(data)
         socketServer.emit("mostrarMesajes", data)
 
     })

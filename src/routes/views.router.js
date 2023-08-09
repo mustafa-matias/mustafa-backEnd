@@ -1,12 +1,12 @@
 import { Router } from "express";
 const router = Router();
-import ProductManager from "../persistencia/mongoDb/productManager.class.js";
-const productManager = new ProductManager();
 import { productsModel } from "../persistencia/mongoDb/models/products.model.js";
 import { cartModel } from "../persistencia/mongoDb/models/carts.model.js";
+import ProductController from "../controller/product.controller.js";
+const productController = new ProductController();
 
 router.get('/', async (req, res) => {
-    const products = await productManager.getProducts();
+    const products = await productController.getProductsController();
     res.render('index', { products, title: 'Products' });
 })
 
@@ -37,7 +37,7 @@ router.get('/api/carts/:cid', async (req, res) => {
 })
 
 router.get('/realTimeProducts', async (req, res) => {
-    const products = await productManager.getProducts();
+    const products = await productController.getProductsController();
     res.render('realTimeProducts', { products, title: 'Real Time Products' })
 })
 

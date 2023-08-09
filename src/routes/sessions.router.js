@@ -10,7 +10,6 @@ router.post('/register', passport.authenticate('register'), async (req, res) => 
         role: req.user.role,
         cart: req.user.cart
     }
-
     return res.redirect('/products');
 })
 

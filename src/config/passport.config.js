@@ -3,10 +3,10 @@ import local from "passport-local";
 import userModel from "../persistencia/mongoDb/models/users.model.js";
 import { createHash, isValidPassword } from "../../utils.js";
 import GitHubStrategy from 'passport-github2';
-import CartManager from "../persistencia/mongoDb/cartManager.class.js";
+import CartController from "../controller/cart.controller.js";
 import config from "./config.js";
 
-const cartManager = new CartManager();
+const cartController = new CartController();
 
 const LocalStrategy = local.Strategy;
 
@@ -22,7 +22,7 @@ const initializeStrategy = () => {
                     return done(null, false);
                 }
 
-                const cart = await cartManager.addCart();
+                const cart = await cartController.addCartController();
 
                 let role = 'user';
                 if (email == config.adminEmail && password == config.adminPassword) {
@@ -68,7 +68,7 @@ const initializeStrategy = () => {
             try {
                 let user = await userModel.findOne({ email: profile.profileUrl });
                 if (!user) {
-                    const cart = await cartManager.addCart();
+                    const cart = await cartController.addCartController();
                     let newUser = {
                         firtName: profile.username,
                         lastName: ' ',

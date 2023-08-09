@@ -1,6 +1,6 @@
 import { chatModel } from "./models/chat.model.js";
 
-export default class ChatManager {
+export default class ChatDao {
 
     getMessages = async () => {
         let messages = await chatModel.find().lean();

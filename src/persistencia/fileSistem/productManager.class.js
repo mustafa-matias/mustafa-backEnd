@@ -2,7 +2,7 @@ import fs from "fs";
 import __dirname from "../../../utils.js";
 import {v4 as uuidv4} from 'uuid';
 
-export default class ProductManager {
+export default class ProductDao {
     constructor() {
         this.path = __dirname + "/files/products.json";
     }
