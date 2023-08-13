@@ -1,10 +1,8 @@
 import CartService from "../servicio/cart.service.js";
-import ProductController from "./product.controller.js";
 
 export default class CartController {
     constructor() {
         this.cartService = new CartService();
-        this.productController = new ProductController();
     }
 
     async getCartsController() {
@@ -25,7 +23,7 @@ export default class CartController {
     }
 
     async addProductToCartController(cid, pid) {
-        if (!id || !pid) {
+        if (!cid || !pid) {
             return {
                 error: 'datos incompletos'
             }
@@ -34,7 +32,7 @@ export default class CartController {
         return await this.cartService.addProductToCartService(cid, pid);
     }
     async deleteProductFromCartController(cid, pid) {
-        if (!id) {
+        if (!cid) {
             return {
                 error: 'id vacio'
             }
@@ -42,7 +40,7 @@ export default class CartController {
         return await this.cartService.deleteProductFromCartService(cid, pid);
     }
     async deleteAllProductsFromCartController(cid) {
-        if (!id) {
+        if (!cid) {
             return {
                 error: 'id vacio'
             }
@@ -51,7 +49,7 @@ export default class CartController {
     }
 
     async actualizarCarritoController(cid, newProducts) {
-        if (!id || !pid) {
+        if (!cid || !newProducts) {
             return {
                 error: 'datos incompletos'
             }
@@ -60,7 +58,7 @@ export default class CartController {
     }
 
     async actualizarCantidadProductoController(cartId, productId, quantity) {
-        if (!id || !pid) {
+        if (!cartId || !productId) {
             return {
                 error: 'datos incompletos ID'
             }

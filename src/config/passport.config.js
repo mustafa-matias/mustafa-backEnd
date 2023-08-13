@@ -23,18 +23,18 @@ const initializeStrategy = () => {
                 }
 
                 const cart = await cartController.addCartController();
-
                 let role = 'user';
-                if (email == config.adminEmail && password == config.adminPassword) {
-                    role = 'admin';
-                }
 
+                if (email == config.adminEmail && password == config.adminPassword) {
+                    role = 'admin'
+                }
                 const newUser = {
                     firtName, lastName, email, age, password: createHash(password), role, cart: cart._id
                 }
                 let result = await userModel.create(newUser);
                 return done(null, result)
-            } catch (error) {
+            }
+            catch (error) {
                 return done('Error al obterner Usuario: ' + error);
             }
         }
@@ -63,7 +63,7 @@ const initializeStrategy = () => {
     }))
 
     passport.use('github', new GitHubStrategy(
-        { clientID: 'Iv1.2fd3123f38d67d52', clientSecret: 'eba6a01cef014aefc855e31f2f71cf658196fa49', callbackURL: 'http://localhost:8080/api/sessions/githubcallback' },
+        { clientID: config.githubClientId , clientSecret: config.githubSecret, callbackURL: 'http://localhost:8080/api/sessions/githubcallback' },
         async (accessToken, refreshToken, profile, done) => {
             try {
                 let user = await userModel.findOne({ email: profile.profileUrl });
@@ -90,5 +90,7 @@ const initializeStrategy = () => {
         }))
 }
 
+
 export default initializeStrategy;
+
 

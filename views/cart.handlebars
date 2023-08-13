@@ -9,7 +9,7 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Carrito ID: {{this._id}}</th>
+                        <th>Carrito ID: {{this.cart._id}}</th>
                         <th></th>
                         <th class="text-center"></th>
                         <th class="text-center"></th>
@@ -24,7 +24,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each this.products}}
+                    {{#each this.cart.products}}
                     <tr>
                         <td class="col-sm-8 col-md-6">
                             <div class="media">
@@ -34,7 +34,7 @@
                                     <h4 class="media-heading">{{this.product.title}}</h4>
                                     <h5 class="media-heading fst-italic text-capitalize text-secondary">
                                         {{this.product.category}}</h5>
-                                    <span>Status: </span><span class="text-success"><strong>In Stock</strong></span>
+                                    <span class="text-success"><strong>Stock: {{this.product.stock}}</strong></span>
                                 </div>
                             </div>
                         </td>
@@ -44,12 +44,12 @@
                         <td class="col-sm-1 col-md-1 text-center"><strong id="price">${{this.product.price}}</strong>
                         </td>
                         <td class="col-sm-1 col-md-1 text-center">
-                            <p class=" text-dark" id="total"></p>
+                            <p class=" text-dark" id="total">${{this.amount}}</p>
                         </td>
                         <td class="col-sm-1 col-md-1">
-                            <button type="button" class="btn btn-danger">
+                            {{!-- <button type="button" class="btn btn-danger">
                                 <span class="glyphicon glyphicon-remove"></span> Remove
-                            </button>
+                            </button> --}}
                         </td>
                     </tr>
                     {{/each}}
@@ -58,32 +58,10 @@
                         <td>   </td>
                         <td>   </td>
                         <td>
-                            <h5>Subtotal</h5>
-                        </td>
-                        <td class="text-right">
-                            <h5><strong>$</strong></h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>   </td>
-                        <td>   </td>
-                        <td>   </td>
-                        <td>
-                            <h5>Estimated shipping</h5>
-                        </td>
-                        <td class="text-right">
-                            <h5><strong>$</strong></h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>   </td>
-                        <td>   </td>
-                        <td>   </td>
-                        <td>
                             <h3>Total</h3>
                         </td>
                         <td class="text-right">
-                            <h3><strong>$</strong></h3>
+                            <h3><strong>${{totalProductos}}</strong></h3>
                         </td>
                     </tr>
                     <tr>
@@ -98,9 +76,11 @@
                             </a>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-success">
-                                COMPRAR <span class="glyphicon glyphicon-play"></span>
-                            </button>
+                            <a href="/api/carts/{{this.cart._id}}/purchase">
+                                <button type="button" class="btn btn-success">
+                                    COMPRAR <span class="glyphicon glyphicon-play"></span>
+                                </button>
+                            </a>
                         </td>
                     </tr>
                 </tbody>

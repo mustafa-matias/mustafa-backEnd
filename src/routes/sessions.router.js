@@ -1,6 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import passport from "passport";
+import { CurrentUserDTO } from "../controller/DTO/user.dto.js";
 
 router.post('/register', passport.authenticate('register'), async (req, res) => {
     req.session.user = {
@@ -23,6 +24,7 @@ router.post('/login', passport.authenticate('login'), async (req, res) => {
         role: req.user.role,
         cart: req.user.cart
     };
+    console.log(req.session)
     res.send({ status: "success", message: req.session.user });
 })
 
@@ -44,6 +46,11 @@ router.get('/logout',(req,res)=>{
         if(!err) res.redirect('/api/sessions/login');
         else res.send({status: 'logout ERROR', body: err});
     })
+})
+
+router.get('/current', (req,res)=>{
+    if (req.user)res.send(new CurrentUserDTO(req.user));
+    else res.send({status: 'No se encuentra usuario logueado'})
 })
 
 export default router;

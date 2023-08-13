@@ -27,23 +27,25 @@ export default class CartService {
 
     async addProductToCartService(cid, pid) {
         const cart = await this.cartDao.getCartByID(cid);
-        const product = await this.productServicie.getProductByidService(pid);
+        const productFilter = await this.productServicie.getProductByidService(pid);
         if (!cart) {
             return {
                 error: 'id cart incorrecto'
             }
         }
-        if (!product) {
+        if (!productFilter) {
             return {
                 error: 'id producto incorrecto'
             }
         }
-        const item = cart.products.find(e => e.product._id.toString() == pid);
+        const item = cart.products.find(e => e.product._id.toString() == productFilter._id);
         if (item) {
             item.quantity += 1;
+            item.amount+= productFilter.price;
         } else {
-            cart.products.push({ product: product, quantity: 1 });
+            cart.products.push({ product: productFilter, quantity: 1, amount: productFilter.price });
         }
+
         return await this.cartDao.addProductToCart(cart);
     }
 
@@ -100,9 +102,8 @@ export default class CartService {
                 error: 'id cart incorrecto'
             }
         }
-        let product = cart.products.find(e => e._id.toString() == productId);
+        let product = cart.products.find(e => e.product._id == productId);
         product.quantity = quantity
-
         return await this.cartDao.actualizarCantidadProducto(cart);
     }
 }

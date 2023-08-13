@@ -12,6 +12,7 @@
     <span><span class="ms-2 fst-italic">{{usuario.email}}</span>
         <span class="mr-2 fw-semibold text-capitalize">[ {{usuario.role}} ]</span>
         <a href='/api/carts/{{usuario.cart}}' class="btn btn-warning border border-solid border-dark">🛒</a>
+        <a href="/chat" class="btn btn-primary">✍Chat</a>
         <a href="/api/sessions/logout" class="btn btn-danger">LogOut</a>
     </span>
 </div>
@@ -39,10 +40,14 @@
                             class="text-secondary fst-italic text-capitalize">{{this.category}}</span></p>
                     <p class="text-dark fw-bold">Price: ${{this.price}}</p>
                     {{#if ../usuario}}
-                    <form action="http://localhost:8080/api/carts/{{../usuario.cart}}/product/{{this._id}}"
-                        method="POST">
-                        <button class="btn btn-success">Agregar al carrito</button>
-                    </form>
+                    <div class="d-flex justify-content-around">
+                        <form action="http://localhost:8080/api/carts/{{../usuario.cart}}/product/{{this._id}}"
+                            method="POST">
+                            <button class="btn btn-success">Agregar al carrito</button>
+                        </form>
+                        <button class="btn btn-danger btEliminarProductAdmin"
+                            data-item-id={{this._id}}>Eliminar</button>
+                    </div>
                     {{else}}
                     <a href="/api/sessions/login" class="btn btn-danger">Logerte para agregar</a>
                     {{/if}}
@@ -70,4 +75,5 @@
     {{else}}
     <h1>No hay productos para mostrar</h1>
     {{/if}}
-</div> --}}
+</div> 
+<script src="/js/products.js"></script>

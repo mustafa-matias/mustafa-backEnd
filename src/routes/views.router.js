@@ -4,6 +4,10 @@ import { productsModel } from "../persistencia/mongoDb/models/products.model.js"
 import { cartModel } from "../persistencia/mongoDb/models/carts.model.js";
 import ProductController from "../controller/product.controller.js";
 const productController = new ProductController();
+import isUser from "./middlewares/isUser.middleware.js";
+import isCartUser from "./middlewares/isCartUser.middleware.js";
+import isAdmin from "./middlewares/isAdmin.middleware.js";
+import { calcularTotalProductosCarrrito } from "../../utils.js";
 
 router.get('/', async (req, res) => {
     const products = await productController.getProductsController();
@@ -13,6 +17,7 @@ router.get('/', async (req, res) => {
 router.get('/products', async (req, res) => {
     let page = parseInt(req.query.page);
     let usuario = req.session.user;
+    
     if (!page) page = 1;
     let products = await productsModel.paginate({}, { page, limit: 4, lean: true })
 
@@ -30,18 +35,19 @@ router.get('/product/:pid', async (req, res) => {
     res.render('product', { product, title: product.title, usuario })
 })
 
-router.get('/api/carts/:cid', async (req, res) => {
+router.get('/api/carts/:cid', isCartUser, async (req, res) => {
     const cid = req.params.cid;
     const cart = await cartModel.findOne({ _id: cid }).populate('products.product').lean();
-    res.render('cart', cart)
+    const totalProductos = calcularTotalProductosCarrrito(cart);
+    res.render('cart', {cart, totalProductos})
 })
 
-router.get('/realTimeProducts', async (req, res) => {
+router.get('/realTimeProducts', isAdmin, async (req, res) => {
     const products = await productController.getProductsController();
     res.render('realTimeProducts', { products, title: 'Real Time Products' })
 })
 
-router.get('/chat', (req, res) => {
+router.get('/chat', isUser, (req, res) => {
     res.render('chat', { title: 'Chat' });
 })
 

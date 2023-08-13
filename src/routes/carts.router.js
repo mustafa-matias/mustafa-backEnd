@@ -3,9 +3,11 @@ import { Router } from "express";
 const router = Router();
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
+import isCartUser from "./middlewares/isCartUser.middleware.js";
 import CartController from "../controller/cart.controller.js";
-
+import TicketController from "../controller/ticket.controller.js";
 const cartController = new CartController();
+const ticketController = new TicketController();
 
 router.post('/', async (req, res) => {
     await cartController.addCartController();
@@ -24,7 +26,7 @@ router.get('/', async (req, res) => {
     res.send(carts);
 })
 
-router.post('/:cid/product/:pid', async (req, res) => {
+router.post('/:cid/product/:pid', isCartUser, async (req, res) => {
     const cid = req.params.cid;
     const pid = req.params.pid;
     await cartController.addProductToCartController(cid, pid)
@@ -56,8 +58,15 @@ router.put('/:cid/products/:pid', async (req, res) => {
     let productId = req.params.pid;
     let quantity = req.body.quantity;
 
-    await cartController.actualizarCantidadProducto(cartId, productId, quantity);
+    await cartController.actualizarCantidadProductoController(cartId, productId, quantity);
     res.send({ status: "success" });
 });
+
+router.get('/:cid/purchase', async (req, res) => {
+    const id = req.params.cid;
+    const email= req.user.email;
+    const result = await ticketController.addTicketController(id, email);
+    res.send(result)
+})
 
 export default router;

@@ -6,6 +6,7 @@ router.use(express.json())
 
 import ProductController from "../controller/product.controller.js";
 const productController = new ProductController();
+import isAdmin from "./middlewares/isAdmin.middleware.js";
 
 router.get('/', async (req, res) => {
     let limit = Number(req.query.limit);
@@ -24,15 +25,15 @@ router.get('/:pid', async (req, res) => {
     res.send(procuctByID);
 })
 
-router.post('/', async (req, res) => {
+router.post('/', isAdmin, async (req, res) => {
     const newProduct = req.body;
     await productController.addProductController(newProduct);
 
     req.socketServer.sockets.emit('newProductRouter', newProduct)
-    res.send(`se agregó ${title}`)
+    res.send(`se agregó ${newProduct.title}`)
 })
 
-router.put('/:pid', async (req, res) => {
+router.put('/:pid', isAdmin, async (req, res) => {
     const pid = req.params.pid;
     const update = req.body;
 
@@ -45,14 +46,14 @@ router.put('/:pid', async (req, res) => {
         res.send(`No puede actualizar la categoria ID`);
         return
     }
-    
+
     await productController.updateProductController(pid, update);
     res.send(`El producto ${procuctByID.title} con ID: ${pid} fue actualizado`);
     return;
 }
 )
 
-router.delete('/:pid', async (req, res) => {
+router.delete('/:pid', isAdmin, async (req, res) => {
     const pid = req.params.pid;
     const procuctByID = await productController.getProductByidController(pid);
     if (!procuctByID) {

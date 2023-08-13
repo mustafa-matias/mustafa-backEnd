@@ -27,4 +27,8 @@ export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSy
 
 export const isValidPassword = (password, user)=>bcrypt.compareSync(password, user.password);
 
+export const calcularTotalProductosCarrrito = (cart) => {
+    return parseInt(cart.products.reduce((acc, product) => acc + product.quantity * product.product.price, 0))
+}
+
 export default __dirname;

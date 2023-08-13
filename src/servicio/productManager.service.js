@@ -21,8 +21,8 @@ export default class ProductService {
     }
 
     async addProductService(product) {
-        let products = await productDao.getProducts();
-        const aux = await products.find((product) => product.code == code);
+        let products = await this.productDao.getProducts();
+        const aux = await products.find((e) => e.code == product.code);
         if (aux) {
             return {
                 error: 'El codigo ya existe'

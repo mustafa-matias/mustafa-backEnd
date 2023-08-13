@@ -69,14 +69,15 @@ app.use(session({
     store: new MongoStore({
         mongoUrl: config.mongoUrl
     }),
-    secret: 'mongoSecret',
+    secret: config.mongoSecret,
     resave: true,
     saveUninitialized: true,
 }));
+app.use(passport.initialize())
+app.use(passport.session());
 
 app.use(cookieParser("palabraSecretaCookie"));
 initializeStrategy();
-app.use(passport.initialize())
 app.use("/", viewsRouter);
 app.use("/api/products/", routerProducts);
 app.use("/api/carts/", routerCarts);
