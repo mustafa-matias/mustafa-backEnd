@@ -76,11 +76,10 @@
                             </a>
                         </td>
                         <td>
-                            <a href="/api/carts/{{this.cart._id}}/purchase">
-                                <button type="button" class="btn btn-success">
-                                    COMPRAR <span class="glyphicon glyphicon-play"></span>
-                                </button>
-                            </a>
+                            <form action="http://localhost:8080/api/carts/{{this.cart._id}}/purchase"
+                                method="POST">
+                                <button ype="button" class="btn btn-success">COMPRAR<span class="glyphicon glyphicon-play"></span></button>
+                            </form>
                         </td>
                     </tr>
                 </tbody>

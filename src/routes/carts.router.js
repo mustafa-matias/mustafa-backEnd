@@ -62,7 +62,7 @@ router.put('/:cid/products/:pid', async (req, res) => {
     res.send({ status: "success" });
 });
 
-router.get('/:cid/purchase', async (req, res) => {
+router.post('/:cid/purchase', async (req, res) => {
     const id = req.params.cid;
     const email= req.user.email;
     const result = await ticketController.addTicketController(id, email);
