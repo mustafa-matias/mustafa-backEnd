@@ -38,7 +38,10 @@
                     <h3>{{this.tilte}}</h3>
                     <p class="d-flex justify-content-around"><span class="text-dark fw-bold">{{this.title}}</span><span
                             class="text-secondary fst-italic text-capitalize">{{this.category}}</span></p>
-                    <p class="text-dark fw-bold">Price: ${{this.price}}</p>
+                    <div class="d-flex justify-content-around mb-2">
+                        <span class="text-dark fw-bold">Price: ${{this.price}}</span>
+                        <span class="text-secondary fst-italic text-capitalize">Stock: {{this.stock}}</span>
+                    </div>
                     {{#if ../usuario}}
                     <div class="d-flex justify-content-around">
                         <form action="http://localhost:8080/api/carts/{{../usuario.cart}}/product/{{this._id}}"
@@ -75,5 +78,5 @@
     {{else}}
     <h1>No hay productos para mostrar</h1>
     {{/if}}
-</div> 
+</div>
 <script src="/js/products.js"></script>

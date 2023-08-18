@@ -7,56 +7,79 @@ const productController = new ProductController();
 import isUser from "./middlewares/isUser.middleware.js";
 import isCartUser from "./middlewares/isCartUser.middleware.js";
 import isAdmin from "./middlewares/isAdmin.middleware.js";
-import { calcularTotalProductosCarrrito } from "../../utils.js";
+import {
+  calcularTotalProductosCarrrito,
+  generateProducts,
+} from "../../utils.js";
+import compression from "express-compression";
 
-router.get('/', async (req, res) => {
-    const products = await productController.getProductsController();
-    res.render('index', { products, title: 'Products' });
-})
+router.get("/", async (req, res) => {
+  const products = await productController.getProductsController();
+  res.render("index", { products, title: "Products" });
+});
 
-router.get('/products', async (req, res) => {
-    let page = parseInt(req.query.page);
-    let usuario = req.session.user;
-    
-    if (!page) page = 1;
-    let products = await productsModel.paginate({}, { page, limit: 4, lean: true })
+router.get("/products", async (req, res) => {
+  let page = parseInt(req.query.page);
+  let usuario = req.session.user;
 
-    products.prevLink = products.hasPrevPage ? `http://localhost:8080/products?page=${products.prevPage}` : '';
-    products.nextLink = products.hasNextPage ? `http://localhost:8080/products?page=${products.nextPage}` : '';
-    products.isValid = !(page <= 0 || page > products.totalPages);
+  if (!page) page = 1;
+  let products = await productsModel.paginate(
+    {},
+    { page, limit: 4, lean: true }
+  );
 
-    res.render('products', { products, title: 'Products', usuario });
-})
+  products.prevLink = products.hasPrevPage
+    ? `http://localhost:8080/products?page=${products.prevPage}`
+    : "";
+  products.nextLink = products.hasNextPage
+    ? `http://localhost:8080/products?page=${products.nextPage}`
+    : "";
+  products.isValid = !(page <= 0 || page > products.totalPages);
 
-router.get('/product/:pid', async (req, res) => {
-    const usuario = req.session.user;
-    let pid = req.params.pid;
-    let product = await productsModel.findOne({ _id: pid }).lean();
-    res.render('product', { product, title: product.title, usuario })
-})
+  res.render("products", { products, title: "Products", usuario });
+});
 
-router.get('/api/carts/:cid', isCartUser, async (req, res) => {
-    const cid = req.params.cid;
-    const cart = await cartModel.findOne({ _id: cid }).populate('products.product').lean();
-    const totalProductos = calcularTotalProductosCarrrito(cart);
-    res.render('cart', {cart, totalProductos})
-})
+router.get("/product/:pid", async (req, res) => {
+  const usuario = req.session.user;
+  let pid = req.params.pid;
+  let product = await productsModel.findOne({ _id: pid }).lean();
+  res.render("product", { product, title: product.title, usuario });
+});
 
-router.get('/realTimeProducts', isAdmin, async (req, res) => {
-    const products = await productController.getProductsController();
-    res.render('realTimeProducts', { products, title: 'Real Time Products' })
-})
+router.get("/api/carts/:cid", isCartUser, async (req, res) => {
+  const cid = req.params.cid;
+  const cart = await cartModel
+    .findOne({ _id: cid })
+    .populate("products.product")
+    .lean();
+  const totalProductos = calcularTotalProductosCarrrito(cart);
+  res.render("cart", { cart, totalProductos });
+});
 
-router.get('/chat', isUser, (req, res) => {
-    res.render('chat', { title: 'Chat' });
-})
+router.get("/realTimeProducts", isAdmin, async (req, res) => {
+  const products = await productController.getProductsController();
+  res.render("realTimeProducts", { products, title: "Real Time Products" });
+});
 
-router.get('/api/sessions/register', (req, res) => {
-    res.render('register', { title: 'Register' });
-})
+router.get("/chat", isUser, (req, res) => {
+  res.render("chat", { title: "Chat" });
+});
 
-router.get('/api/sessions/login', (req, res) => {
-    res.render('login', { title: 'login' });
-})
+router.get("/api/sessions/register", (req, res) => {
+  res.render("register", { title: "Register" });
+});
+
+router.get("/api/sessions/login", (req, res) => {
+  res.render("login", { title: "login" });
+});
+
+router.get(
+  "/mockingproducts",
+  compression({ brotli: { enabled: true, zlib: {} } }),
+  (req, res) => {
+    const products = generateProducts(100);
+    res.send(products);
+  }
+);
 
 export default router;
