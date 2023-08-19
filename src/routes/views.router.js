@@ -12,6 +12,9 @@ import {
   generateProducts,
 } from "../../utils.js";
 import compression from "express-compression";
+import CustomError from "../servicio/error/customError.class.js";
+import { ErrorEnum } from "../servicio/enum/error.enum.js";
+import { generateErrorInfo } from "../servicio/info.js";
 
 router.get("/", async (req, res) => {
   const products = await productController.getProductsController();
@@ -42,12 +45,30 @@ router.get("/products", async (req, res) => {
 router.get("/product/:pid", async (req, res) => {
   const usuario = req.session.user;
   let pid = req.params.pid;
+  if (pid.length != 24) {
+    CustomError.createError({
+      name: "incomplete id ",
+      cause: `Ivalid id: ${pid}`,
+      message: "cannot get product",
+      code: ErrorEnum.PARAM_ERROR,
+    });
+  }
+
   let product = await productsModel.findOne({ _id: pid }).lean();
   res.render("product", { product, title: product.title, usuario });
 });
 
 router.get("/api/carts/:cid", isCartUser, async (req, res) => {
   const cid = req.params.cid;
+  if (cid.length != 24) {
+    CustomError.createError({
+      name: "incomplete id ",
+      cause: `Ivalid id: ${cid}`,
+      message: "cannot get cart",
+      code: ErrorEnum.PARAM_ERROR,
+    });
+  }
+
   const cart = await cartModel
     .findOne({ _id: cid })
     .populate("products.product")

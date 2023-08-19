@@ -8,6 +8,9 @@ import ProductController from "../controller/product.controller.js";
 const productController = new ProductController();
 import isAdmin from "./middlewares/isAdmin.middleware.js";
 
+import { ErrorEnum } from "../servicio/enum/error.enum.js";
+import CustomError from "../servicio/error/customError.class.js";
+
 router.get("/", async (req, res) => {
   let limit = Number(req.query.limit);
   let page = Number(req.query.page);
@@ -27,6 +30,14 @@ router.get("/", async (req, res) => {
 
 router.get("/:pid", async (req, res) => {
   const idParam = req.params.pid;
+  if (idParam.length != 24) {
+    CustomError.createError({
+      name: "incomplete id ",
+      cause: `Ivalid id: ${idParam}`,
+      message: "cannot get product",
+      code: ErrorEnum.PARAM_ERROR,
+    });
+  }
   const procuctByID = await productController.getProductByidController(idParam);
   res.send(procuctByID);
 });
@@ -42,6 +53,14 @@ router.post("/", isAdmin, async (req, res) => {
 
 router.put("/:pid", isAdmin, async (req, res) => {
   const pid = req.params.pid;
+  if (pid.length != 24) {
+    CustomError.createError({
+      name: "incomplete id ",
+      cause: `Ivalid id: ${pid}`,
+      message: "cannot put product",
+      code: ErrorEnum.PARAM_ERROR,
+    });
+  }
   const update = req.body;
 
   const procuctByID = await productController.getProductByidController(pid);
@@ -61,6 +80,14 @@ router.put("/:pid", isAdmin, async (req, res) => {
 
 router.delete("/:pid", isAdmin, async (req, res) => {
   const pid = req.params.pid;
+  if (pid.length != 24) {
+    CustomError.createError({
+      name: "incomplete id ",
+      cause: `Ivalid id: ${pid}`,
+      message: "cannot delete product",
+      code: ErrorEnum.PARAM_ERROR,
+    });
+  }
   const procuctByID = await productController.getProductByidController(pid);
   if (!procuctByID) {
     res.send(`No existe el Id: ${pid} para ser elimnado `);
