@@ -17,19 +17,27 @@ router.post("/", async (req, res) => {
   return;
 });
 
-router.get("/:cid", async (req, res) => {
+router.get("/:cid", async (req, res, next) => {
   const cid = req.params.cid;
   if (cid.length != 24) {
-    CustomError.createError({
-      name: "incomplete id ",
-      cause: `Ivalid id: ${cid}`,
-      message: "cannot get cart",
-      code: ErrorEnum.PARAM_ERROR,
-    });
+    try {
+      throw CustomError.createError({
+        name: "incomplete id ",
+        cause: `Ivalid id: ${cid}`,
+        message: "cannot get cart",
+        code: ErrorEnum.PARAM_ERROR,
+      });
+    } catch (error) {
+      next(error);
+      return;
+    }
   }
-  const cartByID = await cartController.getCartByIDController(cid);
-  console.log(cid, cartByID);
-  res.send(cartByID);
+  try {
+    const cartByID = await cartController.getCartByIDController(cid);
+    res.send(cartByID);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get("/", async (req, res) => {

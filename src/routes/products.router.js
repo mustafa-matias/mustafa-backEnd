@@ -80,15 +80,8 @@ router.put("/:pid", isAdmin, async (req, res, next) => {
   const update = req.body;
   try {
     const procuctByID = await productController.getProductByidController(pid);
-  } catch (error) {
-    next(error);
-    return;
-  }
-
-  try {
     await productController.updateProductController(pid, update);
     res.send(`El producto ${procuctByID.title} con ID: ${pid} fue actualizado`);
-    return;
   } catch (error) {
     next(error);
     return;
@@ -112,11 +105,6 @@ router.delete("/:pid", isAdmin, async (req, res, next) => {
   }
   try {
     const procuctByID = await productController.getProductByidController(pid);
-  } catch (error) {
-    next(error);
-    return;
-  }
-  try {
     await productController.deleteProductByidController(pid);
     res.send(`El producto ${procuctByID.title} con ID: ${pid} fue eliminado`);
   } catch (error) {

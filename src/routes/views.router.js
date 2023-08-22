@@ -14,7 +14,6 @@ import {
 import compression from "express-compression";
 import CustomError from "../servicio/error/customError.class.js";
 import { ErrorEnum } from "../servicio/enum/error.enum.js";
-import { generateErrorInfo } from "../servicio/info.js";
 
 router.get("/", async (req, res) => {
   const products = await productController.getProductsController();
@@ -87,17 +86,21 @@ router.get("/api/carts/:cid", isCartUser, async (req, res, next) => {
       .findOne({ _id: cid })
       .populate("products.product")
       .lean();
+    const totalProductos = calcularTotalProductosCarrrito(cart);
+    res.render("cart", { cart, totalProductos });
   } catch (error) {
     next(error);
     return;
   }
-  const totalProductos = calcularTotalProductosCarrrito(cart);
-  res.render("cart", { cart, totalProductos });
 });
 
 router.get("/realTimeProducts", isAdmin, async (req, res) => {
-  const products = await productController.getProductsController();
-  res.render("realTimeProducts", { products, title: "Real Time Products" });
+  try {
+    const products = await productController.getProductsController();
+    res.render("realTimeProducts", { products, title: "Real Time Products" });
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 router.get("/chat", isUser, (req, res) => {
