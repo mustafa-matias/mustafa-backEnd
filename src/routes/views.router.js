@@ -42,37 +42,55 @@ router.get("/products", async (req, res) => {
   res.render("products", { products, title: "Products", usuario });
 });
 
-router.get("/product/:pid", async (req, res) => {
+router.get("/product/:pid", async (req, res, next) => {
   const usuario = req.session.user;
   let pid = req.params.pid;
   if (pid.length != 24) {
-    CustomError.createError({
-      name: "incomplete id ",
-      cause: `Ivalid id: ${pid}`,
-      message: "cannot get product",
-      code: ErrorEnum.PARAM_ERROR,
-    });
+    try {
+      throw CustomError.createError({
+        name: "incomplete id ",
+        cause: `Ivalid id: ${pid}`,
+        message: "cannot get product",
+        code: ErrorEnum.PARAM_ERROR,
+      });
+    } catch (error) {
+      next(error);
+      return;
+    }
   }
-
-  let product = await productsModel.findOne({ _id: pid }).lean();
-  res.render("product", { product, title: product.title, usuario });
+  try {
+    let product = await productsModel.findOne({ _id: pid }).lean();
+    res.render("product", { product, title: product.title, usuario });
+  } catch (error) {
+    next(error);
+    return;
+  }
 });
 
-router.get("/api/carts/:cid", isCartUser, async (req, res) => {
+router.get("/api/carts/:cid", isCartUser, async (req, res, next) => {
   const cid = req.params.cid;
   if (cid.length != 24) {
-    CustomError.createError({
-      name: "incomplete id ",
-      cause: `Ivalid id: ${cid}`,
-      message: "cannot get cart",
-      code: ErrorEnum.PARAM_ERROR,
-    });
+    try {
+      throw CustomError.createError({
+        name: "incomplete id ",
+        cause: `Ivalid id: ${cid}`,
+        message: "cannot get cart",
+        code: ErrorEnum.PARAM_ERROR,
+      });
+    } catch (error) {
+      next(error);
+      return;
+    }
   }
-
-  const cart = await cartModel
-    .findOne({ _id: cid })
-    .populate("products.product")
-    .lean();
+  try {
+    const cart = await cartModel
+      .findOne({ _id: cid })
+      .populate("products.product")
+      .lean();
+  } catch (error) {
+    next(error);
+    return;
+  }
   const totalProductos = calcularTotalProductosCarrrito(cart);
   res.render("cart", { cart, totalProductos });
 });

@@ -28,18 +28,29 @@ router.get("/", async (req, res) => {
   res.send(products);
 });
 
-router.get("/:pid", async (req, res) => {
+router.get("/:pid", async (req, res, next) => {
   const idParam = req.params.pid;
   if (idParam.length != 24) {
-    CustomError.createError({
-      name: "incomplete id ",
-      cause: `Ivalid id: ${idParam}`,
-      message: "cannot get product",
-      code: ErrorEnum.PARAM_ERROR,
-    });
+    try {
+      throw CustomError.createError({
+        name: "incomplete id ",
+        cause: `Ivalid id: ${idParam}`,
+        message: "cannot get product",
+        code: ErrorEnum.PARAM_ERROR,
+      });
+    } catch (error) {
+      next(error);
+      return;
+    }
   }
-  const procuctByID = await productController.getProductByidController(idParam);
-  res.send(procuctByID);
+  try {
+    const procuctByID = await productController.getProductByidController(
+      idParam
+    );
+    res.send(procuctByID);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/", isAdmin, async (req, res) => {
@@ -51,50 +62,66 @@ router.post("/", isAdmin, async (req, res) => {
   res.send(`se agregó ${newProduct.title}`);
 });
 
-router.put("/:pid", isAdmin, async (req, res) => {
+router.put("/:pid", isAdmin, async (req, res, next) => {
   const pid = req.params.pid;
   if (pid.length != 24) {
-    CustomError.createError({
-      name: "incomplete id ",
-      cause: `Ivalid id: ${pid}`,
-      message: "cannot put product",
-      code: ErrorEnum.PARAM_ERROR,
-    });
+    try {
+      throw CustomError.createError({
+        name: "incomplete id ",
+        cause: `Ivalid id: ${pid}`,
+        message: "cannot put product",
+        code: ErrorEnum.PARAM_ERROR,
+      });
+    } catch (error) {
+      next(error);
+      return;
+    }
   }
   const update = req.body;
-
-  const procuctByID = await productController.getProductByidController(pid);
-  if (!procuctByID) {
-    res.send(`No existe el Id: ${pid} para ser actualizado`);
-    return;
-  }
-  if (update.id) {
-    res.send(`No puede actualizar la categoria ID`);
+  try {
+    const procuctByID = await productController.getProductByidController(pid);
+  } catch (error) {
+    next(error);
     return;
   }
 
-  await productController.updateProductController(pid, update);
-  res.send(`El producto ${procuctByID.title} con ID: ${pid} fue actualizado`);
-  return;
+  try {
+    await productController.updateProductController(pid, update);
+    res.send(`El producto ${procuctByID.title} con ID: ${pid} fue actualizado`);
+    return;
+  } catch (error) {
+    next(error);
+    return;
+  }
 });
 
-router.delete("/:pid", isAdmin, async (req, res) => {
+router.delete("/:pid", isAdmin, async (req, res, next) => {
   const pid = req.params.pid;
   if (pid.length != 24) {
-    CustomError.createError({
-      name: "incomplete id ",
-      cause: `Ivalid id: ${pid}`,
-      message: "cannot delete product",
-      code: ErrorEnum.PARAM_ERROR,
-    });
+    try {
+      throw CustomError.createError({
+        name: "incomplete id ",
+        cause: `Ivalid id: ${pid}`,
+        message: "cannot delete product",
+        code: ErrorEnum.PARAM_ERROR,
+      });
+    } catch (error) {
+      next(error);
+      return;
+    }
   }
-  const procuctByID = await productController.getProductByidController(pid);
-  if (!procuctByID) {
-    res.send(`No existe el Id: ${pid} para ser elimnado `);
+  try {
+    const procuctByID = await productController.getProductByidController(pid);
+  } catch (error) {
+    next(error);
     return;
-  } else {
+  }
+  try {
     await productController.deleteProductByidController(pid);
     res.send(`El producto ${procuctByID.title} con ID: ${pid} fue eliminado`);
+  } catch (error) {
+    next(error);
+    return;
   }
 });
 

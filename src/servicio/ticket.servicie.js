@@ -89,8 +89,8 @@ export default class TicketService {
       };
       try {
         await this.ticketsDao.addTicket(ticket);
-      } catch (addTicketErrror) {
-        console.error("Add Ticket Error:", addTicketErrror);
+      } catch (addTicketError) {
+        console.error("Add Ticket Error:", addTicketError);
         return { error: "Add Ticket Error" };
       }
       return {
@@ -107,8 +107,8 @@ export default class TicketService {
       };
       try {
         await this.ticketsDao.addTicket(ticket);
-      } catch (addTicketErrror) {
-        console.error("Add Ticket Error:", addTicketErrror);
+      } catch (addTicketError) {
+        console.error("Add Ticket Error:", addTicketError);
         return { error: "Add Ticket Error" };
       }
       return {

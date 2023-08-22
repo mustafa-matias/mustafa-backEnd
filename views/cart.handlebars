@@ -47,9 +47,14 @@
                             <p class=" text-dark" id="total">${{this.amount}}</p>
                         </td>
                         <td class="col-sm-1 col-md-1">
-                            {{!-- <button type="button" class="btn btn-danger">
-                                <span class="glyphicon glyphicon-remove"></span> Remove
-                            </button> --}}
+                            {{!-- <form
+                                action="http://localhost:8080/api/carts/{{../cart._id}}/product/{{this.product._id}}"
+                                method="DELETE">
+
+                                <button type="submit" class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-remove"></span> Remove
+                                </button>
+                            </form> --}}
                         </td>
                     </tr>
                     {{/each}}
@@ -76,9 +81,9 @@
                             </a>
                         </td>
                         <td>
-                            <form action="http://localhost:8080/api/carts/{{this.cart._id}}/purchase"
-                                method="POST">
-                                <button ype="button" class="btn btn-success">COMPRAR<span class="glyphicon glyphicon-play"></span></button>
+                            <form action="http://localhost:8080/api/carts/{{this.cart._id}}/purchase" method="POST">
+                                <button ype="button" class="btn btn-success">COMPRAR<span
+                                        class="glyphicon glyphicon-play"></span></button>
                             </form>
                         </td>
                     </tr>
