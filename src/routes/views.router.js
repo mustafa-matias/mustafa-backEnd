@@ -23,6 +23,7 @@ router.get("/", async (req, res) => {
 router.get("/products", async (req, res) => {
   let page = parseInt(req.query.page);
   let usuario = req.session.user;
+  req.logger.info({message: `pagination: ${page}`, fecha: new Date()})
 
   if (!page) page = 1;
   let products = await productsModel.paginate(
@@ -44,6 +45,8 @@ router.get("/products", async (req, res) => {
 router.get("/product/:pid", async (req, res, next) => {
   const usuario = req.session.user;
   let pid = req.params.pid;
+  req.logger.info({message: `id: ${pid}`, fecha: new Date()})
+
   if (pid.length != 24) {
     try {
       throw CustomError.createError({
@@ -54,6 +57,7 @@ router.get("/product/:pid", async (req, res, next) => {
       });
     } catch (error) {
       next(error);
+      req.logger.error({message: `${error}`, fecha: new Date()})
       return;
     }
   }
@@ -62,6 +66,7 @@ router.get("/product/:pid", async (req, res, next) => {
     res.render("product", { product, title: product.title, usuario });
   } catch (error) {
     next(error);
+    req.logger.error({message: `${error}`, fecha: new Date()})
     return;
   }
 });
@@ -78,6 +83,7 @@ router.get("/api/carts/:cid", isCartUser, async (req, res, next) => {
       });
     } catch (error) {
       next(error);
+      req.logger.error({message: `${error}`, fecha: new Date()})
       return;
     }
   }
@@ -90,6 +96,7 @@ router.get("/api/carts/:cid", isCartUser, async (req, res, next) => {
     res.render("cart", { cart, totalProductos });
   } catch (error) {
     next(error);
+    req.logger.error({message: `${error}`, fecha: new Date()})
     return;
   }
 });
@@ -100,6 +107,7 @@ router.get("/realTimeProducts", isAdmin, async (req, res) => {
     res.render("realTimeProducts", { products, title: "Real Time Products" });
   } catch (error) {
     console.error(error);
+    req.logger.error({message: `${error}`, fecha: new Date()})
   }
 });
 

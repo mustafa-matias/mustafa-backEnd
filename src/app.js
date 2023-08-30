@@ -24,8 +24,12 @@ import passport from "passport";
 import initializeStrategy from "./config/passport.config.js";
 import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./servicio/middleware/error.middleware.js";
+import { addLogger } from "./config/logger.config.js";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
+app.use(addLogger);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -109,5 +113,11 @@ app.use("/api/products/", routerProducts);
 app.use("/api/carts/", routerCarts);
 app.use("/api/sessions/", routerSessions);
 app.use(errorMiddleware);
+
+app.get('/loggerTest',(req,res)=>{
+  req.logger.debug('error en consola')
+  req.logger.info({message: 'error en file en production y consola en dev', fecha: new Date()})
+  res.send({message: "prueba de logger"})
+})
 
 export default socketServer;
