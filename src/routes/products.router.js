@@ -10,6 +10,8 @@ import isAdmin from "./middlewares/isAdmin.middleware.js";
 
 import { ErrorEnum } from "../servicio/enum/error.enum.js";
 import CustomError from "../servicio/error/customError.class.js";
+import isPremium from "./middlewares/isPremium.middleware.js";
+import isProductUser from "./middlewares/isProductUser.middleware.js";
 
 router.get("/", async (req, res) => {
   let limit = Number(req.query.limit);
@@ -53,9 +55,8 @@ router.get("/:pid", async (req, res, next) => {
   }
 });
 
-router.post("/", isAdmin, async (req, res) => {
-  console.log(req.body);
-  const newProduct = req.body;
+router.post("/realTimeProducts", isPremium, async (req, res) => {
+  let newProduct = req.body;
   await productController.addProductController(newProduct);
 
   req.socketServer.sockets.emit("newProductRouter", newProduct);
@@ -88,7 +89,7 @@ router.put("/:pid", isAdmin, async (req, res, next) => {
   }
 });
 
-router.delete("/:pid", isAdmin, async (req, res, next) => {
+router.delete("/:pid", isProductUser, async (req, res, next) => {
   const pid = req.params.pid;
   if (pid.length != 24) {
     try {

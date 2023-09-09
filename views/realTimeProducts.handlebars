@@ -1,12 +1,16 @@
 <div class='mt-3 justify-content-center'>
     <h1 class='text-light text-center fw-bold'>Agregar Productos</h1>
     <form class='w-50 mx-auto' id='form-product' action='/api/guardar' method='post'>
-
+        <div class='input-group mb-3 border border-black rounded'>
+            <label for="usuario" class='input-group-text bg-secondary fw-bold border border-black w-25'>Usuario</label>
+            <input type='text' id='usuario' name='usuario' class='form-control border border-black' aria-label='title'
+                value={{usuario}} readonly />
+        </div>
         <div class='input-group mb-3 border border-black rounded'>
             <label for="producto"
                 class='input-group-text bg-secondary fw-bold border border-black w-25'>Producto</label>
             <input type='text' id='producto' name='title' class='form-control border border-black'
-                placeholder='Nombre del producto' autofocus aria-label='title' />
+                placeholder='Nombre del producto' autofocus aria-label='title'/>
         </div>
 
         <div class='input-group mb-3 border border-black rounded'>
@@ -70,9 +74,6 @@
                 <p class="card-text">{{this.description}}</p>
                 <div class="d-flex justify-content-between align-items-center">
                     <small class="text-body-secondary fw-bold">${{this.price}}</small>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Eliminar</button>
-                    </div>
                 </div>
             </div>
         </div>

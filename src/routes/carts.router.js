@@ -10,6 +10,7 @@ const cartController = new CartController();
 const ticketController = new TicketController();
 import CustomError from "../servicio/error/customError.class.js";
 import { ErrorEnum } from "../servicio/enum/error.enum.js";
+import isProductCarUser from "./middlewares/isProductCartUser.js";
 
 router.post("/", async (req, res) => {
   await cartController.addCartController();
@@ -45,7 +46,7 @@ router.get("/", async (req, res) => {
   res.send(carts);
 });
 
-router.post("/:cid/product/:pid", isCartUser, async (req, res, next) => {
+router.post("/:cid/product/:pid", isProductCarUser, isCartUser, async (req, res, next) => {
   const cid = req.params.cid;
   const pid = req.params.pid;
   if (cid.length != 24 || pid.length != 24) {

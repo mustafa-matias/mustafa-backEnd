@@ -5,17 +5,28 @@ import { CurrentUserDTO } from "../controller/DTO/user.dto.js";
 import CustomError from "../servicio/error/customError.class.js";
 import { generateErrorInfo } from "../servicio/info.js";
 import { ErrorEnum } from "../servicio/enum/error.enum.js";
+import Mail from "../helpers/mail.js";
+import userModel from "../persistencia/mongoDb/models/users.model.js";
+import {
+  generateRandomCode,
+  createHash,
+  isValidPassword,
+} from "../../utils.js";
+import SessionsController from "../controller/sessions.controller.js";
+const sessionsController = new SessionsController();
 
 router.post(
   "/register",
   passport.authenticate("register"),
   async (req, res) => {
     req.session.user = {
+      _id: req.user._id,
       name: req.user.firtName + " " + req.user.lastName,
       email: req.user.email,
       age: req.user.age,
       role: req.user.role,
       cart: req.user.cart,
+      premium: req.user.premium,
     };
     return res.redirect("/products");
   }
@@ -49,13 +60,14 @@ router.post(
         .send({ status: "error", error: "Invalid credentials" });
 
     req.session.user = {
+      _id: req.user._id,
       name: req.user.firtName + " " + req.user.lastName,
       email: req.user.email,
       age: req.user.age,
       role: req.user.role,
       cart: req.user.cart,
+      premium: req.user.premium,
     };
-    console.log(req.session);
     res.send({ status: "success", message: req.session.user });
   }
 );
@@ -71,11 +83,13 @@ router.get(
   passport.authenticate("github"),
   async (req, res) => {
     req.session.user = {
+      _id: req.user._id,
       name: req.user.firtName,
       email: req.user.email,
       age: req.user.age,
       role: req.user.role,
       cart: req.user.cart,
+      premium: req.user.premium,
     };
     res.redirect("/products");
   }
@@ -91,6 +105,50 @@ router.get("/logout", (req, res) => {
 router.get("/current", (req, res) => {
   if (req.user) res.send(new CurrentUserDTO(req.user));
   else res.send({ status: "No se encuentra usuario logueado" });
+});
+
+router.post("/forgotPassword", async (req, res) => {
+  const emailUsuario = req.body.email;
+  try {
+    await sessionsController.forgotPasswordController(
+      emailUsuario
+    );
+    return res.redirect("/products");
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ error: "Error en el servidor" });
+  }
+});
+
+router.post("/resetPassword/:token", async (req, res) => {
+  const token = req.params.token;
+  const { password, confirmPassword } = req.body;
+  try {
+    await sessionsController.resetPasswordController(token, password, confirmPassword);
+    return res.redirect("/api/sessions/login");
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ error: "Error en el servidor" });
+  }
+});
+
+router.put("/users/premium/:id", async (req, res) => {
+  try {
+    const userID = req.params.id;
+    const result = await sessionsController.updateUserPremiumController(userID);
+    if (result.error) {
+      return res.status(400).send({ error: result.error });
+    }
+    req.session.user.premium = result.premium;
+    res.send({
+      mensaje: "La actualización se realizó correctamente",
+      estado: "éxito",
+      premium: result.premium,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "Error en el servidor" });
+  }
 });
 
 export default router;

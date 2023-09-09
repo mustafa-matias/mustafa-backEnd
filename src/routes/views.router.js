@@ -7,6 +7,7 @@ const productController = new ProductController();
 import isUser from "./middlewares/isUser.middleware.js";
 import isCartUser from "./middlewares/isCartUser.middleware.js";
 import isAdmin from "./middlewares/isAdmin.middleware.js";
+import isPremium from "./middlewares/isPremium.middleware.js";
 import {
   calcularTotalProductosCarrrito,
   generateProducts,
@@ -14,6 +15,7 @@ import {
 import compression from "express-compression";
 import CustomError from "../servicio/error/customError.class.js";
 import { ErrorEnum } from "../servicio/enum/error.enum.js";
+import config from "../config/config.js";
 
 router.get("/", async (req, res) => {
   const products = await productController.getProductsController();
@@ -23,7 +25,8 @@ router.get("/", async (req, res) => {
 router.get("/products", async (req, res) => {
   let page = parseInt(req.query.page);
   let usuario = req.session.user;
-  req.logger.info({message: `pagination: ${page}`, fecha: new Date()})
+
+  req.logger.info({ message: `pagination: ${page}`, fecha: new Date() });
 
   if (!page) page = 1;
   let products = await productsModel.paginate(
@@ -45,7 +48,7 @@ router.get("/products", async (req, res) => {
 router.get("/product/:pid", async (req, res, next) => {
   const usuario = req.session.user;
   let pid = req.params.pid;
-  req.logger.info({message: `id: ${pid}`, fecha: new Date()})
+  req.logger.info({ message: `id: ${pid}`, fecha: new Date() });
 
   if (pid.length != 24) {
     try {
@@ -57,7 +60,7 @@ router.get("/product/:pid", async (req, res, next) => {
       });
     } catch (error) {
       next(error);
-      req.logger.error({message: `${error}`, fecha: new Date()})
+      req.logger.error({ message: `${error}`, fecha: new Date() });
       return;
     }
   }
@@ -66,7 +69,7 @@ router.get("/product/:pid", async (req, res, next) => {
     res.render("product", { product, title: product.title, usuario });
   } catch (error) {
     next(error);
-    req.logger.error({message: `${error}`, fecha: new Date()})
+    req.logger.error({ message: `${error}`, fecha: new Date() });
     return;
   }
 });
@@ -83,7 +86,7 @@ router.get("/api/carts/:cid", isCartUser, async (req, res, next) => {
       });
     } catch (error) {
       next(error);
-      req.logger.error({message: `${error}`, fecha: new Date()})
+      req.logger.error({ message: `${error}`, fecha: new Date() });
       return;
     }
   }
@@ -96,18 +99,22 @@ router.get("/api/carts/:cid", isCartUser, async (req, res, next) => {
     res.render("cart", { cart, totalProductos });
   } catch (error) {
     next(error);
-    req.logger.error({message: `${error}`, fecha: new Date()})
+    req.logger.error({ message: `${error}`, fecha: new Date() });
     return;
   }
 });
 
-router.get("/realTimeProducts", isAdmin, async (req, res) => {
+router.get("/api/products/realTimeProducts", isPremium, async (req, res) => {
+  let usuario = req.session.user.email;
+  if (usuario === config.adminEmail){
+    usuario = "admin"
+  }
   try {
     const products = await productController.getProductsController();
-    res.render("realTimeProducts", { products, title: "Real Time Products" });
+    res.render("realTimeProducts", {usuario, products, title: "Real Time Products" });
   } catch (error) {
     console.error(error);
-    req.logger.error({message: `${error}`, fecha: new Date()})
+    req.logger.error({ message: `${error}`, fecha: new Date() });
   }
 });
 
@@ -121,6 +128,19 @@ router.get("/api/sessions/register", (req, res) => {
 
 router.get("/api/sessions/login", (req, res) => {
   res.render("login", { title: "login" });
+});
+
+router.get("/api/sessions/forgotPassword", (req, res) => {
+  res.render("forgotPassword", { title: "Forgot Password" });
+});
+
+router.get("/api/sessions/resetPassword/:token", (req, res) => {
+  res.render("resetPassword", { title: "Reset Password" });
+});
+
+router.get("/api/sessions/users/premium/:uid", (req, res) => {
+  let usuario = req.session.user;
+  res.render("userPremium", { title: "Usuario Premium", usuario });
 });
 
 router.get(

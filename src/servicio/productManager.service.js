@@ -34,11 +34,9 @@ export default class ProductService {
   async addProductService(product) {
     let products = await this.productDao.getProducts();
     const aux = await products.find((e) => e.code == product.code);
-    if (aux) {
-      return {
-        error: "El codigo ya existe",
-      };
-    }
+        if (aux) {
+          throw new Error(`El codigo del producto que quiere cargar ya existe`);
+        }
     return await this.productDao.addProduct(product);
   }
 

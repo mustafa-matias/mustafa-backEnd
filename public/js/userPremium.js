@@ -1,0 +1,29 @@
+const premiumForm = document.getElementById("premiumForm");
+
+premiumForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const actionUrl = premiumForm.getAttribute("action");
+  const uid = actionUrl.split("/").pop();
+
+  fetch(`/api/sessions/users/premium/${uid}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error al realizar la solicitud: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Respuesta exitosa:", data);
+      window.location.href = actionUrl;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+});
+

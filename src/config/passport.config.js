@@ -27,9 +27,11 @@ const initializeStrategy = () => {
 
           const cart = await cartController.addCartController();
           let role = "user";
+          let premium = false;
 
           if (email == config.adminEmail && password == config.adminPassword) {
             role = "admin";
+            premium = true;
           }
           const newUser = {
             firtName,
@@ -39,6 +41,7 @@ const initializeStrategy = () => {
             password: createHash(password),
             role,
             cart: cart._id,
+            premium,
           };
           let result = await userModel.create(newUser);
           return done(null, result);

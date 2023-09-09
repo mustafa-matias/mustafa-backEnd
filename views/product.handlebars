@@ -1,14 +1,17 @@
 <link rel="stylesheet" href="../css/product.css">
 
 {{#if usuario}}
-<div class="d-flex justify-content-between text-light bg-success">
-    <span class="ms-2"><span class="fw-bold text-uppercase fs-5 ">{{usuario.name}} </span> <span
-            class=" ">({{usuario.age}})</span></span>
-    <span><span class="ms-2 fst-italic">{{usuario.email}}</span>
-        <span class="mr-2 fw-semibold text-capitalize">[ {{usuario.role}} ]</span>
+<div class="d-flex justify-content-between text-light">
+    <div>
+        <span class="ms-2"><span class="fw-bold text-uppercase fs-5 ">{{usuario.name}} </span> <span
+                class=" ">({{usuario.age}})</span></span>
+        <span class="mr-2 fw-semibold text-capitalize">[ {{usuario.role}} {{#if usuario.premium}} PREMIUM {{/if}}]
+        </span>
+    </div>
+    <div>
         <a href="/api/carts/{{usuario.cart}}" class="btn btn-warning border border-solid border-dark">🛒</a>
         <a href="/api/sessions/logout" class="btn btn-danger">LogOut</a>
-    </span>
+    </div>
 </div>
 {{else}}
 <div class="d-flex justify-content-end text-light bg-dark m-2">

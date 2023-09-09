@@ -25,7 +25,7 @@ import initializeStrategy from "./config/passport.config.js";
 import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./servicio/middleware/error.middleware.js";
 import { addLogger } from "./config/logger.config.js";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
@@ -67,6 +67,7 @@ socketServer.on("connection", (socket) => {
       stock,
       status,
       category,
+      owner,
     } = data;
     await productController.addProductController({
       title,
@@ -77,12 +78,14 @@ socketServer.on("connection", (socket) => {
       stock,
       status: true,
       category,
+      owner,
     });
     socketServer.emit("imprimir", data);
   });
   socket.on("newProductRouter", async (data) => {
     socketServer.emit("postNewProduct", data);
   });
+
   socket.on("message", async (data) => {
     await chatController.addMessageController(data);
     socketServer.emit("mostrarMesajes", data);
@@ -114,10 +117,13 @@ app.use("/api/carts/", routerCarts);
 app.use("/api/sessions/", routerSessions);
 app.use(errorMiddleware);
 
-app.get('/loggerTest',(req,res)=>{
-  req.logger.debug('error en consola')
-  req.logger.info({message: 'error en file en production y consola en dev', fecha: new Date()})
-  res.send({message: "prueba de logger"})
-})
+app.get("/loggerTest", (req, res) => {
+  req.logger.debug("error en consola");
+  req.logger.info({
+    message: "error en file en production y consola en dev",
+    fecha: new Date(),
+  });
+  res.send({ message: "prueba de logger" });
+});
 
 export default socketServer;

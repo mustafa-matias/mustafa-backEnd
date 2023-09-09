@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   age: {
     type: Number,
@@ -27,10 +28,16 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "user",
   },
+  premium:{
+    type: Boolean,
+    default: false
+  },
   cart: {
     type: Schema.Types.ObjectId,
-    ref: "cart",
+    ref: "carts",
   },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
 });
 
 const userModel = mongoose.model(collection, userSchema);
