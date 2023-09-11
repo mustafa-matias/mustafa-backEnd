@@ -16,7 +16,24 @@ resetPassword.addEventListener("submit", (e) => {
     .then((response) => {
       console.log(response);
       if (response.redirected) {
-        window.location.href = response.url;
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 5000,
+          title: "Su contraseña ha sido reestablecida",
+          icon: "success",
+        });
+        setTimeout(function () {
+          window.location.href = response.url;
+        }, 1000);
+      } else {
+        Swal.fire({
+          icon: "error",
+          position: "top-end",
+          title: "Las contraseñas no válidas",
+          background: "#000",
+        });
       }
     })
     .catch(function (err) {

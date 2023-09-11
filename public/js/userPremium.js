@@ -26,4 +26,3 @@ premiumForm.addEventListener("submit", (e) => {
       console.error("Error:", error);
     });
 });
-
