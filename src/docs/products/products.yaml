@@ -1,0 +1,211 @@
+paths:
+  /api/products:
+    get:
+      summary: obtener todos los usuarios
+      tags:
+        - Products
+      responses:
+        "200":
+          description: devuelve los productos, estes loggeado o no
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#components/schemas/product'
+        "500":
+          description: "hubo un error"
+  /api/products/{pid}:
+    get:
+      summary: obtener un producto por id
+      tags:
+        - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: 'parametro de ruta para identificar el producto'
+        schema:
+          type: string
+      responses:
+        "200":
+          description: devuelve el producto por id
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/product'
+        "500":
+          description: "hubo un error"
+    put:
+      summary: actualizar el producto por id
+      tags:
+        - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: 'parametro de ruta para identificar el producto ha actualizar'
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/updateProduct'
+      responses:
+        "200":
+          description: devuelve el producto por id actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/updateProduct'
+        "500":
+          description: "hubo un error"
+    delete:
+      summary: eliminar producto por id
+      tags:
+        - Products
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: 'parametro de ruta para identificar el producto ha eliminar'
+        schema:
+          type: string
+      responses:
+        "200":
+          description: devuelve el producto por id eliminado
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/product'
+        "500":
+          description: "hubo un error"
+  /api/products/realTimeProducts:
+    post:
+      summary: agregar un producto a la base de datos
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/addProduct'
+      responses:
+        "200":
+          description: devuelve el producto agregado
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/addProduct'
+        "500":
+          description: "hubo un error"
+      
+components:
+  schemas:
+    product:
+      type: object
+      properties:
+        _id: 
+          type: ObjectId
+          description: id autogenerado por mongo
+        title: 
+          type: string
+          description: nombre del producto
+        description: 
+          type: string
+          description: descripcion del producto
+        price: 
+          type: number
+          description: precio del producto
+        thumbnail: 
+          type: string
+          description: imagen del producto
+        code:
+          type: number
+          description: codigo del producto
+        stock:
+          type: number
+          description: stock del producto
+        status:
+          type: boolean
+          description: status del producto
+        category:
+          type: string
+          description: categoria del producto
+        owner:
+          type: string
+          description: e-mail del usuario que crea el producto o en defecto "admin"
+      example:
+        _id: ObjectId("1231231231")
+        title: Coca-Cola
+        description: bebida gaseosa azucarada
+        price: 5
+        thumbnail: 'https://cdn.pixabay.com/photo/2015/01/08/04/16/box-592366_640.jpg'
+        code: 125
+        stock: 1000
+        status: true
+        category: bebicas
+        owner: admin
+    updateProduct:
+      type: object
+      properties:
+        title: 
+          type: string
+          description: nombre del producto
+        description: 
+          type: string
+          description: descripcion del producto
+        price: 
+          type: number
+          description: precio del producto
+      example:
+        title: agua mineralizada
+        description: agua de manantiales
+        price: 5
+    addProduct:
+      type: object
+      properties:
+        title: 
+          type: string
+          description: nombre del producto
+        description: 
+          type: string
+          description: descripcion del producto
+        price: 
+          type: number
+          description: precio del producto
+        thumbnail: 
+          type: string
+          description: imagen del producto
+        code:
+          type: number
+          description: codigo del producto
+        stock:
+          type: number
+          description: stock del producto
+        status:
+          type: boolean
+          description: status del producto
+        category:
+          type: string
+          description: categoria del producto
+        owner:
+          type: string
+          description: e-mail del usuario que crea el producto o en defecto "admin"
+      example:
+        title: Coca-Cola
+        description: bebida gaseosa azucarada
+        price: 5
+        thumbnail: 'https://cdn.pixabay.com/photo/2015/01/08/04/16/box-592366_640.jpg'
+        code: 125
+        stock: 1000
+        status: true
+        category: bebicas
+        owner: admin
+      
+      
+
+        

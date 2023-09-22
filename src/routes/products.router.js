@@ -1,8 +1,8 @@
 import express from "express";
 import { Router } from "express";
 const router = Router();
-router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 
 import ProductController from "../controller/product.controller.js";
 const productController = new ProductController();
@@ -60,7 +60,7 @@ router.post("/realTimeProducts", isPremium, async (req, res) => {
   await productController.addProductController(newProduct);
 
   req.socketServer.sockets.emit("newProductRouter", newProduct);
-  res.send(`se agregó ${newProduct.title}`);
+  res.send({status: "success", product: newProduct});
 });
 
 router.put("/:pid", isAdmin, async (req, res, next) => {
@@ -80,9 +80,9 @@ router.put("/:pid", isAdmin, async (req, res, next) => {
   }
   const update = req.body;
   try {
-    const procuctByID = await productController.getProductByidController(pid);
     await productController.updateProductController(pid, update);
-    res.send(`El producto ${procuctByID.title} con ID: ${pid} fue actualizado`);
+    const updateProduct = await productController.getProductByidController(pid);
+    res.send({status: `success`,product: updateProduct});
   } catch (error) {
     next(error);
     return;
@@ -107,7 +107,7 @@ router.delete("/:pid", isProductUser, async (req, res, next) => {
   try {
     const procuctByID = await productController.getProductByidController(pid);
     await productController.deleteProductByidController(pid);
-    res.send(`El producto ${procuctByID.title} con ID: ${pid} fue eliminado`);
+    res.send({status: `success`,product: procuctByID});
   } catch (error) {
     next(error);
     return;

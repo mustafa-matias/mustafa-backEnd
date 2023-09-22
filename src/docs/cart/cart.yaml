@@ -1,0 +1,302 @@
+paths:
+  /api/carts:
+    get:
+      summary: obtener todos los carritos
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: devuelve los carritos
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#components/schemas/cart'
+        "500":
+          description: "hubo un error"
+    post:
+      summary: agregar un carrito nuevo
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: devuelve el carrito creado
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/cart'
+        "500":
+          description: "hubo un error"
+  /api/carts/{cid}:
+    get:
+      summary: obtener un producto por id
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: 'parametro de ruta para identificar el carrito'
+        schema:
+          type: string
+      responses:
+        "200":
+          description: devuelve el carrito por id
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/cart'
+        "500":
+          description: "hubo un error"
+    delete:
+      summary: elimina todos los producto de un carrito por id
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: 'parametro de ruta para identificar el carrito a eliminar todos sus productos'
+        schema:
+          type: string
+      responses:
+        "200":
+          description: devuelve el status
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/cart'
+        "500":
+          description: "hubo un error"
+    put:
+      summary: actualizar todos los productos de un carrito por id
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: 'parametro de ruta para identificar el carrito ha actualizar'
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/updateCart'
+      responses:
+        "200":
+          description: devuelve el carrito por id actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/cart'
+        "500":
+          description: "hubo un error"
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: agregar un producto por id a un carrito determinado por id
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: 'parametro para identificar el carrito al cual se le va a agregar un producto'
+        schema:
+          type: string
+      - name: pid
+        in: path
+        required: true
+        description: 'parametro para identificar el producto ha agregar al carrito'
+        schema:
+          type: string
+      responses:
+        "200":
+          description: devuelve el status
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/cart'
+        "500":
+          description: "hubo un error"
+    delete:
+      summary: elimina un producto por id de un carrito determinado por id
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: 'parametro para identificar el carrito al cual se le va a eliminar un producto'
+        schema:
+          type: string
+      - name: pid
+        in: path
+        required: true
+        description: 'parametro para identificar el producto ha eliminar del carrito'
+        schema:
+          type: string
+      responses:
+        "200":
+          description: devuelve el status
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/cart'
+        "500":
+          description: "hubo un error"
+    put:
+      summary: actualizar cantidad de un producto por id en un carrito determinado por id
+      tags:
+        - Carts
+      parameters:
+      - name: cid
+        in: path
+        required: true
+        description: 'parametro para identificar el carrito al cual se va actualizar la cantidad de un producto'
+        schema:
+          type: string
+      - name: pid
+        in: path
+        required: true
+        description: 'parametro para identificar el producto que se va a actualizar la cantidad'
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/updateQuantity'
+      responses:
+        "200":
+          description: devuelve el status
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/cart'
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Realizar una compra de carrito
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito
+          required: true
+          schema:
+            type: string
+        - name: email
+          in: formData
+          description: Correo electrónico del usuario
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Compra exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Mensaje de confirmación de compra
+        "400":
+          description: Error en la solicitud
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Mensaje de error
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Mensaje de error interno del servidor
+
+components:
+  schemas:
+    cart:
+      type: object
+      properties:
+        _id:
+          type: string  
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: object 
+                description: id del producto y referencia al modelo productos
+              quantity:
+                type: number
+                description: Cantidad del producto
+              amount:
+                type: number
+                description: Monto del producto
+    updateCart:
+      type: array
+      items:
+        type: object
+        properties:
+          _id:
+            type: string
+            description: id mongo del producto
+          title:
+            type: string
+            description: Nombre del producto
+          description:
+            type: string
+            description: Descripción del producto
+          price:
+            type: number
+            description: Precio del producto
+          thumbnail:
+            type: string
+            format: url
+            description: URL de la imagen del producto
+          code:
+            type: number
+            description: Código del producto
+          stock:
+            type: number
+            description: Cantidad en stock del producto
+          status:
+            type: boolean
+            description: Estado del producto (activo/inactivo)
+          category:
+            type: string
+            description: Categoría del producto
+      example:
+        - _id: 6498cffc1f20997a7c777e82
+          title: agua mineralizada
+          description: agua de manantiales
+          price: 6
+          thumbnail: https://cdn.pixabay.com/photo/2020/04/03/11/28/water-4998513_1280.png
+          code: 126
+          stock: 69
+          status: true
+          category: bebida
+          owner: admin
+    updateQuantity:
+      type: object
+      properties:
+        quantity:
+          type: number
+          description: cantidad deseada a actualizar
+      example:
+        quantity: 4

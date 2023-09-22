@@ -12,10 +12,9 @@ import CustomError from "../servicio/error/customError.class.js";
 import { ErrorEnum } from "../servicio/enum/error.enum.js";
 import isProductCarUser from "./middlewares/isProductCartUser.js";
 
-router.post("/", async (req, res) => {
-  await cartController.addCartController();
-  res.send(`Se agrego nuevo Carrito`);
-  return;
+router.get("/", async (req, res) => {
+  const carts = await cartController.getCartsController();
+  res.send(carts);
 });
 
 router.get("/:cid", async (req, res, next) => {
@@ -41,9 +40,10 @@ router.get("/:cid", async (req, res, next) => {
   }
 });
 
-router.get("/", async (req, res) => {
-  const carts = await cartController.getCartsController();
-  res.send(carts);
+router.post("/", async (req, res) => {
+  const cart = await cartController.addCartController();
+  res.send({status: "success", cart: cart});
+  return;
 });
 
 router.post("/:cid/product/:pid", isProductCarUser, isCartUser, async (req, res, next) => {
@@ -63,8 +63,8 @@ router.post("/:cid/product/:pid", isProductCarUser, isCartUser, async (req, res,
     }
   }
   try {
-    await cartController.addProductToCartController(cid, pid);
-    res.send("Se cargo de forma exitosa");
+    const result = await cartController.addProductToCartController(cid, pid);
+    res.send({status: 'success', payload: result});
   } catch (error) {
     next(error);
   }
@@ -142,7 +142,7 @@ router.put("/:cid", async (req, res, next) => {
   }
 });
 
-router.put("/:cid/products/:pid", async (req, res, next) => {
+router.put("/:cid/product/:pid", async (req, res, next) => {
   let cartId = req.params.cid;
   let productId = req.params.pid;
   if (cartId.length != 24 || productId.length != 24) {

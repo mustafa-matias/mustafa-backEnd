@@ -28,7 +28,7 @@ router.post(
       cart: req.user.cart,
       premium: req.user.premium,
     };
-    return res.redirect("/products");
+    return res.redirect("/api/products");
   }
 );
 
@@ -91,7 +91,7 @@ router.get(
       cart: req.user.cart,
       premium: req.user.premium,
     };
-    res.redirect("/products");
+    res.redirect("/api/products");
   }
 );
 
@@ -113,7 +113,7 @@ router.post("/forgotPassword", async (req, res) => {
     await sessionsController.forgotPasswordController(
       emailUsuario
     );
-    return res.redirect("/products");
+    return res.redirect("/api/products");
   } catch (error) {
     console.error(error);
     return res.status(500).send({ error: "Error en el servidor" });

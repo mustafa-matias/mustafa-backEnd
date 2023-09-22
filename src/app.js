@@ -26,13 +26,15 @@ import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./servicio/middleware/error.middleware.js";
 import { addLogger } from "./config/logger.config.js";
 import dotenv from "dotenv";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
+
 dotenv.config();
 
 const app = express();
-app.use(addLogger);
-
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(addLogger);
 app.use(express.static(__dirname + "/public"));
 
 app.engine("handlebars", handlebars.engine());
@@ -108,6 +110,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(errorMiddleware);
 
 app.use(cookieParser("palabraSecretaCookie"));
 initializeStrategy();
@@ -115,7 +118,6 @@ app.use("/", viewsRouter);
 app.use("/api/products/", routerProducts);
 app.use("/api/carts/", routerCarts);
 app.use("/api/sessions/", routerSessions);
-app.use(errorMiddleware);
 
 app.get("/loggerTest", (req, res) => {
   req.logger.debug("error en consola");
@@ -127,3 +129,18 @@ app.get("/loggerTest", (req, res) => {
 });
 
 export default socketServer;
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      title: "Documentación E-Commerce BackEnd",
+      description: "Documentación proyecto E-Commerce Curso BackEnd",
+    },
+  },
+  apis: [`${__dirname}/src/docs/**/*.yaml`],
+};
+
+const specs = swaggerJSDoc(swaggerOptions);
+
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));

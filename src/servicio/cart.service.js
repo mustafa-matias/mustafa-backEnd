@@ -108,7 +108,7 @@ export default class CartService {
         error: "id cart incorrecto",
       };
     }
-    let product = cart.products.find((e) => e.product._id == productId);
+    let product = cart.products.find((e) => e._id == productId);
     product.quantity = quantity;
     return await this.cartDao.actualizarCantidadProducto(cart);
   }

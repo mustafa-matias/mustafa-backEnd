@@ -28,7 +28,7 @@
         </button>
         {{/if}}
         </form>
-        <a href="/chat" class="btn btn-primary">✍Chat</a>
+        <a href="/api/chat" class="btn btn-primary">✍Chat</a>
         <a href='/api/carts/{{usuario.cart}}' class="btn btn-success border border-solid border-dark">🛒</a>
         <a href="/api/sessions/logout" class="btn btn-danger">LogOut</a>
         </span>
@@ -49,7 +49,7 @@
 
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             <div class="box card">
-                <a href="http://localhost:8080/product/{{this._id}}" class="box cardImg ">
+                <a href="http://localhost:8080/api/products/{{this._id}}" class="box cardImg ">
                     <img src={{this.thumbnail}} alt={{this.title}}>
                 </a>
                 <div class="info">
