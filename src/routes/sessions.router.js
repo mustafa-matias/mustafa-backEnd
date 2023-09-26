@@ -68,7 +68,7 @@ router.post(
       cart: req.user.cart,
       premium: req.user.premium,
     };
-    res.send({ status: "success", message: req.session.user });
+    res.send({ status: "success", payload: req.session.user });
   }
 );
 

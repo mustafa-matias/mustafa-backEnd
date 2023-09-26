@@ -111,7 +111,8 @@ router.delete("/:cid", async (req, res, next) => {
     }
   }
   try {
-    await cartController.deleteAllProductsFromCartController(cartId);
+    const cart = await cartController.deleteAllProductsFromCartController(cartId);
+    console.log(cart)
     res.send({ status: "success" });
   } catch (error) {
     next(error);
