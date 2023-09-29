@@ -23,16 +23,4 @@ export default class SessionsController {
   async resetPasswordController(token, password, confirmPassword){
     return await this.sessionsService.resetPasswordServive(token, password, confirmPassword);
   }
-
-  async updateUserPremiumController(userID) {
-    if (userID.length != 24) {
-        throw CustomError.createError({
-          name: "incomplete id ",
-          cause: `Ivalid id: ${pid}`,
-          message: "cannot delete product",
-          code: ErrorEnum.PARAM_ERROR,
-        });
-    }
-    return await this.sessionsService.updateUserPremiumService(userID);
-  }
 }

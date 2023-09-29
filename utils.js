@@ -3,13 +3,25 @@ import { dirname } from "path";
 import multer from "multer";
 import bcrypt from "bcrypt";
 import { faker } from "@faker-js/faker";
+import path from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, __dirname + "./src/public/images");
+    let uploadPath ='';
+    if(file.fieldname === 'profiles'){
+      uploadPath = 'public/uploads/profiles'
+    }
+    if(file.fieldname === 'products'){
+      uploadPath = 'public/uploads/products'
+    }
+    if(file.fieldname === 'documents'){
+      uploadPath = 'public/uploads/documents'
+    }
+
+    cb(null, path.join(__dirname, uploadPath));
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
@@ -61,14 +73,15 @@ export const gereateProduct = () => {
   };
 };
 
-export const generateRandomCode = (length)=> {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let code = '';
+export const generateRandomCode = (length) => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let code = "";
   for (let i = 0; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
     code += characters.charAt(randomIndex);
   }
   return code;
-}
+};
 
 export default __dirname;

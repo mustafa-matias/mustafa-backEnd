@@ -28,16 +28,31 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "user",
   },
-  premium:{
+  premium: {
     type: Boolean,
-    default: false
+    default: false,
   },
   cart: {
     type: Schema.Types.ObjectId,
     ref: "carts",
   },
-  resetPasswordToken: String,
-  resetPasswordExpires: Date,
+  resetPasswordToken: {
+    type: String,
+  },
+  resetPasswordExpires: {
+    type: Date,
+  },
+  documents: {
+    type: [
+      {
+        name: String,
+        reference: String,
+      },
+    ],
+    default: [],
+  },  last_connection: {
+    type: Date,
+  },
 });
 
 const userModel = mongoose.model(collection, userSchema);

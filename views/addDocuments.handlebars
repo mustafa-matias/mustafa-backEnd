@@ -1,0 +1,33 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<div class="text-light text-center">
+    <div>
+        <p>Cargar Archivos</p>
+        <p>usuario: {{userId}}</p>
+    </div>
+    <form action="/api/users/{{userId}}/documents" method="POST" id='upload-form' enctype="multipart/form-data">
+        <div class="d-flex justify-content-between m-3">
+            <label for="profiles">Imagen de perfil</label>
+            <input type="file" name="profiles" id="profiles" accept=".pdf,.jpg, .jpeg" multiple>
+            <span class="file-description">Sube un archivo PDF, jpeg, jpg</span>
+        </div>
+        <div class="d-flex justify-content-between m-3">
+            <label for="products">Foto de producto:</label>
+            <input type="file" name="products" id="products" accept=".pdf,.jpg, .jpeg" multiple>
+            <span class="file-description">Sube un archivo PDF, jpeg, jpg</span>
+        </div>
+        <div class="d-flex justify-content-between m-3">
+            <label for="documents">Documento</label>
+            <input type="file" name="documents" id="documents" accept=".pdf, .doc, .docx, .txt, .jpg, .jpeg" multiple>
+            <span class="file-description">Sube un archivo PDF, jpeg, jpg, DOC, DOCX o TXT.</span>
+        </div>
+        <div class="mt-5">
+            <input type="submit" value="Cargar Archivos">
+        </div>
+    </form>
+</div>
+<script src="/js/uploadDocuments.js"></script>

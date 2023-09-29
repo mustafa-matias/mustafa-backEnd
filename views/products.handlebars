@@ -12,7 +12,7 @@
                 class=" ">({{usuario.age}})</span></span>
         <span class="mr-2 fw-semibold text-capitalize">[ {{usuario.role}} {{#if usuario.premium}}⭐ PREMIUM ⭐{{/if}}]
         </span>
-        <form id="premiumForm" action="http://localhost:8080/api/sessions/users/premium/{{usuario._id}}">
+        <form id="premiumForm" action="http://localhost:8080/api/users/premium/{{usuario._id}}">
     </div>
     <div>
         {{#if usuario.premium}}

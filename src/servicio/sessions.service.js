@@ -73,29 +73,4 @@ export default class SessionsService {
 
     await this.sessionDao.resetPasswordDao(user);
   }
-
-  async updateUserPremiumService(userID) {
-    try {
-      const user = await userModel.findOne({ _id: userID });
-      if (!user) {
-        throw CustomError.createError({
-          name: "usuario no existente ",
-          cause: `Ivalid id: ${userID}`,
-          message: "cannot get user",
-          code: ErrorEnum.PARAM_ERROR,
-        });
-      }
-      if (user.premium === false) {
-        user.premium = true;
-        return await this.sessionDao.updateUserPremiumDao(user);
-      }
-      if (user.premium) {
-        user.premium = false;
-        return await this.sessionDao.updateUserPremiumDao(user);
-      }
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
 }

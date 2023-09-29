@@ -27,6 +27,8 @@ router.post(
       role: req.user.role,
       cart: req.user.cart,
       premium: req.user.premium,
+      last_connetion: req.user.last_connetion,
+      documents: req.user.documents
     };
     return res.redirect("/api/products");
   }
@@ -67,6 +69,8 @@ router.post(
       role: req.user.role,
       cart: req.user.cart,
       premium: req.user.premium,
+      last_connetion: req.user.last_connetion,
+      documents: req.user.documents
     };
     res.send({ status: "success", payload: req.session.user });
   }
@@ -90,15 +94,22 @@ router.get(
       role: req.user.role,
       cart: req.user.cart,
       premium: req.user.premium,
+      last_connetion: req.user.last_connetion,
+      documents: req.user.documents
     };
     res.redirect("/api/products");
   }
 );
 
-router.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (!err) res.redirect("/api/sessions/login");
-    else res.send({ status: "logout ERROR", body: err });
+router.get("/logout", async (req, res) => {
+  const userId = req.session.user._id;
+  req.session.destroy(async (err) => {
+    if (!err) {
+      await userModel.findByIdAndUpdate(userId, {
+        last_connection: new Date(),
+      });
+      res.redirect("/api/sessions/login");
+    } else res.send({ status: "logout ERROR", body: err });
   });
 });
 
@@ -110,9 +121,7 @@ router.get("/current", (req, res) => {
 router.post("/forgotPassword", async (req, res) => {
   const emailUsuario = req.body.email;
   try {
-    await sessionsController.forgotPasswordController(
-      emailUsuario
-    );
+    await sessionsController.forgotPasswordController(emailUsuario);
     return res.redirect("/api/products");
   } catch (error) {
     console.error(error);
@@ -124,30 +133,15 @@ router.post("/resetPassword/:token", async (req, res) => {
   const token = req.params.token;
   const { password, confirmPassword } = req.body;
   try {
-    await sessionsController.resetPasswordController(token, password, confirmPassword);
+    await sessionsController.resetPasswordController(
+      token,
+      password,
+      confirmPassword
+    );
     return res.redirect("/api/sessions/login");
   } catch (error) {
     console.error(error);
     return res.status(500).send({ error: "Error en el servidor" });
-  }
-});
-
-router.put("/users/premium/:id", async (req, res) => {
-  try {
-    const userID = req.params.id;
-    const result = await sessionsController.updateUserPremiumController(userID);
-    if (result.error) {
-      return res.status(400).send({ error: result.error });
-    }
-    req.session.user.premium = result.premium;
-    res.send({
-      mensaje: "La actualización se realizó correctamente",
-      estado: "éxito",
-      premium: result.premium,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ error: "Error en el servidor" });
   }
 });
 

@@ -9,9 +9,4 @@ export default class SessionsDao {
     await user.save();
     return user;
   };
-
-  updateUserPremiumDao = async (user) => {
-    user.save();
-    return user;
-  };
 }

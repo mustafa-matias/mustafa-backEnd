@@ -44,9 +44,9 @@ router.get("/api/products", async (req, res) => {
     ? `http://localhost:8080/api/products?page=${products.nextPage}`
     : "";
   products.isValid = !(page <= 0 || page > products.totalPages);
-  res.send(products)
+  // res.send(products)
 
-  // res.render("products", { products, title: "Products", usuario });
+  res.render("products", { products, title: "Products", usuario });
 });
 
 router.get("/api/products/:pid", async (req, res, next) => {
@@ -70,9 +70,9 @@ router.get("/api/products/:pid", async (req, res, next) => {
   }
   try {
     let product = await productsModel.findOne({ _id: pid }).lean();
-      res.send(product)
+      // res.send(product)
 
-    // res.render("product", { product, title: product.title, usuario });
+    res.render("product", { product, title: product.title, usuario });
   } catch (error) {
     next(error);
     req.logger.error({ message: `${error}`, fecha: new Date() });
@@ -102,8 +102,8 @@ router.get("/api/carts/:cid", isCartUser, async (req, res, next) => {
       .populate("products.product")
       .lean();
     const totalProductos = calcularTotalProductosCarrrito(cart);
-    res.send(cart)
-    // res.render("cart", { cart, totalProductos });
+    // res.send(cart)
+    res.render("cart", { cart, totalProductos });
   } catch (error) {
     next(error);
     req.logger.error({ message: `${error}`, fecha: new Date() });
@@ -145,7 +145,7 @@ router.get("/api/sessions/resetPassword/:token", (req, res) => {
   res.render("resetPassword", { title: "Reset Password" });
 });
 
-router.get("/api/sessions/users/premium/:uid", (req, res) => {
+router.get("/api/users/premium/:uid", (req, res) => {
   let usuario = req.session.user;
   res.render("userPremium", { title: "Usuario Premium", usuario });
 });
@@ -159,4 +159,8 @@ router.get(
   }
 );
 
+router.get('/api/users/:uid/documents',(req, res)=>{
+  const userId = req.params.uid;
+  res.render("addDocuments",{userId})
+})
 export default router;

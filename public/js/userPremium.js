@@ -6,7 +6,7 @@ premiumForm.addEventListener("submit", (e) => {
   const actionUrl = premiumForm.getAttribute("action");
   const uid = actionUrl.split("/").pop();
 
-  fetch(`/api/sessions/users/premium/${uid}`, {
+  fetch(`/api/users/premium/${uid}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
