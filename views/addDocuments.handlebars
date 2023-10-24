@@ -6,28 +6,42 @@
 
 <div class="text-light text-center">
     <div>
-        <p>Cargar Archivos</p>
+        <p>Cargar Archivos para ser Premium</p>
         <p>usuario: {{userId}}</p>
     </div>
     <form action="/api/users/{{userId}}/documents" method="POST" id='upload-form' enctype="multipart/form-data">
         <div class="d-flex justify-content-between m-3">
-            <label for="profiles">Imagen de perfil</label>
-            <input type="file" name="profiles" id="profiles" accept=".pdf,.jpg, .jpeg" multiple>
+            <label for="fotoPerfil">Imagen de perfil</label>
+            <input type="file" name="fotoPerfil" id="fotoPerfil" accept=".pdf,.jpg, .jpeg"
+                onchange="fileSelected(this)">
             <span class="file-description">Sube un archivo PDF, jpeg, jpg</span>
         </div>
         <div class="d-flex justify-content-between m-3">
-            <label for="products">Foto de producto:</label>
-            <input type="file" name="products" id="products" accept=".pdf,.jpg, .jpeg" multiple>
+            <label for="dniFrente">Dni frente</label>
+            <input type="file" name="dniFrente" id="dniFrente" accept=".pdf,.jpg, .jpeg" onchange="fileSelected(this)">
             <span class="file-description">Sube un archivo PDF, jpeg, jpg</span>
         </div>
         <div class="d-flex justify-content-between m-3">
-            <label for="documents">Documento</label>
-            <input type="file" name="documents" id="documents" accept=".pdf, .doc, .docx, .txt, .jpg, .jpeg" multiple>
-            <span class="file-description">Sube un archivo PDF, jpeg, jpg, DOC, DOCX o TXT.</span>
+            <label for="dniDorso">Dni dorso</label>
+            <input type="file" name="dniDorso" id="dniDorso" accept=".pdf, .doc, .docx, .txt, .jpg, .jpeg"
+                onchange="fileSelected(this)">
+            <span class="file-description">Sube un archivo PDF, jpeg, jpg</span>
         </div>
         <div class="mt-5">
-            <input type="submit" value="Cargar Archivos">
+            <input type="submit" value="Cargar Archivos" id="uploadButton" disabled>
         </div>
     </form>
+    <div>
+        <button id="premiumButton" class="btn btn-secondary border border-solid border-dark" style="display: none;">
+            <strong class="text-light">Siguiente</strong>
+        </button>
+    </div>
+    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 mt-3">
+        <div class=""><a href="/products" class="btn btn-success btn-block btn-lg">Volver a Productos</a>
+        </div>
+    </div>
+
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/uploadDocuments.js"></script>
+<script src="/js/userPremium.js"></script>

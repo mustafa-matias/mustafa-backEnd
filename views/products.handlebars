@@ -12,32 +12,32 @@
                 class=" ">({{usuario.age}})</span></span>
         <span class="mr-2 fw-semibold text-capitalize">[ {{usuario.role}} {{#if usuario.premium}}⭐ PREMIUM ⭐{{/if}}]
         </span>
-        <form id="premiumForm" action="http://localhost:8080/api/users/premium/{{usuario._id}}">
+        <form id="premiumForm" action="http://localhost:8080/users/premium/{{usuario._id}}">
     </div>
     <div>
         {{#if usuario.premium}}
-        <a href="/api/products/realTimeProducts"
+        <a href="/products/realTimeProducts"
             class="btn btn-warning border border-solid border-dark text-light"><strong>Agregar Producto</strong></a>
-        <button id="premiumButton" class="btn btn-secondary border border-solid border-dark">
+        <button id="userClassicButton" class="btn btn-secondary border border-solid border-dark">
             <strong class="text-light">Queres dejar de ser Premium?</strong>
         </button>
 
         {{else}}
-        <button id="premiumButton" class="btn btn-warning border border-solid border-dark">
+        <a href="/users/{{usuario._id}}/documents" id="" class="btn btn-warning border border-solid border-dark">
             <strong class="text-light">Queres ser Premium?⭐</strong>
-        </button>
+        </a>
         {{/if}}
         </form>
-        <a href="/api/chat" class="btn btn-primary">✍Chat</a>
-        <a href='/api/carts/{{usuario.cart}}' class="btn btn-success border border-solid border-dark">🛒</a>
-        <a href="/api/sessions/logout" class="btn btn-danger">LogOut</a>
+        <a href="/chat" class="btn btn-primary">✍Chat</a>
+        <a href='/carts/{{usuario.cart}}' class="btn btn-success border border-solid border-dark">🛒</a>
+        <a href="api/sessions/logout" class="btn btn-danger">LogOut</a>
         </span>
     </div>
 </div>
 {{else}}
 <div class="d-flex justify-content-end text-light bg-dark m-2">
-    <a href="/api/sessions/login" class="btn btn-success mx-2">Login</a>
-    <a href="/api/sessions/register" class="btn btn-primary">Register</a>
+    <a href="/sessions/login" class="btn btn-success mx-2">Login</a>
+    <a href="/sessions/register" class="btn btn-primary">Register</a>
 </div>
 {{/if}}
 
@@ -49,7 +49,7 @@
 
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             <div class="box card">
-                <a href="http://localhost:8080/api/products/{{this._id}}" class="box cardImg ">
+                <a href="http://localhost:8080/products/{{this._id}}" class="box cardImg ">
                     <img src={{this.thumbnail}} alt={{this.title}}>
                 </a>
                 <div class="info">
@@ -70,7 +70,7 @@
                             data-item-id={{this._id}}>Eliminar</button>
                     </div>
                     {{else}}
-                    <a href="/api/sessions/login" class="btn btn-danger">Logerte para agregar</a>
+                    <a href="/sessions/login" class="btn btn-danger">Logerte para agregar</a>
                     {{/if}}
                 </div>
             </div>
@@ -98,4 +98,4 @@
     {{/if}}
 </div>
 <script src="/js/products.js"></script>
-<script src="/js/userPremium.js"></script>
+<script src="/js/userClassic.js"></script>

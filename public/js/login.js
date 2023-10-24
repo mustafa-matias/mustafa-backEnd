@@ -24,7 +24,7 @@ loginForm.addEventListener("submit", (e) => {
         icon: "success",
       });
       setTimeout(function () {
-        window.location.replace("/api/products");
+        window.location.replace("/products");
       }, 1000);
     } else {
       Swal.fire({

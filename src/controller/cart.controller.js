@@ -19,7 +19,7 @@ export default class CartController {
         error: "id vacio",
       };
     }
-    return await this.cartService.getCartsService(id);
+    return await this.cartService.getCartByIDService(id);
   }
 
   async addProductToCartController(cid, pid) {

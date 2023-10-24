@@ -26,6 +26,7 @@ const initializeStrategy = () => {
           }
 
           const cart = await cartController.addCartController();
+          let last_connection = new Date();
           let role = "user";
           let premium = false;
           if (email == config.adminEmail && password == config.adminPassword) {
@@ -41,7 +42,7 @@ const initializeStrategy = () => {
             role,
             cart: cart._id,
             premium,
-            last_connection: new Date(),
+            last_connection,
           };
           let result = await userModel.create(newUser);
           return done(null, result);
@@ -93,8 +94,7 @@ const initializeStrategy = () => {
       async (accessToken, refreshToken, profile, done) => {
         try {
           let user = await userModel.findOne({ email: profile.profileUrl });
-          user.last_connection = new Date();
-          user.save();
+          let last_connection = new Date();
           if (!user) {
             const cart = await cartController.addCartController();
             let newUser = {
@@ -105,11 +105,14 @@ const initializeStrategy = () => {
               password: " ",
               role: "user",
               cart: cart._id,
-              last_connection: new Date(),
+              last_connection
             };
+
             let result = await userModel.create(newUser);
             done(null, result);
           } else {
+            user.last_connection = new Date();
+            user.save();
             return done(null, user);
           }
         } catch (error) {

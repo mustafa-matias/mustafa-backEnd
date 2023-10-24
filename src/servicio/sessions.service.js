@@ -29,7 +29,7 @@ export default class SessionsService {
     user.resetPasswordExpires = expirationDate;
 
     const mailer = new Mail();
-    const resetUrl = `http://localhost:8080/api/sessions/resetPassword/${token}`;
+    const resetUrl = `http://localhost:8080/sessions/resetPassword/${token}`;
 
     mailer.send(user, "Restablecer Contraseña", resetUrl);
 

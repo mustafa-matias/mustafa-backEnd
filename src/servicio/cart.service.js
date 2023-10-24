@@ -22,7 +22,7 @@ export default class CartService {
         error: "id incorrecto",
       };
     }
-    return await this.cartDao.getCarts(id);
+    return await this.cartDao.getCartByID(id);
   }
 
   async addProductToCartService(cid, pid) {

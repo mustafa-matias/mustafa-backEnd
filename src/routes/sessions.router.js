@@ -28,9 +28,9 @@ router.post(
       cart: req.user.cart,
       premium: req.user.premium,
       last_connetion: req.user.last_connetion,
-      documents: req.user.documents
+      documents: req.user.documents,
     };
-    return res.redirect("/api/products");
+    res.status(200).json({ status: "success" });
   }
 );
 
@@ -70,7 +70,7 @@ router.post(
       cart: req.user.cart,
       premium: req.user.premium,
       last_connetion: req.user.last_connetion,
-      documents: req.user.documents
+      documents: req.user.documents,
     };
     res.send({ status: "success", payload: req.session.user });
   }
@@ -95,22 +95,30 @@ router.get(
       cart: req.user.cart,
       premium: req.user.premium,
       last_connetion: req.user.last_connetion,
-      documents: req.user.documents
+      documents: req.user.documents,
     };
-    res.redirect("/api/products");
+    res.redirect("/products");
   }
 );
 
 router.get("/logout", async (req, res) => {
-  const userId = req.session.user._id;
-  req.session.destroy(async (err) => {
-    if (!err) {
-      await userModel.findByIdAndUpdate(userId, {
-        last_connection: new Date(),
-      });
-      res.redirect("/api/sessions/login");
-    } else res.send({ status: "logout ERROR", body: err });
-  });
+  try {
+    const userId = req.session.user._id;
+    req.session.destroy(async (err) => {
+      if (!err) {
+        await userModel.findByIdAndUpdate(userId, {
+          last_connection: new Date(),
+        });
+
+        res.redirect("/sessions/login");
+      } else res.send({ status: "logout ERROR", body: err });
+    });
+  } catch (err) {
+    res.send({
+      status: "success",
+      message: "no habia sesion abierta para cerrar",
+    });
+  }
 });
 
 router.get("/current", (req, res) => {
@@ -122,7 +130,7 @@ router.post("/forgotPassword", async (req, res) => {
   const emailUsuario = req.body.email;
   try {
     await sessionsController.forgotPasswordController(emailUsuario);
-    return res.redirect("/api/products");
+    return res.redirect("/products");
   } catch (error) {
     console.error(error);
     return res.status(500).send({ error: "Error en el servidor" });
@@ -138,7 +146,7 @@ router.post("/resetPassword/:token", async (req, res) => {
       password,
       confirmPassword
     );
-    return res.redirect("/api/sessions/login");
+    return res.redirect("/sessions/login");
   } catch (error) {
     console.error(error);
     return res.status(500).send({ error: "Error en el servidor" });

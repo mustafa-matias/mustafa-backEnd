@@ -26,8 +26,8 @@ registerForm.addEventListener("submit", (e) => {
       "Content-Type": "application/json",
     },
   })
-    .then((response) => {
-      if (response.redirected) {
+    .then((result) => {
+      if (result.status === 200) {
         Swal.fire({
           toast: true,
           position: "top-end",
@@ -37,7 +37,7 @@ registerForm.addEventListener("submit", (e) => {
           icon: "success",
         });
         setTimeout(function () {
-          window.location.href = response.url;
+          window.location.replace("/products");
         }, 1000);
       } else {
         Swal.fire({

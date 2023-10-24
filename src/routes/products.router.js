@@ -60,11 +60,10 @@ router.post("/realTimeProducts", isPremium, async (req, res) => {
   await productController.addProductController(newProduct);
 
   req.socketServer.sockets.emit("newProductRouter", newProduct);
-  res.send({status: "success", product: newProduct});
+  res.send({ status: "success", product: newProduct });
 });
 
-router.put("/:pid",  async (req, res, next) => {
-// router.put("/:pid", isAdmin, async (req, res, next) => { lo cambie para hacer el supertest
+router.put("/:pid", isAdmin, async (req, res, next) => {
   const pid = req.params.pid;
   if (pid.length != 24) {
     try {
@@ -83,7 +82,7 @@ router.put("/:pid",  async (req, res, next) => {
   try {
     await productController.updateProductController(pid, update);
     const updateProduct = await productController.getProductByidController(pid);
-    res.send({status: `success`,product: updateProduct});
+    res.send({ status: `success`, product: updateProduct });
   } catch (error) {
     next(error);
     return;
@@ -108,7 +107,8 @@ router.delete("/:pid", isProductUser, async (req, res, next) => {
   try {
     const procuctByID = await productController.getProductByidController(pid);
     await productController.deleteProductByidController(pid);
-    res.send({status: `success`,product: procuctByID});
+    console.log(procuctByID);
+    res.send({ status: `success`, product: procuctByID });
   } catch (error) {
     next(error);
     return;

@@ -14,14 +14,14 @@
         </span>
     </div>
     <div>
-        <a href="/api/carts/{{usuario.cart}}" class="btn btn-warning border border-solid border-dark">🛒</a>
+        <a href="/carts/{{usuario.cart}}" class="btn btn-warning border border-solid border-dark">🛒</a>
         <a href="/api/sessions/logout" class="btn btn-danger">LogOut</a>
     </div>
 </div>
 {{else}}
 <div class="d-flex justify-content-end text-light bg-dark m-2">
-    <a href="/api/sessions/login" class="btn btn-success mx-2">Login</a>
-    <a href="/api/sessions/register" class="btn btn-primary">Register</a>
+    <a href="/sessions/login" class="btn btn-success mx-2">Login</a>
+    <a href="/sessions/register" class="btn btn-primary">Register</a>
 </div>
 {{/if}}
 
@@ -54,16 +54,16 @@
                             </form>
                         </span>
                         <span>
-                            <a href="/api/products" class="btn btn-primary ">Volver a productos</a>
+                            <a href="/products" class="btn btn-primary ">Volver a productos</a>
                         </span>
                     </div>
                     {{else}}
                     <div class="d-flex justify-content-around">
                         <span>
-                            <a href="/api/sessions/login" class="btn btn-danger">Logerte para agregar</a>
+                            <a href="/sessions/login" class="btn btn-danger">Logerte para agregar</a>
                         </span>
                         <span>
-                            <a href="/api/products" class="btn btn-primary ">Volver a productos</a>
+                            <a href="/products" class="btn btn-primary ">Volver a productos</a>
                         </span>
                     </div>
                     {{/if}}

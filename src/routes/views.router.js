@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
   res.render("index", { products, title: "Products" });
 });
 
-router.get("/api/products", async (req, res) => {
+router.get("/products", async (req, res) => {
   let page = parseInt(req.query.page);
   let usuario = req.session.user;
 
@@ -44,12 +44,11 @@ router.get("/api/products", async (req, res) => {
     ? `http://localhost:8080/api/products?page=${products.nextPage}`
     : "";
   products.isValid = !(page <= 0 || page > products.totalPages);
-  // res.send(products)
 
   res.render("products", { products, title: "Products", usuario });
 });
 
-router.get("/api/products/:pid", async (req, res, next) => {
+router.get("/products/:pid", async (req, res, next) => {
   const usuario = req.session.user;
   let pid = req.params.pid;
   req.logger.info({ message: `id: ${pid}`, fecha: new Date() });
@@ -70,8 +69,6 @@ router.get("/api/products/:pid", async (req, res, next) => {
   }
   try {
     let product = await productsModel.findOne({ _id: pid }).lean();
-      // res.send(product)
-
     res.render("product", { product, title: product.title, usuario });
   } catch (error) {
     next(error);
@@ -80,7 +77,7 @@ router.get("/api/products/:pid", async (req, res, next) => {
   }
 });
 
-router.get("/api/carts/:cid", isCartUser, async (req, res, next) => {
+router.get("/carts/:cid", isCartUser, async (req, res, next) => {
   const cid = req.params.cid;
   if (cid.length != 24) {
     try {
@@ -102,7 +99,6 @@ router.get("/api/carts/:cid", isCartUser, async (req, res, next) => {
       .populate("products.product")
       .lean();
     const totalProductos = calcularTotalProductosCarrrito(cart);
-    // res.send(cart)
     res.render("cart", { cart, totalProductos });
   } catch (error) {
     next(error);
@@ -111,13 +107,14 @@ router.get("/api/carts/:cid", isCartUser, async (req, res, next) => {
   }
 });
 
-router.get("/api/products/realTimeProducts", isPremium, async (req, res) => {
+router.get("/products/realTimeProducts", isPremium , async (req, res) => {
   let usuario = req.session.user.email;
   if (usuario === config.adminEmail){
     usuario = "admin"
   }
   try {
     const products = await productController.getProductsController();
+    console.log(products)
     res.render("realTimeProducts", {usuario, products, title: "Real Time Products" });
   } catch (error) {
     console.error(error);
@@ -125,27 +122,27 @@ router.get("/api/products/realTimeProducts", isPremium, async (req, res) => {
   }
 });
 
-router.get("/api/chat", isUser, (req, res) => {
+router.get("/chat", isUser, (req, res) => {
   res.render("chat", { title: "Chat" });
 });
 
-router.get("/api/sessions/register", (req, res) => {
+router.get("/sessions/register", (req, res) => {
   res.render("register", { title: "Register" });
 });
 
-router.get("/api/sessions/login", (req, res) => {
+router.get("/sessions/login", (req, res) => {
   res.render("login", { title: "login" });
 });
 
-router.get("/api/sessions/forgotPassword", (req, res) => {
+router.get("/sessions/forgotPassword", (req, res) => {
   res.render("forgotPassword", { title: "Forgot Password" });
 });
 
-router.get("/api/sessions/resetPassword/:token", (req, res) => {
+router.get("/sessions/resetPassword/:token", (req, res) => {
   res.render("resetPassword", { title: "Reset Password" });
 });
 
-router.get("/api/users/premium/:uid", (req, res) => {
+router.get("/users/premium/:uid", (req, res) => {
   let usuario = req.session.user;
   res.render("userPremium", { title: "Usuario Premium", usuario });
 });
@@ -159,8 +156,9 @@ router.get(
   }
 );
 
-router.get('/api/users/:uid/documents',(req, res)=>{
+router.get('/users/:uid/documents',(req, res)=>{
   const userId = req.params.uid;
   res.render("addDocuments",{userId})
 })
+
 export default router;

@@ -34,7 +34,7 @@ router.get("/:cid", async (req, res, next) => {
   }
   try {
     const cartByID = await cartController.getCartByIDController(cid);
-    res.send(cartByID);
+    res.send({status: "success", cart: cartByID});
   } catch (error) {
     next(error);
   }
