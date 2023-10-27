@@ -7,31 +7,33 @@
 
 {{#if usuario}}
 <div class="d-flex justify-content-between text-light">
-    <div>
-        <span class="ms-2">Bienvenido <span class="fw-bold text-uppercase fs-5 ">{{usuario.name}} </span> <span
-                class=" ">({{usuario.age}})</span></span>
-        <span class="mr-2 fw-semibold text-capitalize">[ {{usuario.role}} {{#if usuario.premium}}⭐ PREMIUM ⭐{{/if}}]
-        </span>
-        <form id="premiumForm" action="http://localhost:8080/users/premium/{{usuario._id}}">
+    <div class="d-flex align-items-center"> 
+        <div class="rounded-circle overflow-hidden" style="width: 50px; height: 50px;">
+            {{#if usuario.documents.[0]}}
+                <img src="{{usuario.documents.[0].reference}}" width="100%" alt="fotoPerfil">
+            {{/if}}
+        </div>
+        <div class="ms-3"> 
+            <div>
+                <span class="fw-bold text-uppercase fs-5">{{usuario.name}}</span>
+                <span class=" ">({{usuario.age}})</span>
+            </div>
+            <div>
+                <span class="mr-2 fw-semibold text-capitalize">[ {{usuario.role}} {{#if usuario.premium}}⭐ PREMIUM ⭐{{/if}}]</span>
+            </div>
+        </div>
     </div>
-    <div>
+    <div class="d-flex"> 
         {{#if usuario.premium}}
-        <a href="/products/realTimeProducts"
-            class="btn btn-warning border border-solid border-dark text-light"><strong>Agregar Producto</strong></a>
-        <button id="userClassicButton" class="btn btn-secondary border border-solid border-dark">
-            <strong class="text-light">Queres dejar de ser Premium?</strong>
-        </button>
-
+        <a href="/products/realTimeProducts" class="btn btn-warning border border-solid border-dark text-light"><strong>Agregar Producto</strong></a>
+        <form id="premiumForm" action="http://localhost:8080/users/premium/{{usuario._id}}">
+        <button id="userClassicButton" class="btn btn-secondary border border-solid border-dark"><strong class="text-light">Queres dejar de ser Premium?</strong></button></form>
         {{else}}
-        <a href="/users/{{usuario._id}}/documents" id="" class="btn btn-warning border border-solid border-dark">
-            <strong class="text-light">Queres ser Premium?⭐</strong>
-        </a>
+        <a href="/users/{{usuario._id}}/documents" id="" class="btn btn-warning border border-solid border-dark"><strong class="text-light">Queres ser Premium?⭐</strong></a>
         {{/if}}
-        </form>
         <a href="/chat" class="btn btn-primary">✍Chat</a>
         <a href='/carts/{{usuario.cart}}' class="btn btn-success border border-solid border-dark">🛒</a>
         <a href="api/sessions/logout" class="btn btn-danger">LogOut</a>
-        </span>
     </div>
 </div>
 {{else}}
@@ -40,7 +42,6 @@
     <a href="/sessions/register" class="btn btn-primary">Register</a>
 </div>
 {{/if}}
-
 <div class="container">
     <div class="row">
         <p class="text-light text-center mt-5 fs-1">Lista de Productos</p>

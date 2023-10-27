@@ -174,19 +174,19 @@ router.put("/:cid/product/:pid", async (req, res, next) => {
 
 router.post("/:cid/purchase", async (req, res, next) => {
   const id = req.params.cid;
-  if (id.length != 24) {
-    try {
-      throw CustomError.createError({
-        name: "incomplete id ",
-        cause: `Ivalid id: ${id}`,
-        message: "cannot get product",
-        code: ErrorEnum.PARAM_ERROR,
-      });
-    } catch (error) {
-      next(error);
-      return;
-    }
-  }
+  // if (id.length != 24) {
+  //   try {
+  //     throw CustomError.createError({
+  //       name: "incomplete id ",
+  //       cause: `Ivalid id: ${id}`,
+  //       message: "cannot get product",
+  //       code: ErrorEnum.PARAM_ERROR,
+  //     });
+  //   } catch (error) {
+  //     next(error);
+  //     return;
+  //   }
+  // }
 
   const email = req.user.email;
   try {

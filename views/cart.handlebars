@@ -81,10 +81,8 @@
                             </a>
                         </td>
                         <td>
-                            <form action="http://localhost:8080/api/carts/{{this.cart._id}}/purchase" method="POST">
-                                <button ype="button" class="btn btn-success">COMPRAR<span
-                                        class="glyphicon glyphicon-play"></span></button>
-                            </form>
+                            <button id='purchaseButton' type="button" class="btn btn-success">COMPRAR<span
+                                    class="glyphicon glyphicon-play"></span></button>
                         </td>
                     </tr>
                 </tbody>
@@ -92,3 +90,4 @@
         </div>
     </div>
 </div>
+<script src="/js/purchase.js"></script>

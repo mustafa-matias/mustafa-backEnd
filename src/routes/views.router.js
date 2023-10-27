@@ -19,6 +19,7 @@ import compression from "express-compression";
 import CustomError from "../servicio/error/customError.class.js";
 import { ErrorEnum } from "../servicio/enum/error.enum.js";
 import config from "../config/config.js";
+import mongoose from "mongoose";
 
 router.get("/", async (req, res) => {
   const products = await productController.getProductsController();
@@ -28,6 +29,7 @@ router.get("/", async (req, res) => {
 router.get("/products", async (req, res) => {
   let page = parseInt(req.query.page);
   let usuario = req.session.user;
+  console.log(usuario);
 
   req.logger.info({ message: `pagination: ${page}`, fecha: new Date() });
 
@@ -48,25 +50,60 @@ router.get("/products", async (req, res) => {
   res.render("products", { products, title: "Products", usuario });
 });
 
+router.get("/products/realTimeProducts", isPremium, async (req, res) => {
+  let usuario = req.session.user.email;
+  if (usuario === config.adminEmail) {
+    usuario = "admin";
+  }
+  try {
+    const products = await productController.getProductsController();
+    const userProducts = products.filter(
+      (product) => product.owner === usuario
+    );
+
+    console.log(userProducts);
+    res.render("realTimeProducts", {
+      usuario,
+      userProducts,
+      title: "Real Time Products",
+    });
+  } catch (error) {
+    console.error(error);
+    req.logger.error({ message: `${error}`, fecha: new Date() });
+  }
+});
+
 router.get("/products/:pid", async (req, res, next) => {
   const usuario = req.session.user;
   let pid = req.params.pid;
   req.logger.info({ message: `id: ${pid}`, fecha: new Date() });
 
-  if (pid.length != 24) {
-    try {
-      throw CustomError.createError({
-        name: "incomplete id ",
-        cause: `Ivalid id: ${pid}`,
-        message: "cannot get product",
-        code: ErrorEnum.PARAM_ERROR,
-      });
-    } catch (error) {
-      next(error);
-      req.logger.error({ message: `${error}`, fecha: new Date() });
-      return;
-    }
-  }
+  // if (pid.length != 24) {
+  //   try {
+  //     throw CustomError.createError({
+  //       name: "incomplete id ",
+  //       cause: `Ivalid id: ${pid}`,
+  //       message: "cannot get product",
+  //       code: ErrorEnum.PARAM_ERROR,
+  //     });
+  //   } catch (error) {
+  //     next(error);
+  //     req.logger.error({ message: `${error}`, fecha: new Date() });
+  //     return;
+  //   }
+  // }
+  // if (!mongoose.Types.ObjectId.isValid(pid)) {
+  //   // Si pid no es un ObjectId válido, mostrar un error 400
+  //   const error = CustomError.createError({
+  //     name: "Invalid id",
+  //     cause: `Invalid id: ${pid}`,
+  //     message: "Cannot get product",
+  //     code: ErrorEnum.PARAM_ERROR,
+  //   });
+  //   next(error);
+  //   req.logger.error({ message: `${error}`, fecha: new Date() });
+  //   return;
+  // }
   try {
     let product = await productsModel.findOne({ _id: pid }).lean();
     res.render("product", { product, title: product.title, usuario });
@@ -107,19 +144,10 @@ router.get("/carts/:cid", isCartUser, async (req, res, next) => {
   }
 });
 
-router.get("/products/realTimeProducts", isPremium , async (req, res) => {
-  let usuario = req.session.user.email;
-  if (usuario === config.adminEmail){
-    usuario = "admin"
-  }
-  try {
-    const products = await productController.getProductsController();
-    console.log(products)
-    res.render("realTimeProducts", {usuario, products, title: "Real Time Products" });
-  } catch (error) {
-    console.error(error);
-    req.logger.error({ message: `${error}`, fecha: new Date() });
-  }
+router.get("/purchase", async (req, res, next) => {
+  const tid = req.params.tid;
+  let usuario = req.session.user;
+  res.render("purchase", { usuario });
 });
 
 router.get("/chat", isUser, (req, res) => {
@@ -156,9 +184,9 @@ router.get(
   }
 );
 
-router.get('/users/:uid/documents',(req, res)=>{
+router.get("/users/:uid/documents", (req, res) => {
   const userId = req.params.uid;
-  res.render("addDocuments",{userId})
-})
+  res.render("addDocuments", { userId });
+});
 
 export default router;

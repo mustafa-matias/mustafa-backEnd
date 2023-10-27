@@ -11,12 +11,13 @@ const __dirname = dirname(__filename);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    let emailUser = req.user.email;
-    let userPath =`public/uploads/${emailUser}`;
-    let userProfilePath =`public/uploads/${emailUser}/profiles`;
-    let userProfileFotoPath =`public/uploads/${emailUser}/profiles/fotoPerfil`;
-    let userProfileDniFrentePath =`public/uploads/${emailUser}/profiles/DniFrente`;
-    let userProfileDniDorsoPath =`public/uploads/${emailUser}/profiles/DniDorso`;
+    console.log("storageee")
+    let idUser = req.user._id;
+    let userPath =`public/uploads/${idUser}`;
+    let userProfilePath =`public/uploads/${idUser}/profiles`;
+    let userProfileFotoPath =`public/uploads/${idUser}/profiles/fotoPerfil`;
+    let userProfileDniFrentePath =`public/uploads/${idUser}/profiles/DniFrente`;
+    let userProfileDniDorsoPath =`public/uploads/${idUser}/profiles/DniDorso`;
     let uploadPath = "";
     if(!fs.existsSync(userPath)){
       fs.mkdirSync(userProfilePath, { recursive: true });

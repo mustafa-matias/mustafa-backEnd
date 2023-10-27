@@ -1,7 +1,6 @@
 const premiumForm = document.getElementById("premiumForm");
 
-premiumForm.addEventListener("submit", (e) => {
-  e.preventDefault();
+premiumForm.addEventListener("click", (e) => {
 
   const actionUrl = premiumForm.getAttribute("action");
   const uid = actionUrl.split("/").pop();

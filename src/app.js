@@ -39,6 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(addLogger);
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json({ limit: '20mb' }));
+// app.use(errorMiddleware);
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
@@ -52,6 +53,18 @@ app.use(
 
 const expressServer = app.listen(config.port, () =>
   console.log(`Servidor levantado en puerto: ${config.port}`)
+);
+
+const connection = mongoose.connect(config.mongoUrl);
+app.use(
+  session({
+    store: new MongoStore({
+      mongoUrl: config.mongoUrl,
+    }),
+    secret: config.mongoSecret,
+    resave: true,
+    saveUninitialized: true,
+  })
 );
 const socketServer = new Server(expressServer);
 
@@ -100,20 +113,8 @@ socketServer.on("connection", (socket) => {
   });
 });
 
-const connection = mongoose.connect(config.mongoUrl);
-app.use(
-  session({
-    store: new MongoStore({
-      mongoUrl: config.mongoUrl,
-    }),
-    secret: config.mongoSecret,
-    resave: true,
-    saveUninitialized: true,
-  })
-);
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(errorMiddleware);
 
 app.use(cookieParser("palabraSecretaCookie"));
 initializeStrategy();

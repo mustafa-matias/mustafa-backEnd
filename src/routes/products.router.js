@@ -30,30 +30,6 @@ router.get("/", async (req, res) => {
   res.send(products);
 });
 
-router.get("/:pid", async (req, res, next) => {
-  const idParam = req.params.pid;
-  if (idParam.length != 24) {
-    try {
-      throw CustomError.createError({
-        name: "incomplete id ",
-        cause: `Ivalid id: ${idParam}`,
-        message: "cannot get product",
-        code: ErrorEnum.PARAM_ERROR,
-      });
-    } catch (error) {
-      next(error);
-      return;
-    }
-  }
-  try {
-    const procuctByID = await productController.getProductByidController(
-      idParam
-    );
-    res.send(procuctByID);
-  } catch (error) {
-    next(error);
-  }
-});
 
 router.post("/realTimeProducts", isPremium, async (req, res) => {
   let newProduct = req.body;
@@ -114,5 +90,30 @@ router.delete("/:pid", isProductUser, async (req, res, next) => {
     return;
   }
 });
+
+router.get("/:pid", async (req, res, next) => {
+  const idParam = req.params.pid;
+  // try {
+  // if (!idParam || !mongoose.Types.ObjectId.isValid(idParam)) {
+  //     throw CustomError.createError({
+  //       name: "incomplete id ",
+  //       cause: `Ivalid id: ${idParam}`,
+  //       message: "cannot get product",
+  //       code: ErrorEnum.PARAM_ERROR,
+  //     });
+  //   }} catch (error) {
+  //     next(error);
+  //     return;
+  //   }
+  try {
+    const procuctByID = await productController.getProductByidController(
+      idParam
+    );
+    res.send(procuctByID);
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 export default router;

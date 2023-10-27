@@ -9,8 +9,7 @@ import { CurrentUserDTO } from "../controller/DTO/user.dto.js";
 import Mail from "../helpers/mail.js";
 const mail = new Mail();
 
-// router.put("/premium/:id", checkDocuments, async (req, res) => {
-  router.put("/premium/:id",  async (req, res) => {
+router.put("/premium/:id", checkDocuments, async (req, res) => {
   try {
     const userID = req.params.id;
     const result = await usersController.updateUserPremiumController(userID);
@@ -32,31 +31,45 @@ const mail = new Mail();
 router.post(
   "/:uid/documents",
   uploader.fields([
-    { name: "fotoPerfil"},
+    { name: "fotoPerfil" },
     { name: "dniFrente" },
     { name: "dniDorso" },
   ]),
   async (req, res) => {
-    console.log(req.files)
-    const profiles = req.files.profiles;
+    console.log(req.files);
+
+    const files = req.files;
     try {
       const userId = req.params.uid;
       const user = await userModel.findById(userId);
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado" });
       }
-      if (profiles && user.documents.length < 3) {
-        profiles.forEach((image) => {
-          user.documents.push({
-            name: image.filename,
-            reference: image.path,
-          });
-        });
-        await user.save();
-        req.session.user.documents = user.documents;
-      } else {
-        return res.send("Ya llego al limite de archivos");
+      if (files.fotoPerfil) {
+        const fotoPerfil = {
+          name: files.fotoPerfil[0].filename,
+          reference: files.fotoPerfil[0].path.split("public\\")[1],
+        };
+        user.documents.push(fotoPerfil);
       }
+      if (files.dniFrente) {
+        const dniFrente = {
+          name: files.dniFrente[0].filename,
+          reference: files.dniFrente[0].path.split("public\\")[1],
+        };
+        user.documents.push(dniFrente);
+      }
+      if (files.dniDorso) {
+        const dniDorso = {
+          name: files.dniDorso[0].filename,
+          reference: files.dniDorso[0].path.split("public\\")[1],
+        };
+        console.log(dniDorso.reference)
+        user.documents.push(dniDorso);
+      }
+      await user.save();
+      req.session.user.documents = user.documents;
+      console.log(req.session.user.documents);
       return res.status(200).json({ message: "Documentos cargados con éxito" });
     } catch (error) {
       console.log(error);
@@ -82,10 +95,14 @@ router.delete("/", async (req, res) => {
       return lastConnectionTime < currentTime;
     });
     for (const user of usersToDelete) {
-      mail.sendDeleteUser(user, "Se ha eliminado su cuenta", `http://localhost:8080/api/sessions/register`)
+      mail.sendDeleteUser(
+        user,
+        "Se ha eliminado su cuenta",
+        `http://localhost:8080/api/sessions/register`
+      );
       await userModel.findByIdAndRemove(user._id);
     }
-    res.send({status: 'success'})
+    res.send({ status: "success" });
   } else res.send({ status: "No se encuentran usuarios" });
 });
 
