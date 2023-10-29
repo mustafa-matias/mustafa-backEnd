@@ -3,86 +3,78 @@
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
-<div class="container">
-    <div class="row mt-3 ms-auto">
-        <div class="col-sm-12 col-md-10 col-md-offset-1">
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Carrito ID: {{this.cart._id}}</th>
-                        <th></th>
-                        <th class="text-center"></th>
-                        <th class="text-center"></th>
-                        <th> </th>
+                        <th colspan="5" class="text-center">Carrito ID: {{this.cart._id}}</th>
                     </tr>
                     <tr>
                         <th>Products</th>
                         <th>Quantity</th>
                         <th class="text-center">Price</th>
                         <th class="text-center">Total</th>
-                        <th> </th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {{#each this.cart.products}}
                     <tr>
-                        <td class="col-sm-8 col-md-6">
+                        <td>
                             <div class="media">
-                                <a class="thumbnail pull-left" href="#"> <img class="media-object"
-                                        src="{{this.product.thumbnail}}" style="width: 72px; height: 72px;"> </a>
+                                <a class="thumbnail pull-left" href="#">
+                                    <img class="media-object" src="{{this.product.thumbnail}}"
+                                        style="width: 72px; height: 72px;">
+                                </a>
                                 <div class="media-body">
                                     <h4 class="media-heading">{{this.product.title}}</h4>
                                     <h5 class="media-heading fst-italic text-capitalize text-secondary">
-                                        {{this.product.category}}</h5>
+                                        {{this.product.category}}
+                                    </h5>
                                     <span class="text-success"><strong>Stock: {{this.product.stock}}</strong></span>
                                 </div>
                             </div>
                         </td>
-                        <td class="col-sm-1 col-md-1" style="text-align: center">
+                        <td style="text-align: center">
                             <p class="fw-semibold" id="quantity">{{this.quantity}}</p>
                         </td>
-                        <td class="col-sm-1 col-md-1 text-center"><strong id="price">${{this.product.price}}</strong>
+                        <td class="text-center"><strong id="price">${{this.product.price}}</strong></td>
+                        <td class="text-center">
+                            <p class="text-dark" id="total">${{this.amount}}</p>
                         </td>
-                        <td class="col-sm-1 col-md-1 text-center">
-                            <p class=" text-dark" id="total">${{this.amount}}</p>
-                        </td>
-                        <td class="col-sm-1 col-md-1">
-                            {{!-- <form
-                                action="http://localhost:8080/api/carts/{{../cart._id}}/product/{{this.product._id}}"
-                                method="DELETE">
-
-                                <button type="submit" class="btn btn-danger">
-                                    <span class="glyphicon glyphicon-remove"></span> Remove
+                        <td>
+                            <form action="http://localhost:8080/api/carts/{{../cart._id}}/product/{{this.product._id}}">
+                                <button class="btn btn-danger eliminarProductoButton"
+                                    data-product-id="{{this.product._id}}">
+                                    Eliminar
                                 </button>
-                            </form> --}}
+                            </form>
                         </td>
                     </tr>
                     {{/each}}
                     <tr>
-                        <td>   </td>
-                        <td>   </td>
-                        <td>   </td>
+                        <td>
+                            <a href="/products" class="btn btn-default">
+                                <span class="glyphicon glyphicon-shopping-cart"></span> Volver
+                            </a>
+                        </td>
+                        <td class="d-flex justify-content-between">
+                            <button id="eliminarTodoButton" class="btn btn-danger w-100">
+                                <span class="glyphicon glyphicon-remove"></span> Eliminar Todos
+                            </button>
+                        </td>
                         <td>
                             <h3>Total</h3>
                         </td>
                         <td class="text-right">
                             <h3><strong>${{totalProductos}}</strong></h3>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>   </td>
-                        <td>   </td>
-                        <td>   </td>
                         <td>
-                            <a href="/products">
-                                <button type="button" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-shopping-cart">Volver</span>
-                                </button>
-                            </a>
-                        </td>
-                        <td>
-                            <button id='purchaseButton' type="button" class="btn btn-success">COMPRAR<span
-                                    class="glyphicon glyphicon-play"></span></button>
+                            <button id="purchaseButton" class="btn btn-success w-100">
+                                COMPRAR<span class="glyphicon glyphicon-play"></span>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

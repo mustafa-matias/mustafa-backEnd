@@ -33,7 +33,7 @@
         {{/if}}
         <a href="/chat" class="btn btn-primary">✍Chat</a>
         <a href='/carts/{{usuario.cart}}' class="btn btn-success border border-solid border-dark">🛒</a>
-        <a href="api/sessions/logout" class="btn btn-danger">LogOut</a>
+        <button type="button" id="LogoutButton" class="btn btn-danger">LogOut</button>
     </div>
 </div>
 {{else}}
@@ -63,9 +63,9 @@
                     </div>
                     {{#if ../usuario}}
                     <div class="d-flex justify-content-around">
-                        <form action="http://localhost:8080/api/carts/{{../usuario.cart}}/product/{{this._id}}"
-                            method="POST">
-                            <button class="btn btn-success">Agregar al carrito</button>
+                        <form id="addToCartForm" action="http://localhost:8080/api/carts/{{../usuario.cart}}/product/{{this._id}}"
+                            method="POST"> 
+                            <button class="btn btn-success addToCartButton">Agregar al carrito</button>
                         </form>
                         <button class="btn btn-danger btEliminarProductAdmin"
                             data-item-id={{this._id}}>Eliminar</button>
@@ -100,3 +100,4 @@
 </div>
 <script src="/js/products.js"></script>
 <script src="/js/userClassic.js"></script>
+<script src="/js/logout.js"></script>

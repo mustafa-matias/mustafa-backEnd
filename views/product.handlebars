@@ -15,7 +15,7 @@
     </div>
     <div>
         <a href="/carts/{{usuario.cart}}" class="btn btn-warning border border-solid border-dark">🛒</a>
-        <a href="/api/sessions/logout" class="btn btn-danger">LogOut</a>
+        <button type="button" id="LogoutButton" class="btn btn-danger">LogOut</button>
     </div>
 </div>
 {{else}}
@@ -50,7 +50,7 @@
                         <span>
                             <form action="http://localhost:8080/api/carts/{{usuario.cart}}/product/{{product._id}}"
                                 method="POST">
-                                <button class="btn btn-success">Agregar al carrito</button>
+                                <button class="btn btn-success" id="addToCartProduct">Agregar al carrito</button>
                             </form>
                         </span>
                         <span>
@@ -72,3 +72,5 @@
         </div>
     </div>
 </div>
+<script src="/js/logout.js"></script>
+<script src="/js/product.js"></script>

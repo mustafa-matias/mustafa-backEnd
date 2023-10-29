@@ -23,7 +23,7 @@ export default class UsersService {
           return await this.usersDao.updateUserPremiumDao(user);
         }
       }
-      if (user.premium) {
+      if (user.premium && user.role != 'admin') {
         user.premium = false;
         return await this.usersDao.updateUserPremiumDao(user);
       }

@@ -12,7 +12,7 @@ forgotPassword.addEventListener("submit", (e) => {
     },
   })
     .then((response) => {
-      if (response.redirected) {
+      if (response.ok) {
         Swal.fire({
           toast: true,
           position: "top-end",
@@ -22,7 +22,7 @@ forgotPassword.addEventListener("submit", (e) => {
           icon: "success",
         });
         setTimeout(function () {
-          window.location.href = response.url; //
+          window.location.href = `http://localhost:8080/products`;
         }, 1000);
       } else {
         Swal.fire({

@@ -87,6 +87,7 @@ export default class CartService {
   }
 
   async actualizarCarritoService(cid, newProducts) {
+    console.log(newProducts);
     const cart = await this.cartDao.getCartByID(cid);
     if (!cart) {
       return {
@@ -94,10 +95,13 @@ export default class CartService {
       };
     }
     cart.products = [];
-    newProducts.forEach((product) => {
-      cart.products.push({ product: product });
+    newProducts.forEach((newProduct) => {
+      cart.products.push({
+        product: newProduct,
+        quantity: 1,
+        amount: newProduct.price,
+      });
     });
-
     return await this.cartDao.actualizarCarrito(cart);
   }
 

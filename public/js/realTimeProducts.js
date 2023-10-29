@@ -38,9 +38,8 @@ form.addEventListener("submit", (e) => {
     icon: "success",
   });
 });
-
-const imprimir = (product) => {
-  const contenedorProducts = document.getElementById("contenedorProducts");
+  function imprimir(product) {
+      const contenedorProducts = document.getElementById("contenedorProducts");
   const divProduct = document.createElement("div");
   divProduct.classList.add(
     "card",
@@ -71,7 +70,7 @@ const imprimir = (product) => {
 `;
   divProduct.innerHTML = estructuraProducto;
   contenedorProducts.appendChild(divProduct);
-};
+}
 
 socket.on("imprimir", (product) => {
   imprimir(product);

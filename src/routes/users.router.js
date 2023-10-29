@@ -64,7 +64,7 @@ router.post(
           name: files.dniDorso[0].filename,
           reference: files.dniDorso[0].path.split("public\\")[1],
         };
-        console.log(dniDorso.reference)
+        console.log(dniDorso.reference);
         user.documents.push(dniDorso);
       }
       await user.save();
@@ -90,8 +90,8 @@ router.delete("/", async (req, res) => {
   const currentTime = new Date();
   if (users.length > 0) {
     const usersToDelete = users.filter((user) => {
-      const lastConnectionTime = user.last_connection;
-      currentTime.setHours(currentTime.getHours() - 2);
+      const lastConnectionTime = new Date(user.last_connection);
+      currentTime.setDate(currentTime.getDate() - 2);
       return lastConnectionTime < currentTime;
     });
     for (const user of usersToDelete) {

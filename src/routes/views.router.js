@@ -29,6 +29,9 @@ router.get("/", async (req, res) => {
 router.get("/products", async (req, res) => {
   let page = parseInt(req.query.page);
   let usuario = req.session.user;
+  console.log(page)
+  console.log('esta es la pagina')
+  console.log(page)
   console.log(usuario);
 
   req.logger.info({ message: `pagination: ${page}`, fecha: new Date() });
@@ -40,10 +43,10 @@ router.get("/products", async (req, res) => {
   );
 
   products.prevLink = products.hasPrevPage
-    ? `http://localhost:8080/api/products?page=${products.prevPage}`
+    ? `http://localhost:8080/products?page=${products.prevPage}`
     : "";
   products.nextLink = products.hasNextPage
-    ? `http://localhost:8080/api/products?page=${products.nextPage}`
+    ? `http://localhost:8080/products?page=${products.nextPage}`
     : "";
   products.isValid = !(page <= 0 || page > products.totalPages);
 

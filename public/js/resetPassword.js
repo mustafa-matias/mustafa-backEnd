@@ -15,7 +15,7 @@ resetPassword.addEventListener("submit", (e) => {
   })
     .then((response) => {
       console.log(response);
-      if (response.redirected) {
+      if (response.ok) {
         Swal.fire({
           toast: true,
           position: "top-end",
@@ -25,7 +25,7 @@ resetPassword.addEventListener("submit", (e) => {
           icon: "success",
         });
         setTimeout(function () {
-          window.location.href = response.url;
+          window.location.href = `http://localhost:8080/sessions/login`;
         }, 1000);
       } else {
         Swal.fire({

@@ -110,7 +110,7 @@ router.get("/logout", async (req, res) => {
           last_connection: new Date(),
         });
 
-        res.redirect("/sessions/login");
+        res.send({status: "success"});
       } else res.send({ status: "logout ERROR", body: err });
     });
   } catch (err) {
@@ -130,7 +130,7 @@ router.post("/forgotPassword", async (req, res) => {
   const emailUsuario = req.body.email;
   try {
     await sessionsController.forgotPasswordController(emailUsuario);
-    return res.redirect("/products");
+    return res.send({status: "success"});
   } catch (error) {
     console.error(error);
     return res.status(500).send({ error: "Error en el servidor" });
@@ -146,7 +146,7 @@ router.post("/resetPassword/:token", async (req, res) => {
       password,
       confirmPassword
     );
-    return res.redirect("/sessions/login");
+    return res.send({status: "success"});
   } catch (error) {
     console.error(error);
     return res.status(500).send({ error: "Error en el servidor" });
