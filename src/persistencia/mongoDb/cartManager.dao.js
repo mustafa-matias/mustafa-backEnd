@@ -5,42 +5,93 @@ export default class CartDao {
   productDao = new ProductDao();
 
   getCarts = async () => {
-    const carts = await cartModel.find();
-    return carts;
+    try {
+      const carts = await cartModel.find();
+      if (!carts) {
+        throw new Error(
+          "No conecto con la base de datos al buscar todos los carritos"
+        );
+      }
+      return carts;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   };
 
   addCart = async () => {
-    const cart = await cartModel.create({ products: [] });
-    return cart;
+    try {
+      const cart = await cartModel.create({ products: [] });
+      if (!cart) {
+        throw new Error(
+          "No conecto con la base de datos al agregar un carrito nuevo"
+        );
+      }
+      return cart;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   };
 
   getCartByID = async (id) => {
-    const cart = await cartModel
-      .findOne({ _id: id })
-      .populate("products.product");
-    return cart;
+    try {
+      const cart = await cartModel
+        .findOne({ _id: id })
+        .populate("products.product");
+      if (!cart) {
+        throw new Error(
+          `Carrito ID: ${id} no encontrado`
+        );
+      }
+      return cart;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   };
 
   addProductToCart = async (cart) => {
-    await cart.save();
-    return;
+    try {
+      const result = await cart.save();
+      return result;
+    } catch (error) {
+      throw new Error(
+        "Error al guardar en base de datos"
+      );
+    }
   };
+
   async deleteProductFromCart(cart) {
-    await cart.save();
-    return;
+    try {
+      return await cart.save();
+    } catch (error) {
+      throw new Error(
+        "Error al guardar en base de datos"
+      );
+    }
   }
   async deleteAllProductsFromCart(cart) {
-    await cart.save();
-    return;
+    try {
+      const result = await cart.save();
+      return result;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 
   actualizarCarrito = async (cart) => {
-    await cart.save();
-    return;
+    try {
+      const result = await cart.save();
+      return result;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   };
 
   actualizarCantidadProducto = async (cart) => {
-    cart.save();
-    return;
+    try {
+      const result = await cart.save();
+      return result;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   };
 }

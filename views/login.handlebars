@@ -1,39 +1,44 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="../css/login.css">
+<link rel="stylesheet" href="../css/sesion.css">
 
-<div class="container">
-
-    <div class="row">
+<div class="bodySesion">
+<div class="container ">
+    <div class="row formularioSesion">
         <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-            <h2 class="text-light">Login</h2>
+            <h1 class="text-dark fw-bold">Ingresar con E-mail</h1>
             <hr class="colorgraph">
             <form id="loginForm">
                 <div class="form-group">
                     <input autofocus required type="email" name="email" id="email" class="form-control input-lg"
-                        placeholder="Email Address" tabindex="0">
+                        placeholder="E-mail" tabindex="0">
                 </div>
                 <div class="form-group">
                     <input required type="password" name="password" id="password" class="form-control input-lg"
-                        placeholder="Password" tabindex="1">
+                        placeholder="Contraseña" tabindex="1">
                 </div>
         </div>
         <hr class="colorgraph">
         <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 ">
-            <button type="submit" class="btn btn-success btn-block btn-lg ">Login</button>
+            <button type="submit" class="btn btn-success btn-block btn-lg ">Ingresar</button>
         </div>
         </form>
+                <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 ">
 
+        <div class=""><a href="/sessions/forgotPassword" class="mt-3 btn btn-secondary btn-block btn-lg">Restablecer
+                Contraseña
+            </a></div></div>
         <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 mt-3">
-            <div class=""><a href="/api/sessions/github" class="btn btn-secondary btn-block btn-lg">Entrar con
+            <p class="mt-5 fw-bold">Ahora podés Ingresar sin E-mail:</p>
+            <div class=""><a href="/api/sessions/github" class="btn btn-warning btn-block btn-lg">Entrar con
                     Github</a>
             </div>
         </div>
 
         <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 ">
-            <p class="fw-bold mt-3 text-light text-center">¿No se encuentra registrado?</p>
-            <div class=""><a href="/sessions/register" class="btn btn-primary btn-block btn-lg">Sign up</a></div>
-            <div class=""><a href="/sessions/forgotPassword" class="mt-3 btn btn-secondary btn-block btn-lg">Reset Password</a></div>
+            <p class="fw-bold mt-5 text-dark text-center">¿No se encuentra registrado?</p>
+            <div class=""><a href="/sessions/register" class="btn btn-primary btn-block btn-lg">Registrarse</a></div>
         </div>
+    </div>
     </div>
     <script src="/js/login.js"></script>

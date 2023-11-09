@@ -12,65 +12,56 @@ export default class SessionsService {
   }
 
   async forgotPasswordService(email) {
-    const user = await userModel.findOne({ email });
-    if (!user) {
-      throw CustomError.createError({
-        name: "usuario no existente ",
-        cause: `Ivalid email: ${email}`,
-        message: "cannot get user",
-        code: ErrorEnum.PARAM_ERROR,
-      });
+    try {
+      const user = await userModel.findOne({ email });
+      if (!user) {
+        throw new Error("E-mail inexistente");
+      }
+      const token = generateRandomCode(25);
+      const expirationDate = new Date();
+      expirationDate.setHours(expirationDate.getHours() + 1);
+
+      user.resetPasswordToken = token;
+      user.resetPasswordExpires = expirationDate;
+
+      const mailer = new Mail();
+      const resetUrl = `http://localhost:8080/sessions/resetPassword/${token}`;
+
+      mailer.send(user, "Restablecer Contraseña", resetUrl);
+
+      await this.sessionDao.forgotPasswordDao(user);
+    } catch (error) {
+      throw new Error(error.message);
     }
-    const token = generateRandomCode(25);
-    const expirationDate = new Date();
-    expirationDate.setHours(expirationDate.getHours() + 1);
-
-    user.resetPasswordToken = token;
-    user.resetPasswordExpires = expirationDate;
-
-    const mailer = new Mail();
-    const resetUrl = `http://localhost:8080/sessions/resetPassword/${token}`;
-
-    mailer.send(user, "Restablecer Contraseña", resetUrl);
-
-    await this.sessionDao.forgotPasswordDao(user);
   }
 
   async resetPasswordServive(token, password, confirmPassword) {
-    if (password !== confirmPassword) {
-      throw CustomError.createError({
-        name: "Las password no coinciden",
-        cause: `Ivalid password`,
-        message: "cannot put password",
-        code: ErrorEnum.DATABASE_ERROR,
+    try {
+      if (password !== confirmPassword) {
+        throw new Error("Las contraseñas no coinciden");
+      }
+      const user = await userModel.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: new Date() },
       });
-    }
-    const user = await userModel.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: new Date() },
-    });
-    if (!user) {
-      throw CustomError.createError({
-        name: "Link incorrecto o caduco",
-        cause: `Link incorrecto o caduco`,
-        message: "cannot put password",
-        code: ErrorEnum.DATABASE_ERROR,
-      });
-    }
-    const isNotValidPassword = isValidPassword(password, user);
-    if (isNotValidPassword) {
-      throw CustomError.createError({
-        name: "Password error",
-        cause: `La password no puede ser igual a la anterior`,
-        message: "cannot put password",
-        code: ErrorEnum.DATABASE_ERROR,
-      });
-    }
+      if (!user) {
+        throw new Error("Usuario no encontrado y/o caduco el token");
+      }
+      const isNotValidPassword = isValidPassword(password, user);
+      if (isNotValidPassword) {
+        throw new Error("La contraseña no puede ser identica a la anterior");
+      }
+      user.password = createHash(password);
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpires = undefined;
 
-    user.password = createHash(password);
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
+      await this.sessionDao.resetPasswordDao(user);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 
-    await this.sessionDao.resetPasswordDao(user);
+  async logoutService(userId) {
+    await this.sessionDao.logoutDao(userId);
   }
 }

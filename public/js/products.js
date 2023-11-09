@@ -30,9 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
             });
           } else {
             Swal.fire({
-              icon: "error",
+              toast: true,
               position: "top-end",
-              title: "No puede agregar un producto de su propiedad al carrito",
+              showConfirmButton: false,
+              timer: 5000,
+              title: "No puede agregar al carrito un producto que le pertenece",
+              icon: "error",
               background: "#000",
             });
           }
@@ -68,10 +71,12 @@ document.addEventListener("DOMContentLoaded", () => {
               });
             } else {
               Swal.fire({
-                icon: "error",
+                toast: true,
                 position: "top-end",
-                title:
-                  "No puedes eliminar este producto porque no te pertenece",
+                showConfirmButton: false,
+                timer: 5000,
+                title: "No puede eliminar un producto que no le pertenece",
+                icon: "error",
                 background: "#000",
               });
             }
@@ -82,4 +87,4 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-});
+})

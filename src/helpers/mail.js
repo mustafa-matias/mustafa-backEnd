@@ -71,7 +71,7 @@ export default class Mail {
           <div class="content">
             <img src="cid:headerMail" alt="img headerMail">
             <h1>Restablecimiento de Contraseña</h1>
-            <p>Estimado/a <strong class="uppercase">${user.firtName}</strong>,</p>
+            <p>Estimado/a <strong class="uppercase">${user.firstName}</strong>,</p>
             <p>Para restablecer la contraseña, por favor haz clic en el siguiente botón:</p>
             <div class="button-container">
               <p><a class="button" href="${url}">Restablecer Contraseña</a></p>
@@ -155,7 +155,7 @@ export default class Mail {
           <div class="content">
             <img src="cid:headerMail" alt="img headerMail">
             <h1>Se ha eliminado su cuenta</h1>
-            <p>Estimado/a <strong class="uppercase">${user.firtName}</strong>,</p>
+            <p>Estimado/a <strong class="uppercase">${user.firstName}</strong>,</p>
             <p>Por inactividad de más de 2 días se ha eliminado su cuenta</p>
             <div class="button-container">
               <p><a class="button" href="${url}">Volver a Registrarse</a></p>
@@ -181,5 +181,4 @@ export default class Mail {
     });
     return result;
   };
-
 }

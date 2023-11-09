@@ -8,192 +8,113 @@ import CartController from "../controller/cart.controller.js";
 import TicketController from "../controller/ticket.controller.js";
 const cartController = new CartController();
 const ticketController = new TicketController();
-import CustomError from "../servicio/error/customError.class.js";
-import { ErrorEnum } from "../servicio/enum/error.enum.js";
 import isProductCarUser from "./middlewares/isProductCartUser.js";
 
 router.get("/", async (req, res) => {
-  const carts = await cartController.getCartsController();
-  res.send(carts);
+  try {
+    const carts = await cartController.getCartsController();
+    res.send({ status: "success", carts: carts });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
 });
 
-router.get("/:cid", async (req, res, next) => {
+router.get("/:cid", isCartUser, async (req, res) => {
   const cid = req.params.cid;
-  if (cid.length != 24) {
-    try {
-      throw CustomError.createError({
-        name: "incomplete id ",
-        cause: `Ivalid id: ${cid}`,
-        message: "cannot get cart",
-        code: ErrorEnum.PARAM_ERROR,
-      });
-    } catch (error) {
-      next(error);
-      return;
-    }
-  }
   try {
     const cartByID = await cartController.getCartByIDController(cid);
-    res.send({status: "success", cart: cartByID});
+    res.send({ status: "success", cart: cartByID });
   } catch (error) {
-    next(error);
+    res.status(500).send({ error: error.message });
   }
 });
 
 router.post("/", async (req, res) => {
-  const cart = await cartController.addCartController();
-  res.send({status: "success", cart: cart});
-  return;
+  try {
+    const cart = await cartController.addCartController();
+    res.send({ status: "success", cart: cart });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
 });
 
-router.post("/:cid/product/:pid", isProductCarUser, isCartUser, async (req, res, next) => {
-  const cid = req.params.cid;
-  const pid = req.params.pid;
-  if (cid.length != 24 || pid.length != 24) {
-    try {
-      throw CustomError.createError({
-        name: "incomplete id ",
-        cause: `Ivalid id`,
-        message: "cannot post product",
-        code: ErrorEnum.PARAM_ERROR,
-      });
-    } catch (error) {
-      next(error);
-      return;
+router.post(
+  "/:cid/product/:pid",
+  isProductCarUser,
+  isCartUser,
+  async (req, res, next) => {
+    const cid = req.params.cid;
+    const pid = req.params.pid;
+    const result = await cartController.addProductToCartController(cid, pid);
+    if (result.error) {
+      res.status(400).json({ error: result.error });
+    } else {
+      res.send({ status: "success", payload: result });
     }
   }
-  try {
-    const result = await cartController.addProductToCartController(cid, pid);
-    res.send({status: 'success', payload: result});
-  } catch (error) {
-    next(error);
-  }
-});
+);
 
-router.delete("/:cid/product/:pid", async (req, res, next) => {
+router.delete("/:cid/product/:pid", async (req, res) => {
   let cartId = req.params.cid;
   let productId = req.params.pid;
-  if (cartId.length != 24 || productId.length != 24) {
-    try {
-      throw CustomError.createError({
-        name: "incomplete id ",
-        cause: `Ivalid id`,
-        message: "cannot delete product",
-        code: ErrorEnum.PARAM_ERROR,
-      });
-    } catch (error) {
-      next(error);
-      return;
-    }
-  }
-
   try {
     await cartController.deleteProductFromCartController(cartId, productId);
     res.send({ status: "success" });
   } catch (error) {
-    next(error);
+    res.status(500).send({ error: error.message });
   }
 });
 
-router.delete("/:cid", async (req, res, next) => {
+router.delete("/:cid", async (req, res) => {
   let cartId = req.params.cid;
-  if (cartId.length != 24) {
-    try {
-      throw CustomError.createError({
-        name: "incomplete id ",
-        cause: `Ivalid id: ${cartId}`,
-        message: "cannot delete cart",
-        code: ErrorEnum.PARAM_ERROR,
-      });
-    } catch (error) {
-      next(error);
-      return;
-    }
-  }
   try {
-    const cart = await cartController.deleteAllProductsFromCartController(cartId);
-    console.log(cart)
-    res.send({ status: "success" });
+    const cart = await cartController.deleteAllProductsFromCartController(
+      cartId
+    );
+    res.send({ status: "success", payload: cart });
   } catch (error) {
-    next(error);
+    res.status(500).send({ error: error.message });
   }
 });
 
-router.put("/:cid", async (req, res, next) => {
+router.put("/:cid", async (req, res) => {
   let cartId = req.params.cid;
-  if (cartId.length != 24) {
-    try {
-      throw CustomError.createError({
-        name: "incomplete id ",
-        cause: `Ivalid id: ${cartId}`,
-        message: "cannot put cart",
-        code: ErrorEnum.PARAM_ERROR,
-      });
-    } catch (error) {
-      next(error);
-      return;
-    }
-  }
   let newProducts = req.body;
   try {
-    await cartController.actualizarCarritoController(cartId, newProducts);
-    res.send({ status: "success" });
+    const cart = await cartController.actualizarCarritoController(
+      cartId,
+      newProducts
+    );
+    res.send({ status: "success", payload: cart });
   } catch (error) {
-    next(error);
+    res.status(500).send({ error: error.message });
   }
 });
 
-router.put("/:cid/product/:pid", async (req, res, next) => {
+router.put("/:cid/product/:pid", async (req, res) => {
   let cartId = req.params.cid;
   let productId = req.params.pid;
-  if (cartId.length != 24 || productId.length != 24) {
-    try {
-      throw CustomError.createError({
-        name: "incomplete id ",
-        cause: `Ivalid id`,
-        message: "cannot put product",
-        code: ErrorEnum.PARAM_ERROR,
-      });
-    } catch (error) {
-      next(error);
-      return;
-    }
-  }
   let quantity = req.body.quantity;
   try {
-    await cartController.actualizarCantidadProductoController(
+    const result = await cartController.actualizarCantidadProductoController(
       cartId,
       productId,
       quantity
     );
-    res.send({ status: "success" });
+    res.send({ status: "success", payload: result });
   } catch (error) {
-    next(error);
+    res.status(500).send({ error: error.message });
   }
 });
 
-router.post("/:cid/purchase", async (req, res, next) => {
+router.post("/:cid/purchase", async (req, res) => {
   const id = req.params.cid;
-  // if (id.length != 24) {
-  //   try {
-  //     throw CustomError.createError({
-  //       name: "incomplete id ",
-  //       cause: `Ivalid id: ${id}`,
-  //       message: "cannot get product",
-  //       code: ErrorEnum.PARAM_ERROR,
-  //     });
-  //   } catch (error) {
-  //     next(error);
-  //     return;
-  //   }
-  // }
-
   const email = req.user.email;
   try {
     const result = await ticketController.addTicketController(id, email);
     res.send(result);
   } catch (error) {
-    next(error);
+    res.status(500).send({ error: error.message });
   }
 });
 

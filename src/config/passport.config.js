@@ -16,16 +16,39 @@ const initializeStrategy = () => {
     new LocalStrategy(
       { passReqToCallback: true, usernameField: "email" },
       async (req, username, password, done) => {
-        const { firtName, lastName, email, age } = req.body;
+        const { firstName, lastName, email, age } = req.body;
 
         try {
+          if (!firstName) {
+            throw new Error(
+              "No se cargo el firstName al usuario a registrar - passport.config"
+            );
+          }
+          if (!lastName) {
+            throw new Error(
+              "No se cargo el lastName al usuario a registrar - passport.config"
+            );
+          }
+          if (!email) {
+            throw new Error(
+              "No se cargo el email al usuario a registrar - passport.config"
+            );
+          }
+          if (!age) {
+            throw new Error(
+              "No se cargo la edad al usuario a registrar - passport.config"
+            );
+          }
           let user = await userModel.findOne({ email: username });
           if (user) {
-            console.log("Usuario Existente");
             return done(null, false);
           }
-
           const cart = await cartController.addCartController();
+          if (!cart) {
+            throw new Error(
+              "No se pudo crear un nuevo carrito para el usuario a registrar - passport.config"
+            );
+          }
           let last_connection = new Date();
           let role = "user";
           let premium = false;
@@ -34,7 +57,7 @@ const initializeStrategy = () => {
             premium = true;
           }
           const newUser = {
-            firtName,
+            firstName,
             lastName,
             email,
             age,
@@ -45,9 +68,14 @@ const initializeStrategy = () => {
             last_connection,
           };
           let result = await userModel.create(newUser);
+          if (!result) {
+            throw new Error(
+              "No se pudo crear el usuario a registrar - passport.config"
+            );
+          }
           return done(null, result);
         } catch (error) {
-          return done("Error al obterner Usuario: " + error);
+          return done(error.message);
         }
       }
     )
@@ -68,13 +96,12 @@ const initializeStrategy = () => {
       async (username, password, done) => {
         try {
           const user = await userModel.findOne({ email: username });
-          user.last_connection = new Date();
-          user.save();
           if (!user) {
-            console.log("User doesn't exits");
             return done(null, false);
           }
           if (!isValidPassword(password, user)) return done(null, false);
+          user.last_connection = new Date();
+          user.save();
           return done(null, user);
         } catch (error) {
           return done(error);
@@ -98,14 +125,14 @@ const initializeStrategy = () => {
           if (!user) {
             const cart = await cartController.addCartController();
             let newUser = {
-              firtName: profile.username,
+              firstName: profile.username,
               lastName: " ",
               age: 18,
               email: profile.profileUrl,
               password: " ",
               role: "user",
               cart: cart._id,
-              last_connection
+              last_connection,
             };
 
             let result = await userModel.create(newUser);

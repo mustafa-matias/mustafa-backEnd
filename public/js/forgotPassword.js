@@ -1,8 +1,8 @@
-const forgotPassword = document.getElementById("forgotPassword");
+const forgotPasswordForm = document.getElementById("forgotPassword");
 
-forgotPassword.addEventListener("submit", (e) => {
+forgotPasswordForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const email = forgotPassword.email.value.toLowerCase();
+  const email = forgotPasswordForm.querySelector('input[name="email"]').value;
 
   fetch("/api/sessions/forgotPassword", {
     method: "POST",
@@ -12,28 +12,31 @@ forgotPassword.addEventListener("submit", (e) => {
     },
   })
     .then((response) => {
-      if (response.ok) {
-        Swal.fire({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 5000,
-          title: "Verifique su casilla de correo",
-          icon: "success",
-        });
-        setTimeout(function () {
-          window.location.href = `http://localhost:8080/products`;
-        }, 1000);
+      if (response.status === 200) {
+        return response.json();
       } else {
-        Swal.fire({
-          icon: "error",
-          position: "top-end",
-          title: "Usuario no registrado",
-          background: "#000",
-        });
+        throw new Error("Usuario no registrado");
       }
     })
-    .catch(function (err) {
-      console.info(err + " url: " + url);
+    .then((data) => {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 5000,
+        title: "Verifique su casilla de correo",
+        icon: "success",
+      });
+      setTimeout(() => {
+        window.location.href = "http://localhost:8080/sessions/login";
+      }, 1000);
+    })
+    .catch((error) => {
+      Swal.fire({
+        icon: "error",
+        position: "top-end",
+        title: error.message,
+        background: "#000",
+      });
     });
 });

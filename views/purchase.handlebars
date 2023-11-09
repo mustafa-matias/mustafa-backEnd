@@ -1,28 +1,26 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="../css/product.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/sesion.css">
 
-{{#if usuario}}
-<div class="d-flex justify-content-between text-light">
-    <div>
-        <span class="ms-2"><span class="fw-bold text-uppercase fs-5 ">{{usuario.name}} </span> <span
-                class=" ">({{usuario.age}})</span></span>
-        <span class="mr-2 fw-semibold text-capitalize">[ {{usuario.role}} {{#if usuario.premium}} PREMIUM {{/if}}]
-        </span>
-    </div>
-    <div>
-        <a href="/carts/{{usuario.cart}}" class="btn btn-warning border border-solid border-dark">🛒</a>
-        <a href="/api/sessions/logout" class="btn btn-danger">LogOut</a>
-    </div>
-</div>
-{{/if}}
-
-<div>gracias por compra</div>
-
-    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 mt-3">
-        <div class=""><a href="/products" class="btn btn-success btn-block btn-lg">Volver a Productos</a>
+<div class="bodySesion">
+    <div class="container formularioSesion">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="">
+                    <div class="card-body text-center">
+                        <h1 class="display-4 text-success">¡Gracias por tu compra!</h1>
+                        <p class="lead fw-bold">Tu pedido ha sido procesado con éxito. Esperamos que disfrutes de tus productos.</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="/products" class="btn btn-secondary btn-lg">Volver a la Tienda</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</div>

@@ -3,14 +3,14 @@ const registerForm = document.getElementById("registerForm");
 registerForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  const firtName = registerForm[0].value.toLowerCase();
+  const firstName = registerForm[0].value.toLowerCase();
   const lastName = registerForm[1].value.toLowerCase();
   const email = registerForm[2].value.toLowerCase();
   const age = registerForm[3].value;
   const password = registerForm[4].value;
 
   const newUsuario = {
-    firtName,
+    firstName,
     lastName,
     email,
     age,
@@ -33,7 +33,7 @@ registerForm.addEventListener("submit", (e) => {
           position: "top-end",
           showConfirmButton: false,
           timer: 5000,
-          title: "Registro correcto",
+          title: "Registro Correcto",
           icon: "success",
         });
         setTimeout(function () {
@@ -41,9 +41,12 @@ registerForm.addEventListener("submit", (e) => {
         }, 1000);
       } else {
         Swal.fire({
-          icon: "error",
+          toast: true,
           position: "top-end",
-          title: "Usuario ya existente",
+          showConfirmButton: false,
+          timer: 5000,
+          title: "E-mail ya registrado",
+          icon: "error",
           background: "#000",
         });
       }

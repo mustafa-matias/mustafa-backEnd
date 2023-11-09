@@ -3,7 +3,6 @@ import { Router } from "express";
 const router = Router();
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
-
 import { productsModel } from "../persistencia/mongoDb/models/products.model.js";
 import { cartModel } from "../persistencia/mongoDb/models/carts.model.js";
 import ProductController from "../controller/product.controller.js";
@@ -11,35 +10,18 @@ const productController = new ProductController();
 import isUser from "./middlewares/isUser.middleware.js";
 import isCartUser from "./middlewares/isCartUser.middleware.js";
 import isPremium from "./middlewares/isPremium.middleware.js";
-import {
-  calcularTotalProductosCarrrito,
-  generateProducts,
-} from "../../utils.js";
-import compression from "express-compression";
-import CustomError from "../servicio/error/customError.class.js";
-import { ErrorEnum } from "../servicio/enum/error.enum.js";
+import { calcularTotalProductosCarrrito } from "../../utils.js";
 import config from "../config/config.js";
-import mongoose from "mongoose";
-
-router.get("/", async (req, res) => {
-  const products = await productController.getProductsController();
-  res.render("index", { products, title: "Products" });
-});
 
 router.get("/products", async (req, res) => {
   let page = parseInt(req.query.page);
   let usuario = req.session.user;
-  console.log(page)
-  console.log('esta es la pagina')
-  console.log(page)
-  console.log(usuario);
-
   req.logger.info({ message: `pagination: ${page}`, fecha: new Date() });
 
   if (!page) page = 1;
   let products = await productsModel.paginate(
     {},
-    { page, limit: 4, lean: true }
+    { page, limit: 8, lean: true }
   );
 
   products.prevLink = products.hasPrevPage
@@ -54,19 +36,18 @@ router.get("/products", async (req, res) => {
 });
 
 router.get("/products/realTimeProducts", isPremium, async (req, res) => {
-  let usuario = req.session.user.email;
-  if (usuario === config.adminEmail) {
-    usuario = "admin";
+  let usuario = req.session.user;
+  let email = req.session.user.email;
+  if (email === config.adminEmail) {
+    email = "admin";
   }
   try {
     const products = await productController.getProductsController();
     const userProducts = products.filter(
       (product) => product.owner === usuario
     );
-
-    console.log(userProducts);
     res.render("realTimeProducts", {
-      usuario,
+      usuario, email,
       userProducts,
       title: "Real Time Products",
     });
@@ -80,33 +61,6 @@ router.get("/products/:pid", async (req, res, next) => {
   const usuario = req.session.user;
   let pid = req.params.pid;
   req.logger.info({ message: `id: ${pid}`, fecha: new Date() });
-
-  // if (pid.length != 24) {
-  //   try {
-  //     throw CustomError.createError({
-  //       name: "incomplete id ",
-  //       cause: `Ivalid id: ${pid}`,
-  //       message: "cannot get product",
-  //       code: ErrorEnum.PARAM_ERROR,
-  //     });
-  //   } catch (error) {
-  //     next(error);
-  //     req.logger.error({ message: `${error}`, fecha: new Date() });
-  //     return;
-  //   }
-  // }
-  // if (!mongoose.Types.ObjectId.isValid(pid)) {
-  //   // Si pid no es un ObjectId válido, mostrar un error 400
-  //   const error = CustomError.createError({
-  //     name: "Invalid id",
-  //     cause: `Invalid id: ${pid}`,
-  //     message: "Cannot get product",
-  //     code: ErrorEnum.PARAM_ERROR,
-  //   });
-  //   next(error);
-  //   req.logger.error({ message: `${error}`, fecha: new Date() });
-  //   return;
-  // }
   try {
     let product = await productsModel.findOne({ _id: pid }).lean();
     res.render("product", { product, title: product.title, usuario });
@@ -119,27 +73,14 @@ router.get("/products/:pid", async (req, res, next) => {
 
 router.get("/carts/:cid", isCartUser, async (req, res, next) => {
   const cid = req.params.cid;
-  if (cid.length != 24) {
-    try {
-      throw CustomError.createError({
-        name: "incomplete id ",
-        cause: `Ivalid id: ${cid}`,
-        message: "cannot get cart",
-        code: ErrorEnum.PARAM_ERROR,
-      });
-    } catch (error) {
-      next(error);
-      req.logger.error({ message: `${error}`, fecha: new Date() });
-      return;
-    }
-  }
+  let usuario = req.session.user;
   try {
     const cart = await cartModel
       .findOne({ _id: cid })
       .populate("products.product")
       .lean();
     const totalProductos = calcularTotalProductosCarrrito(cart);
-    res.render("cart", { cart, totalProductos });
+    res.render("cart", { title: "Cart", cart, totalProductos, usuario });
   } catch (error) {
     next(error);
     req.logger.error({ message: `${error}`, fecha: new Date() });
@@ -148,29 +89,33 @@ router.get("/carts/:cid", isCartUser, async (req, res, next) => {
 });
 
 router.get("/purchase", async (req, res, next) => {
-  const tid = req.params.tid;
   let usuario = req.session.user;
-  res.render("purchase", { usuario });
+  res.render("purchase", { title: "Compra", usuario });
 });
 
 router.get("/chat", isUser, (req, res) => {
-  res.render("chat", { title: "Chat" });
+  let usuario = req.session.user;
+  res.render("chat", { title: "Chat", usuario });
 });
 
 router.get("/sessions/register", (req, res) => {
-  res.render("register", { title: "Register" });
+  let usuario = req.session.user;
+  res.render("register", { title: "Register", usuario });
 });
 
 router.get("/sessions/login", (req, res) => {
-  res.render("login", { title: "login" });
+  let usuario = req.session.user;
+  res.render("login", { title: "login", usuario });
 });
 
 router.get("/sessions/forgotPassword", (req, res) => {
-  res.render("forgotPassword", { title: "Forgot Password" });
+  let usuario = req.session.user;
+  res.render("forgotPassword", { title: "Forgot Password", usuario });
 });
 
 router.get("/sessions/resetPassword/:token", (req, res) => {
-  res.render("resetPassword", { title: "Reset Password" });
+  let usuario = req.session.user;
+  res.render("resetPassword", { title: "Reset Password", usuario });
 });
 
 router.get("/users/premium/:uid", (req, res) => {
@@ -178,18 +123,9 @@ router.get("/users/premium/:uid", (req, res) => {
   res.render("userPremium", { title: "Usuario Premium", usuario });
 });
 
-router.get(
-  "/api/mockingproducts",
-  compression({ brotli: { enabled: true, zlib: {} } }),
-  (req, res) => {
-    const products = generateProducts(100);
-    res.send(products);
-  }
-);
-
 router.get("/users/:uid/documents", (req, res) => {
-  const userId = req.params.uid;
-  res.render("addDocuments", { userId });
+  let usuario = req.session.user;
+  res.render("addDocuments", { title: "Add Documents", usuario });
 });
 
 export default router;

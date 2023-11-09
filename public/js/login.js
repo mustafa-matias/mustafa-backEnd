@@ -13,26 +13,33 @@ loginForm.addEventListener("submit", (e) => {
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((result) => {
-    if (result.status === 200) {
-      Swal.fire({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 5000,
-        title: "Acceso correcto",
-        icon: "success",
-      });
-      setTimeout(function () {
-        window.location.replace("/products");
-      }, 1000);
-    } else {
-      Swal.fire({
-        icon: "error",
-        position: "top-end",
-        title: "Usuario y/o contraseña incorrecta",
-        background: "#000",
-      });
-    }
-  });
+  })
+    .then((result) => {
+      if (result.status === 200) {
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 5000,
+          title: "Acceso correcto",
+          icon: "success",
+        });
+        setTimeout(function () {
+          window.location.replace("/products");
+        }, 1000);
+      } else {
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 5000,
+          title: "Usuario o contraseña incorrecta",
+          icon: "error",
+          background: "#000",
+        });
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 });

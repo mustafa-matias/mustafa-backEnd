@@ -32,41 +32,50 @@ export default class ProductService {
   }
 
   async addProductService(product) {
-    let products = await this.productDao.getProducts();
-    const aux = await products.find((e) => e.code == product.code);
-        if (aux) {
-          throw new Error(`El codigo del producto que quiere cargar ya existe`);
-        }
-    return await this.productDao.addProduct(product);
+    try {
+      let products = await this.productDao.getProducts();
+      const aux = products.find((e) => e.code == product.code);
+      if (aux) {
+        throw new Error("El código del producto que quiere cargar ya existe");
+      }
+      return await this.productDao.addProduct(product);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async getProductByidService(id) {
+    try{
     const product = await this.productDao.getProductByid(id);
     if (!product) {
-      return {
-        error: "id incorrecto",
-      };
+      throw new Error('Producto no encontrado');
     }
     return await this.productDao.getProductByid(id);
+  }catch(error){
+    throw new Error(error.message);
   }
-
+}
   async deleteProductByidService(id) {
-    const product = await this.productDao.getProductByid(id);
-    if (!product) {
-      return {
-        error: "id incorrecto",
-      };
+    try {
+      const product = await this.productDao.getProductByid(id);
+      if (!product) {
+        throw new Error("No se encontro el producto a eliminar");
+      }
+      return await this.productDao.deleteProductByid(id);
+    } catch (error) {
+      throw new Error(error.message);
     }
-    return await this.productDao.deleteProductByid(id);
   }
 
   async updateProductService(id, update) {
-    const product = await this.productDao.getProductByid(id);
-    if (!product) {
-      return {
-        error: "id incorrecto",
-      };
+    try {
+      const product = await this.productDao.getProductByid(id);
+      if (!product) {
+        throw new Error("No se encontro el producto a actualizar");
+      }
+      return await this.productDao.updateProduct(id, update);
+    } catch (error) {
+      throw new Error(error.message);
     }
-    return await this.productDao.updateProduct(id, update);
   }
 }

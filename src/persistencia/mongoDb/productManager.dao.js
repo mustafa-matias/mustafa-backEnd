@@ -7,31 +7,69 @@ export default class ProductDao {
   }
 
   async getProductsFilter(limit, page, sort, whereOptions) {
-    let products = await productsModel.paginate(whereOptions, {
-      limit,
-      page,
-      sort: { price: sort },
-    });
-    return products;
+    try {
+      let products = await productsModel.paginate(whereOptions, {
+        limit,
+        page,
+        sort: { price: sort },
+      });
+      if (!products) {
+        throw new Error("Error al obtener los productos en la base de datos");
+      }
+      return products;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 
   async addProduct(product) {
-    let result = await productsModel.create(product);
-    return result;
+    try {
+      let result = await productsModel.create(product);
+      if (!result) {
+        throw new Error("Error al crear producto en base de datos");
+      }
+      return result;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 
   async getProductByid(id) {
-    const product = await productsModel.findOne({ _id: id });
-    return product;
+    try {
+      const product = await productsModel.findOne({ _id: id });
+      if (!product) {
+        throw new Error("No se encontro el producto en la base de datos");
+      }
+      return product;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 
   async deleteProductByid(id) {
-    let product = await productsModel.deleteOne({ _id: id });
-    return product;
+    try {
+      let product = await productsModel.deleteOne({ _id: id });
+      if (!product) {
+        throw new Error("No se pudo eliminar el producto de la base de datos");
+      }
+      return;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 
   async updateProduct(id, update) {
-    let product = await productsModel.updateOne({ _id: id }, { $set: update });
-    return product;
+    try {
+      let product = await productsModel.updateOne(
+        { _id: id },
+        { $set: update }
+      );
+      if (!product) {
+        throw new Error("No se pudo actualizar producto en la base de datos");
+      }
+      return update;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 }

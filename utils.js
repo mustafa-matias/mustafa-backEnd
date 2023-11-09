@@ -4,35 +4,34 @@ import multer from "multer";
 import bcrypt from "bcrypt";
 import { faker } from "@faker-js/faker";
 import path from "path";
-import fs from 'fs';
+import fs from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    console.log("storageee")
     let idUser = req.user._id;
-    let userPath =`public/uploads/${idUser}`;
-    let userProfilePath =`public/uploads/${idUser}/profiles`;
-    let userProfileFotoPath =`public/uploads/${idUser}/profiles/fotoPerfil`;
-    let userProfileDniFrentePath =`public/uploads/${idUser}/profiles/DniFrente`;
-    let userProfileDniDorsoPath =`public/uploads/${idUser}/profiles/DniDorso`;
+    let userPath = `public/uploads/${idUser}`;
+    let userProfilePath = `public/uploads/${idUser}/profiles`;
+    let userProfileFotoPath = `public/uploads/${idUser}/profiles/fotoPerfil`;
+    let userProfileDniFrentePath = `public/uploads/${idUser}/profiles/DniFrente`;
+    let userProfileDniDorsoPath = `public/uploads/${idUser}/profiles/DniDorso`;
     let uploadPath = "";
-    if(!fs.existsSync(userPath)){
+    if (!fs.existsSync(userPath)) {
       fs.mkdirSync(userProfilePath, { recursive: true });
       fs.mkdirSync(userProfileFotoPath);
       fs.mkdirSync(userProfileDniFrentePath);
       fs.mkdirSync(userProfileDniDorsoPath);
     }
-    if(file.fieldname === 'fotoPerfil'){
-      uploadPath = userProfileFotoPath
-        }
-    if(file.fieldname === 'dniFrente'){
-      uploadPath = userProfileDniFrentePath
+    if (file.fieldname === "fotoPerfil") {
+      uploadPath = userProfileFotoPath;
     }
-    if(file.fieldname === 'dniDorso'){
-      uploadPath = userProfileDniDorsoPath
+    if (file.fieldname === "dniFrente") {
+      uploadPath = userProfileDniFrentePath;
+    }
+    if (file.fieldname === "dniDorso") {
+      uploadPath = userProfileDniDorsoPath;
     }
 
     cb(null, path.join(__dirname, uploadPath));

@@ -14,9 +14,10 @@ const prodLogger = winston.createLogger({
 });
 
 export const addLogger = (req, res, next) => {
-  req.logger = process.env.ENVIRONMENT === "PRODUCTION" ? prodLogger : devLogger;
+  req.logger =
+    process.env.ENVIRONMENT === "PRODUCTION" ? prodLogger : devLogger;
   req.logger.http(
     `${req.method} en ${req.url} - ${new Date().toLocaleDateString()}`
   );
   next();
-}; 
+};

@@ -1,5 +1,7 @@
 import ProductService from "../servicio/productManager.service.js";
-
+import mongoose from "mongoose";
+import CustomError from "../servicio/error/customError.class.js";
+import { ErrorEnum } from "../servicio/enum/error.enum.js";
 export default class ProductController {
   constructor() {
     this.productService = new ProductService();
@@ -18,57 +20,87 @@ export default class ProductController {
   }
 
   async addProductController(product) {
-    const {
-      title,
-      description,
-      price,
-      thumbnail,
-      code,
-      stock,
-      status,
-      category,
-    } = product;
-    if (
-      !title ||
-      !description ||
-      !price ||
-      !thumbnail ||
-      !code ||
-      !stock ||
-      !status ||
-      !category
-    ) {
-      return {
-        error: "Debe completar todos los campos",
-      };
+    try {
+      const {
+        title,
+        description,
+        price,
+        thumbnail,
+        code,
+        stock,
+        status,
+        category,
+      } = product;
+      if (
+        !title ||
+        !description ||
+        !price ||
+        !thumbnail ||
+        !code ||
+        !stock ||
+        !status ||
+        !category
+      ) {
+        throw new Error(
+          "No se completaron todos los campos para cargar el producto"
+        );
+      }
+      return await this.productService.addProductService(product);
+    } catch (error) {
+      throw new Error(error.message);
     }
-    return await this.productService.addProductService(product);
   }
 
   async getProductByidController(id) {
-    if (!id) {
-      return {
-        error: "id vacio",
-      };
+    try {
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        throw CustomError.createError({
+          name: "ID invalido",
+          cause: `Id invalido por Mongo: ${id}`,
+          message: "Id invalido por Mongo",
+          code: ErrorEnum.PARAM_ERROR,
+        });
+      }
+      return await this.productService.getProductByidService(id);
+    } catch (error) {
+      throw new Error(error.message);
     }
-    return await this.productService.getProductByidService(id);
   }
 
   async deleteProductByidController(id) {
-    if (!id) {
-      return {
-        error: "producto vacio",
-      };
+    try {
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        throw CustomError.createError({
+          name: "ID invalido",
+          cause: `Id invalido por Mongo: ${id}`,
+          message: "Id invalido por Mongo",
+          code: ErrorEnum.PARAM_ERROR,
+        });
+      }
+      return await this.productService.deleteProductByidService(id);
+    } catch (error) {
+      throw new Error(error.message);
     }
-    return await this.productService.deleteProductByidService(id);
   }
 
   async updateProductController(id, update) {
-    if (!id || !update) {
-      return {
-        error: "Error al actualizar",
-      };
+    try {
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        throw CustomError.createError({
+          name: "ID invalido",
+          cause: `Id invalido por Mongo: ${id}`,
+          message: "Id invalido por Mongo",
+          code: ErrorEnum.PARAM_ERROR,
+        });
+      }
+      if (!update) {
+        throw new Error(
+          "No se completaron los datos a actualizar del producto"
+        );
+      }
+      return await this.productService.updateProductService(id, update);
+    } catch (error) {
+      throw new Error(error.message);
     }
-    return await this.productService.updateProductService(id, update);
   }
 }

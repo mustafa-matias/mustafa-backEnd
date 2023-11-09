@@ -1,103 +1,69 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="../css/products.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-{{#if usuario}}
-<div class="d-flex justify-content-between text-light">
-    <div class="d-flex align-items-center"> 
-        <div class="rounded-circle overflow-hidden" style="width: 50px; height: 50px;">
-            {{#if usuario.documents.[0]}}
-                <img src="{{usuario.documents.[0].reference}}" width="100%" alt="fotoPerfil">
-            {{/if}}
-        </div>
-        <div class="ms-3"> 
-            <div>
-                <span class="fw-bold text-uppercase fs-5">{{usuario.name}}</span>
-                <span class=" ">({{usuario.age}})</span>
-            </div>
-            <div>
-                <span class="mr-2 fw-semibold text-capitalize">[ {{usuario.role}} {{#if usuario.premium}}⭐ PREMIUM ⭐{{/if}}]</span>
-            </div>
-        </div>
-    </div>
-    <div class="d-flex"> 
-        {{#if usuario.premium}}
-        <a href="/products/realTimeProducts" class="btn btn-warning border border-solid border-dark text-light"><strong>Agregar Producto</strong></a>
-        <form id="premiumForm" action="http://localhost:8080/users/premium/{{usuario._id}}">
-        <button id="userClassicButton" class="btn btn-secondary border border-solid border-dark"><strong class="text-light">Queres dejar de ser Premium?</strong></button></form>
-        {{else}}
-        <a href="/users/{{usuario._id}}/documents" id="" class="btn btn-warning border border-solid border-dark"><strong class="text-light">Queres ser Premium?⭐</strong></a>
-        {{/if}}
-        <a href="/chat" class="btn btn-primary">✍Chat</a>
-        <a href='/carts/{{usuario.cart}}' class="btn btn-success border border-solid border-dark">🛒</a>
-        <button type="button" id="LogoutButton" class="btn btn-danger">LogOut</button>
-    </div>
-</div>
-{{else}}
-<div class="d-flex justify-content-end text-light bg-dark m-2">
-    <a href="/sessions/login" class="btn btn-success mx-2">Login</a>
-    <a href="/sessions/register" class="btn btn-primary">Register</a>
-</div>
-{{/if}}
-<div class="container">
+<div class="container mt-100">
     <div class="row">
-        <p class="text-light text-center mt-5 fs-1">Lista de Productos</p>
+        <h1 style="margin-top: -80px; margin-left: -100px;">Bienvenido {{#if
+            usuario.name}}<strong>{{usuario.name}}</strong>{{/if}} a tu Tienda</h1>
         {{#if products.isValid}}
         {{#each products.docs}}
+        <div class="col-md-3 col-sm-6">
+            <div class="product-wrapper mb-4 text-center" style="height: 300px; width: 200px">
+                <div class="product-img" style="height: 100%;">
+                    <a href="http://localhost:8080/products/{{this._id}}" data-abc="true">
+                        <img src={{this.thumbnail}} alt={{this.title}} style="max-height: 100%; width: auto;">
+                    </a>
+                    <span class="text-center fw-bold">${{this.price}}</span>
 
-        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            <div class="box card">
-                <a href="http://localhost:8080/products/{{this._id}}" class="box cardImg ">
-                    <img src={{this.thumbnail}} alt={{this.title}}>
-                </a>
-                <div class="info">
-                    <h3>{{this.title}}</h3>
-                    <p class="d-flex justify-content-around"><span class="text-dark fw-bold">{{this.title}}</span><span
-                            class="text-secondary fst-italic text-capitalize">{{this.category}}</span></p>
-                    <div class="d-flex justify-content-around mb-2">
-                        <span class="text-dark fw-bold">Price: ${{this.price}}</span>
-                        <span class="text-secondary fst-italic text-capitalize">Stock: {{this.stock}}</span>
-                    </div>
                     {{#if ../usuario}}
-                    <div class="d-flex justify-content-around">
-                        <form id="addToCartForm" action="http://localhost:8080/api/carts/{{../usuario.cart}}/product/{{this._id}}"
-                            method="POST"> 
-                            <button class="btn btn-success addToCartButton">Agregar al carrito</button>
-                        </form>
-                        <button class="btn btn-danger btEliminarProductAdmin"
-                            data-item-id={{this._id}}>Eliminar</button>
+                    <div class="product-action">
+                        <div class="product-action-style d-flex justify-content-around">
+                            <a href="http://localhost:8080/products/{{this._id}}" class="fa fa-search estiloIcono"
+                                data-abc="true">
+                            </a>
+                            <form id="addToCartForm"
+                                action="http://localhost:8080/api/carts/{{../usuario.cart}}/product/{{this._id}}"
+                                method="POST">
+                                <i class="fa fa-shopping-cart addToCartButton estiloIcono"></i>
+                            </form>
+                            <button class="fa fa-trash btEliminarProductAdmin estiloIcono "
+                                data-item-id={{this._id}}></button>
+                        </div>
                     </div>
                     {{else}}
-                    <a href="/sessions/login" class="btn btn-danger">Logerte para agregar</a>
+                    <div class="product-action">
+                        <div class="product-action-style d-flex justify-content-around">
+                            <a href="/sessions/login" class="text-decoration-none text-danger fw-bold"><p>Iniciar Sesión</p></a>
+                        </div>
+                    </div>
                     {{/if}}
                 </div>
             </div>
         </div>
+
         {{/each}}
+        {{/if}}
     </div>
 </div>
-
-<div class="mt-5">
+<div class="m-2">
     <div class="text-center">
         {{#if products.hasPrevPage}}
-        <a href={{products.prevLink}} class="text-decoration-none ">
+        <a href={{products.prevLink}} class="text-decoration-none text-dark fw-bold ">
             << Anterior</a>
                 {{/if}}
-                &nbsp;<span class="text-light fw-bold fs-3">
+                &nbsp;<span class="text-dark fw-bold fs-3">
                     {{products.page}}
                 </span>
                 &nbsp;
                 {{#if products.hasNextPage}}
-                <a href={{products.nextLink}} class="text-decoration-none ">Siguiente >></a>
+                <a href={{products.nextLink}} class="text-decoration-none text-dark fw-bold">Siguiente >></a>
                 {{/if}}
     </div>
-    {{else}}
-    <h1>No hay productos para mostrar</h1>
-    {{/if}}
 </div>
 <script src="/js/products.js"></script>
-<script src="/js/userClassic.js"></script>
-<script src="/js/logout.js"></script>

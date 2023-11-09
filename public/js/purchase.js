@@ -3,7 +3,9 @@ const currentURL = window.location.href;
 const segments = currentURL.split("/");
 const cartId = segments[segments.length - 1];
 
-const productsCount = document.querySelectorAll(".eliminarProductoButton").length;
+const productsCount = document.querySelectorAll(
+  ".eliminarProductoButton"
+).length;
 if (productsCount === 0) {
   purchaseButton.disabled = true;
 }
@@ -15,18 +17,42 @@ purchaseButton.addEventListener("click", function () {
       "Content-Type": "application/json",
     },
   })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Error al realizar la solicitud: ${response.status}`);
-      }
-      return response.json();
-    })
+    .then((response) => response.json())
     .then((data) => {
-      console.log("Respuesta exitosa:", data);
-      window.location.href = `http://localhost:8080/purchase`;
+      if (!data.error) {
+        const productosProcesados = data.ProductosProcesados;
+        const productosNoProcesados = data.ProductosNoProcesados;
+        let message;
+        if (!productosNoProcesados) {
+          message = `Compra Exitosa`;
+        } else {
+          message = `Compra procesada con éxito. Productos procesados: ${productosProcesados.length}. Productos no procesados: ${productosNoProcesados.length}.`;
+        }
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 5000,
+          title: message,
+          icon: "success",
+        });
+        setTimeout(function () {
+          window.location.href = "http://localhost:8080/purchase";
+        }, 1000);
+      } else {
+        Swal.fire({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 5000,
+          title: data.error,
+          icon: "error",
+          background: "#000",
+        });
+      }
     })
     .catch((error) => {
-      console.error("Error:", error);
+      console.error("Error en la solicitud fetch: " + error);
     });
 });
 
@@ -61,7 +87,9 @@ eliminarTodoButton.addEventListener("click", function () {
     });
 });
 
-const eliminarProductoButtons = document.querySelectorAll(".eliminarProductoButton");
+const eliminarProductoButtons = document.querySelectorAll(
+  ".eliminarProductoButton"
+);
 
 eliminarProductoButtons.forEach((button) => {
   const addToCartForm = button.closest("form");
@@ -71,9 +99,9 @@ eliminarProductoButtons.forEach((button) => {
   }
 
   button.addEventListener("click", (e) => {
-    e.preventDefault()
+    e.preventDefault();
     fetch(addToCartForm.action, {
-      method: 'DELETE',
+      method: "DELETE",
     })
       .then((response) => {
         if (response.ok) {
@@ -89,7 +117,7 @@ eliminarProductoButtons.forEach((button) => {
           Swal.fire({
             icon: "error",
             position: "top-end",
-            title: "No puede el producto del carrito",
+            title: "Error al eliminar el producto del carrito",
             background: "#000",
           });
         }

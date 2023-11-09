@@ -1,5 +1,5 @@
 import CartService from "../servicio/cart.service.js";
-
+import mongoose from "mongoose";
 export default class CartController {
   constructor() {
     this.cartService = new CartService();
@@ -15,63 +15,96 @@ export default class CartController {
 
   async getCartByIDController(id) {
     if (!id) {
-      return {
-        error: "id vacio",
-      };
+      throw new Error("ID vacío");
     }
-    return await this.cartService.getCartByIDService(id);
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("ID no valido invalido");
+    }
+    try {
+      return await this.cartService.getCartByIDService(id);
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 
   async addProductToCartController(cid, pid) {
-    if (!cid || !pid) {
-      return {
-        error: "datos incompletos",
-      };
+    if (!pid) {
+      throw new Error("ID Producto vacío");
     }
-
+    if (!cid) {
+      throw new Error("ID Carrito vacío");
+    }
+    if (!mongoose.Types.ObjectId.isValid(cid)) {
+      throw new Error("ID carrito invalido");
+    }
+    if (!mongoose.Types.ObjectId.isValid(pid)) {
+      throw new Error("ID producto invalido");
+    }
     return await this.cartService.addProductToCartService(cid, pid);
   }
+
   async deleteProductFromCartController(cid, pid) {
     if (!cid) {
-      return {
-        error: "id vacio",
-      };
+      throw new Error("ID Carrito vacío");
+    }
+    if (!mongoose.Types.ObjectId.isValid(cid)) {
+      throw new Error("ID Carrito invalido");
+    }
+    if (!pid) {
+      throw new Error("ID producto vacío");
+    }
+    if (!mongoose.Types.ObjectId.isValid(pid)) {
+      throw new Error("ID producto invalido");
     }
     return await this.cartService.deleteProductFromCartService(cid, pid);
   }
+
   async deleteAllProductsFromCartController(cid) {
     if (!cid) {
-      return {
-        error: "id vacio",
-      };
+      throw new Error("ID Carrito vacío");
+    }
+    if (!mongoose.Types.ObjectId.isValid(cid)) {
+      throw new Error("ID Carrito invalido");
     }
     return await this.cartService.deleteAllProductsFromCartService(cid);
   }
 
   async actualizarCarritoController(cid, newProducts) {
-    if (!cid || !newProducts) {
-      return {
-        error: "datos incompletos",
-      };
+    if (!cid) {
+      throw new Error("ID Carrito vacío");
+    }
+    if (!mongoose.Types.ObjectId.isValid(cid)) {
+      throw new Error("ID Carrito invalido");
+    }
+    if (!newProducts) {
+      throw new Error(
+        "No se cargaron correctamente los productos a actualizar"
+      );
     }
     return await this.cartService.actualizarCarritoService(cid, newProducts);
   }
 
   async actualizarCantidadProductoController(cartId, productId, quantity) {
-    if (!cartId || !productId) {
-      return {
-        error: "datos incompletos ID",
-      };
+    try {
+      if (!cartId) {
+        throw new Error("ID Carrito vacío");
+      }
+      if (!mongoose.Types.ObjectId.isValid(cartId)) {
+        throw new Error("ID Carrito invalido");
+      }
+      if (!mongoose.Types.ObjectId.isValid(productId)) {
+        throw new Error("ID producto invalido");
+      }
+      if (!quantity) {
+        throw new Error("No se cargo correctamente la cantidad a actualizar");
+      }
+      return await this.cartService.actualizarCantidadProductoService(
+        cartId,
+        productId,
+        quantity
+      );
+    } catch (error) {
+      throw new Error(error.message);
     }
-    if (!quantity) {
-      return {
-        error: "quantity vacia",
-      };
-    }
-    return await this.cartService.actualizarCantidadProductoService(
-      cartId,
-      productId,
-      quantity
-    );
   }
 }

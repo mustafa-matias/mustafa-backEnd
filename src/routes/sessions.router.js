@@ -5,13 +5,7 @@ import { CurrentUserDTO } from "../controller/DTO/user.dto.js";
 import CustomError from "../servicio/error/customError.class.js";
 import { generateErrorInfo } from "../servicio/info.js";
 import { ErrorEnum } from "../servicio/enum/error.enum.js";
-import Mail from "../helpers/mail.js";
 import userModel from "../persistencia/mongoDb/models/users.model.js";
-import {
-  generateRandomCode,
-  createHash,
-  isValidPassword,
-} from "../../utils.js";
 import SessionsController from "../controller/sessions.controller.js";
 const sessionsController = new SessionsController();
 
@@ -19,18 +13,22 @@ router.post(
   "/register",
   passport.authenticate("register"),
   async (req, res) => {
-    req.session.user = {
-      _id: req.user._id,
-      name: req.user.firtName + " " + req.user.lastName,
-      email: req.user.email,
-      age: req.user.age,
-      role: req.user.role,
-      cart: req.user.cart,
-      premium: req.user.premium,
-      last_connetion: req.user.last_connetion,
-      documents: req.user.documents,
-    };
-    res.status(200).json({ status: "success" });
+    try {
+      req.session.user = {
+        _id: req.user._id,
+        name: req.user.firstName + " " + req.user.lastName,
+        email: req.user.email,
+        age: req.user.age,
+        role: req.user.role,
+        cart: req.user.cart,
+        premium: req.user.premium,
+        last_connetion: req.user.last_connetion,
+        documents: req.user.documents,
+      };
+      res.status(200).json({ status: "Successful registration" });
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
   }
 );
 
@@ -63,7 +61,7 @@ router.post(
 
     req.session.user = {
       _id: req.user._id,
-      name: req.user.firtName + " " + req.user.lastName,
+      name: req.user.firstName + " " + req.user.lastName,
       email: req.user.email,
       age: req.user.age,
       role: req.user.role,
@@ -88,7 +86,7 @@ router.get(
   async (req, res) => {
     req.session.user = {
       _id: req.user._id,
-      name: req.user.firtName,
+      name: req.user.firstName,
       email: req.user.email,
       age: req.user.age,
       role: req.user.role,
@@ -109,14 +107,13 @@ router.get("/logout", async (req, res) => {
         await userModel.findByIdAndUpdate(userId, {
           last_connection: new Date(),
         });
-
-        res.send({status: "success"});
-      } else res.send({ status: "logout ERROR", body: err });
+        res.send({ status: "success" });
+      }
     });
   } catch (err) {
     res.send({
       status: "success",
-      message: "no habia sesion abierta para cerrar",
+      message: "No hay sesion abierta para cerrar",
     });
   }
 });
@@ -127,29 +124,27 @@ router.get("/current", (req, res) => {
 });
 
 router.post("/forgotPassword", async (req, res) => {
-  const emailUsuario = req.body.email;
   try {
+    const emailUsuario = req.body.email;
     await sessionsController.forgotPasswordController(emailUsuario);
-    return res.send({status: "success"});
+    return res.status(200).send({ status: "success" });
   } catch (error) {
-    console.error(error);
-    return res.status(500).send({ error: "Error en el servidor" });
+    return res.status(500).send({ error: error.message });
   }
 });
 
 router.post("/resetPassword/:token", async (req, res) => {
-  const token = req.params.token;
-  const { password, confirmPassword } = req.body;
   try {
+    const token = req.params.token;
+    const { password, confirmPassword } = req.body;
     await sessionsController.resetPasswordController(
       token,
       password,
       confirmPassword
     );
-    return res.send({status: "success"});
+    return res.send({ status: "success" });
   } catch (error) {
-    console.error(error);
-    return res.status(500).send({ error: "Error en el servidor" });
+    return res.status(500).send({ error: error.message });
   }
 });
 

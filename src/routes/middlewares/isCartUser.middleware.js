@@ -7,10 +7,10 @@ export default function isCartUser(req, res, next) {
     return next();
   }
   if (req.session.user.role == "user") {
-    res.status(403).send("Acceso denegado, no corresponde a su Carrito");
+    res.status(403).send(`Acceso denegado: el id proporcionado no correponde al usuario ${req.session.user.name} `);
   } else {
     res
       .status(403)
-      .send("Acceso denegado, el Admin no puede cargar productos al Carrito");
+      .send("Acceso denegado: el Admin no puede cargar productos al Carrito");
   }
 }

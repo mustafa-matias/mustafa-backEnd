@@ -11,5 +11,5 @@ export default {
   githubClientId: process.env.GITHUB_CLIENT_ID,
   githubSecret: process.env.GITHUB_SECRET,
   userGmail: process.env.USER_GMAIL,
-  passGmail: process.env.PASS_GMAIL
+  passGmail: process.env.PASS_GMAIL,
 };

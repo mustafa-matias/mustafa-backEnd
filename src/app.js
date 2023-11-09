@@ -9,7 +9,7 @@ import routerProducts from "./routes/products.router.js";
 import routerCarts from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
 import routerSessions from "./routes/sessions.router.js";
-import routerUsers from "./routes/users.router.js"
+import routerUsers from "./routes/users.router.js";
 
 import ProductController from "./controller/product.controller.js";
 const productController = new ProductController();
@@ -29,7 +29,7 @@ import { addLogger } from "./config/logger.config.js";
 import dotenv from "dotenv";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
-import bodyParser from 'body-parser';
+import bodyParser from "body-parser";
 
 dotenv.config();
 
@@ -38,8 +38,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(addLogger);
 app.use(express.static(__dirname + "/public"));
-app.use(bodyParser.json({ limit: '20mb' }));
-// app.use(errorMiddleware);
+app.use(bodyParser.json({ limit: "20mb" }));
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
@@ -87,6 +86,7 @@ socketServer.on("connection", (socket) => {
       category,
       owner,
     } = data;
+    try{
     await productController.addProductController({
       title,
       description,
@@ -99,6 +99,9 @@ socketServer.on("connection", (socket) => {
       owner,
     });
     socketServer.emit("imprimir", data);
+  }catch(error){
+    error: error.message
+  }
   });
   socket.on("newProductRouter", async (data) => {
     socketServer.emit("postNewProduct", data);
@@ -118,12 +121,12 @@ app.use(passport.session());
 
 app.use(cookieParser("palabraSecretaCookie"));
 initializeStrategy();
-app.use("/", viewsRouter);
 app.use("/api/products/", routerProducts);
 app.use("/api/carts/", routerCarts);
 app.use("/api/sessions/", routerSessions);
 app.use("/api/users/", routerUsers);
-
+app.use("/", viewsRouter);
+app.use(errorMiddleware);
 
 app.get("/loggerTest", (req, res) => {
   req.logger.debug("error en consola");

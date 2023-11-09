@@ -1,37 +1,27 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="../css/login.css">
-<link rel="stylesheet" href="../css/product.css">
 
-<div class="d-flex justify-content-between text-light">
-    <div>
-        <span class="ms-2"><span class="fw-bold text-uppercase fs-5 ">{{usuario.name}} </span> <span
-                class=" ">({{usuario.age}})</span></span>
-    </div>
-    {{#if usuario.premium}}
-    <p class="mr-2 fw-semibold text-capitalize text-light" [ user ⭐ PREMIUM ⭐]></p>
-    {{else}}
-    <p class="mr-2 fw-semibold text-capitalize text-light" [ user ]></p>
-    {{/if}}
-    <div>
-        <a href="/carts/{{usuario.cart}}" class="btn btn-warning border border-solid border-dark">🛒</a>
-        <a href="/sessions/logout" class="btn btn-danger">LogOut</a>
-    </div>
-</div>
-
-<div class="container">
-    <div class="row">
-        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="text-dark">{{usuario.email}}</h2>
             {{#if usuario.premium}}
-            <h2 class="text-light">Eres usuario ⭐ Premium ⭐, Felicitaciones!</h2>
-            {{else}}
-            <h2 class="text-light">Dejaste de ser Premium!😢</h2>
-            {{/if}}
-            <hr class="colorgraph">
-            <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 mt-3">
-                <div class=""><a href="/products" class="btn btn-success btn-block btn-lg">Volver a Productos</a>
-                </div>
+            <span class="badge bg-warning">Usuario Premium</span>
+            <div class="card-body">
+                <p class="card-text fw-bold">Felicitaciones eres USUARIO ⭐PREMIUM⭐.</p>
+                <p class="card-text">Comenzá a disfrutar de todos los beneficios que tenemos para vos!</p>
             </div>
+            {{else}}
+            <span class="badge bg-danger">Dejaste de ser Premium</span>
+            <div class="card-body">
+                <p class="card-text fw-bold">Volviste a ser {{usuario.role}} classic.</p>
+                <p class="card-text">Si quieres volver a ser <strong>Premium</strong> no debes volver a cargar la
+                    documentación.</p>
+            </div>
+            {{/if}}
+        </div>
+        <div class="card-footer">
+            <a href="/products" class="btn btn-success btn-block">Volver a la Tienda</a>
         </div>
     </div>
 </div>

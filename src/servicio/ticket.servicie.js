@@ -10,34 +10,33 @@ export default class TicketService {
   }
 
   async addTicketService(id, email) {
-    let cart;
     try {
-      cart = await cartModel.findOne({ _id: id });
-    } catch (cartError) {
-      console.error("Error find cart:", cartError);
-      return { error: "Error find cart" };
-    }
+      const cart = await cartModel.findOne({ _id: id });
+      if (!cart) {
+        throw new Error("No se encontro el carrito");
+      }
+      const products = await this.productService.getProductsService();
+      if (!products) {
+        throw new Error("No se encontron los productos en la base de datos");
+      }
 
-    let products;
-    try {
-      products = await this.productService.getProductsService();
-    } catch (productsError) {
-      console.error("Error find products:", productsError);
-      return { error: "Error find products" };
-    }
+      let newCart = [];
+      let productsTickets = [];
+      let amount = 0;
 
-    let newCart = [];
-    let productsTickets = [];
-    let amount = 0;
+      if (!cart.products.length) {
+        throw new Error(
+          "No hay productos en el carrito para procesar la compra"
+        );
+      }
 
-    for (const item of cart.products) {
-      const productBaseDatos = products.find(
-        (producto) => producto._id.toString() == item.product.toString()
-      );
-      const quantityCart = item.quantity;
-      const stockProcuct = productBaseDatos.stock;
+      for (const item of cart.products) {
+        const productBaseDatos = products.find(
+          (producto) => producto._id.toString() == item.product.toString()
+        );
+        const quantityCart = item.quantity;
+        const stockProcuct = productBaseDatos.stock;
 
-      try {
         if (quantityCart <= stockProcuct) {
           productsTickets.push(productBaseDatos);
           await this.productService.updateProductService(
@@ -48,73 +47,47 @@ export default class TicketService {
         } else {
           newCart.push(productBaseDatos);
         }
-      } catch (updateError) {
-        console.error("Error updating product:", updateError);
-        return { error: "Error updating product" };
       }
-    }
 
-    try {
+      if (!productsTickets.length) {
+        throw new Error(
+          "Error al procesar la compra: los productos no tienen Stock"
+        );
+      }
       await this.cartService.deleteAllProductsFromCartService(id);
-    } catch (deleteError) {
-      console.error("Error delete Products:", deleteError);
-      return { error: "Error delete products" };
-    }
 
-    try {
       for (const item of newCart) {
         await this.cartService.addProductToCartService(id, item._id);
       }
-    } catch (addProductToCartServiceError) {
-      console.error(
-        "Error add product to Cart Service:",
-        addProductToCartServiceError
-      );
-      return { error: "Error add product to Cart Service" };
-    }
 
-    cart.save();
+      cart.save();
 
-    if (!productsTickets.length) {
-      return {
-        status: "No se genero tickets, ya que no hay productos en stock",
-        ProductosNoProcesados: newCart.map((item) => item._id),
-      };
-    }
-    if (productsTickets.length > 0 && newCart.length > 0) {
-      const ticket = {
-        products: productsTickets,
-        amount: amount,
-        purchaser: email,
-      };
-      try {
+      if (productsTickets.length > 0 && newCart.length > 0) {
+        const ticket = {
+          products: productsTickets,
+          amount: amount,
+          purchaser: email,
+        };
         await this.ticketsDao.addTicket(ticket);
-      } catch (addTicketError) {
-        console.error("Add Ticket Error:", addTicketError);
-        return { error: "Add Ticket Error" };
+        return {
+          status: "Se generó Tickets",
+          ProductosProcesados: productsTickets.map((item) => item._id),
+          ProductosNoProcesados: newCart.map((item) => item._id),
+        };
       }
-      return {
-        status: "Se generó Tickets",
-        ProductosProcesados: productsTickets.map((item) => item._id),
-        ProductosNoProcesados: newCart.map((item) => item._id),
-      };
-    }
-    if (!newCart.length) {
-      const ticket = {
-        products: productsTickets,
-        amount: amount,
-        purchaser: email,
-      };
-      try {
-        await this.ticketsDao.addTicket(ticket);
-      } catch (addTicketError) {
-        console.error("Add Ticket Error:", addTicketError);
-        return { error: "Add Ticket Error" };
-      }
+      if (!newCart.length) {
+        const ticket = {
+          products: productsTickets,
+          amount: amount,
+          purchaser: email,
+        };
+      await this.ticketsDao.addTicket(ticket);
       return {
         status: "Se procesaron todos los productos con éxito",
         ProductosProcesados: productsTickets.map((item) => item._id),
       };
+    }} catch (error) {
+      throw new Error(error.message);
     }
   }
 }

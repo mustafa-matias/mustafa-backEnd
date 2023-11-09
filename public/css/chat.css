@@ -1,0 +1,36 @@
+.dark-bg {
+    background-color: black;
+  }
+  
+  .white-text {
+    color: rgb(7, 7, 7);
+  }
+
+  .scrollable-chat {
+    min-height: 50vh; /* Altura máxima del chat */
+    max-height: 50vh; /* Altura máxima del chat */
+    overflow-y: auto; /* Agrega scroll vertical si es necesario */
+}
+
+.bodyChat {
+    background-image: url("https://cdn.pixabay.com/photo/2017/10/10/21/46/laptop-2838917_640.jpg");
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    background-position: center center; 
+    min-height: 100vh;
+    margin: 0; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .formularioChat {
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    /* padding: 20px; */
+    /* max-width: 800px; */
+    margin: 0 auto;
+    width: 80%;
+    height: 100%;
+  }
+  
