@@ -50,8 +50,10 @@ app.use(
   })
 );
 
-const expressServer = app.listen(config.port, () =>
-  console.log(`Servidor levantado en puerto: ${config.port}`)
+const PORT = config.port || 8080;
+
+const expressServer = app.listen(PORT, () =>
+  console.log(`Servidor levantado en puerto: ${PORT}`)
 );
 
 const connection = mongoose.connect(config.mongoUrl);
