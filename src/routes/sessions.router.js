@@ -2,9 +2,6 @@ import { Router } from "express";
 const router = Router();
 import passport from "passport";
 import { CurrentUserDTO } from "../controller/DTO/user.dto.js";
-import CustomError from "../servicio/error/customError.class.js";
-import { generateErrorInfo } from "../servicio/info.js";
-import { ErrorEnum } from "../servicio/enum/error.enum.js";
 import userModel from "../persistencia/mongoDb/models/users.model.js";
 import SessionsController from "../controller/sessions.controller.js";
 const sessionsController = new SessionsController();
@@ -38,22 +35,6 @@ router.post(
   async (req, res, next) => {
     const email = req.user.email;
     const password = req.user.password;
-    if (!email || !password) {
-      try {
-        throw CustomError.createError({
-          name: "login error",
-          cause: generateErrorInfo({
-            email,
-            password,
-          }),
-          message: "error trying login",
-          code: ErrorEnum.INVALID_TYPES_ERROR,
-        });
-      } catch (error) {
-        next(error);
-        return;
-      }
-    }
     if (!req.user)
       return res
         .status(400)
