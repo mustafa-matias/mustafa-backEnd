@@ -25,10 +25,10 @@ router.get("/products", async (req, res) => {
   );
 
   products.prevLink = products.hasPrevPage
-    ? `http://localhost:8080/products?page=${products.prevPage}`
+    ? `${config.domain}products?page=${products.prevPage}`
     : "";
   products.nextLink = products.hasNextPage
-    ? `http://localhost:8080/products?page=${products.nextPage}`
+    ? `${config.domain}products?page=${products.nextPage}`
     : "";
   products.isValid = !(page <= 0 || page > products.totalPages);
 
