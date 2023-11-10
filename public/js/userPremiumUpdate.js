@@ -21,7 +21,7 @@ if (premiumFormUpdate) {
       })
       .then((data) => {
         console.log("Respuesta exitosa:", data);
-        window.location.href = `http://localhost:8080/users/premium/${id}`;
+        window.location.href = `https://mustafa-backend-production.up.railway.app/users/premium/${id}`;
       })
       .catch((error) => {
         console.error("Error:", error);

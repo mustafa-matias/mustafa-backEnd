@@ -23,7 +23,7 @@ export default class SessionsService {
       user.resetPasswordExpires = expirationDate;
 
       const mailer = new Mail();
-      const resetUrl = `http://localhost:8080/sessions/resetPassword/${token}`;
+      const resetUrl = `https://mustafa-backend-production.up.railway.app/sessions/resetPassword/${token}`;
 
       mailer.send(user, "Restablecer Contraseña", resetUrl);
 

@@ -40,7 +40,7 @@ premiumButton.addEventListener("click", (e) => {
     })
     .then((data) => {
       console.log("Respuesta exitosa:", data);
-      window.location.href = `http://localhost:8080/users/premium/${uid}`;
+      window.location.href = `https://mustafa-backend-production.up.railway.app/users/premium/${uid}`;
     })
     .catch((error) => {
       console.error("Error:", error);

@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const id = btEliminarProductAdmin.getAttribute("data-item-id");
       const confirmation = confirm("¿Estás seguro de que deseas eliminar?");
       if (confirmation) {
-        const url = `http://localhost:8080/api/products/${id}`;
+        const url = `https://mustafa-backend-production.up.railway.app/api/products/${id}`;
         fetch(url, {
           method: "DELETE",
           headers: {

@@ -71,7 +71,7 @@ export default class UsersService {
           mail.sendDeleteUser(
             user,
             "Se ha eliminado su cuenta",
-            `http://localhost:8080/api/sessions/register`
+            `https://mustafa-backend-production.up.railway.app/api/sessions/register`
           );
           await this.usersDao.deleteUsersById(user._id);
         }

@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then((data) => {
           console.log("Respuesta exitosa:", data);
-          window.location.href = `http://localhost:8080/sessions/login`;
+          window.location.href = `https://mustafa-backend-production.up.railway.app/sessions/login`;
         })
         .catch((error) => {
           console.error("Error:", error);

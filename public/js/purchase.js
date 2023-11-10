@@ -37,7 +37,7 @@ purchaseButton.addEventListener("click", function () {
           icon: "success",
         });
         setTimeout(function () {
-          window.location.href = "http://localhost:8080/purchase";
+          window.location.href = "https://mustafa-backend-production.up.railway.app/purchase";
         }, 1000);
       } else {
         Swal.fire({

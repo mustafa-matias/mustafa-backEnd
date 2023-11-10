@@ -16,18 +16,18 @@
         <div class="col-md-3 col-sm-6">
             <div class="product-wrapper mb-4 text-center" style="height: 300px; width: 200px">
                 <div class="product-img" style="height: 100%;">
-                    <a href="http://localhost:8080/products/{{this._id}}" data-abc="true">
+                    <a href="https://mustafa-backend-production.up.railway.app/products/{{this._id}}" data-abc="true">
                         <img src={{this.thumbnail}} alt={{this.title}} style="max-height: 100%; width: auto;">
                     </a>
                     <span class="text-center fw-bold">${{this.price}}</span>
                     {{#if ../usuario}}
                     <div class="product-action">
                         <div class="product-action-style d-flex justify-content-around">
-                            <a href="http://localhost:8080/products/{{this._id}}" class="fa fa-search estiloIcono"
+                            <a href="https://mustafa-backend-production.up.railway.app/products/{{this._id}}" class="fa fa-search estiloIcono"
                                 data-abc="true">
                             </a>
                             <form id="addToCartForm"
-                                action="http://localhost:8080/api/carts/{{../usuario.cart}}/product/{{this._id}}"
+                                action="https://mustafa-backend-production.up.railway.app/api/carts/{{../usuario.cart}}/product/{{this._id}}"
                                 method="POST">
                                 <i class="fa fa-shopping-cart addToCartButton estiloIcono"></i>
                             </form>
