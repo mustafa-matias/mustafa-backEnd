@@ -1,7 +1,5 @@
 import ProductService from "../servicio/productManager.service.js";
 import mongoose from "mongoose";
-import CustomError from "../servicio/error/customError.class.js";
-import { ErrorEnum } from "../servicio/enum/error.enum.js";
 export default class ProductController {
   constructor() {
     this.productService = new ProductService();
@@ -54,12 +52,7 @@ export default class ProductController {
   async getProductByidController(id) {
     try {
       if (!mongoose.Types.ObjectId.isValid(id)) {
-        throw CustomError.createError({
-          name: "ID invalido",
-          cause: `Id invalido por Mongo: ${id}`,
-          message: "Id invalido por Mongo",
-          code: ErrorEnum.PARAM_ERROR,
-        });
+        throw newError('Id invalido')
       }
       return await this.productService.getProductByidService(id);
     } catch (error) {
@@ -70,12 +63,7 @@ export default class ProductController {
   async deleteProductByidController(id) {
     try {
       if (!mongoose.Types.ObjectId.isValid(id)) {
-        throw CustomError.createError({
-          name: "ID invalido",
-          cause: `Id invalido por Mongo: ${id}`,
-          message: "Id invalido por Mongo",
-          code: ErrorEnum.PARAM_ERROR,
-        });
+        throw newError('Id invalido')
       }
       return await this.productService.deleteProductByidService(id);
     } catch (error) {
@@ -86,12 +74,7 @@ export default class ProductController {
   async updateProductController(id, update) {
     try {
       if (!mongoose.Types.ObjectId.isValid(id)) {
-        throw CustomError.createError({
-          name: "ID invalido",
-          cause: `Id invalido por Mongo: ${id}`,
-          message: "Id invalido por Mongo",
-          code: ErrorEnum.PARAM_ERROR,
-        });
+        throw newError('Id invalido')
       }
       if (!update) {
         throw new Error(

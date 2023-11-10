@@ -2,8 +2,6 @@ import SessionsDao from "../persistencia/mongoDb/sessions.dao.js";
 import userModel from "../persistencia/mongoDb/models/users.model.js";
 import { generateRandomCode } from "../../utils.js";
 import Mail from "../helpers/mail.js";
-import CustomError from "./error/customError.class.js";
-import { ErrorEnum } from "./enum/error.enum.js";
 import { isValidPassword, createHash } from "../../utils.js";
 
 export default class SessionsService {

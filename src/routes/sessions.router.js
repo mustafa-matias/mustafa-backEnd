@@ -35,6 +35,9 @@ router.post(
   async (req, res, next) => {
     const email = req.user.email;
     const password = req.user.password;
+    if (!email || !password) {
+        return('error')
+    }
     if (!req.user)
       return res
         .status(400)
