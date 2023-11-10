@@ -57,8 +57,9 @@ export default class CartService {
       if (!cart) {
         throw new Error("No se encontró carrito");
       }
+      console.log(cart)
       const item = cart.products.find(
-        (producto) => producto.product._id == pid
+        (producto) => producto._id == pid
       );
       if (!item) {
         throw new Error("No se encontró el ID del producto que desea eliminar");
@@ -152,11 +153,12 @@ export default class CartService {
       if (!cart) {
         throw new Error("No se encontro el Carrito a actualizar");
       }
-      let product = cart.products.find((e) => e._id == productId);
-      if (!product) {
+      let productFind = cart.products.find((e) => e._id == productId);
+      if (!productFind) {
         throw new Error("No se encontro el producto a actualizar");
       }
-      product.quantity = quantity;
+      productFind.quantity = quantity;
+      productFind.amount =  productFind.quantity * productFind.product.price;
       return await this.cartDao.actualizarCantidadProducto(cart);
     } catch (error) {
       throw new Error(error.message);

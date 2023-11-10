@@ -44,7 +44,7 @@ router.get("/products/realTimeProducts", isPremium, async (req, res) => {
   try {
     const products = await productController.getProductsController();
     const userProducts = products.filter(
-      (product) => product.owner === usuario
+      (product) => product.owner === email
     );
     res.render("realTimeProducts", {
       usuario, email,

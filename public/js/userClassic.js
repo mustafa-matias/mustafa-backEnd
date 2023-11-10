@@ -14,6 +14,15 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then((response) => {
           if (!response.ok) {
+            Swal.fire({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 5000,
+              title: "El Admin no puede dejar de ser Premium",
+              icon: "error",
+              background: "#000",
+            });
             throw new Error(
               `Error al realizar la solicitud: ${response.status}`
             );

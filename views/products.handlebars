@@ -10,7 +10,7 @@
 <div class="container mt-100">
     <div class="row">
         <h1 style="margin-top: -80px; margin-left: -100px;">Bienvenido {{#if
-            usuario.name}}<strong>{{usuario.name}}</strong>{{/if}} a tu Tienda</h1>
+            usuario.name}}<strong class="text-capitalize">{{usuario.name}}</strong>{{/if}} a tu Tienda</h1>
         {{#if products.isValid}}
         {{#each products.docs}}
         <div class="col-md-3 col-sm-6">
@@ -20,7 +20,6 @@
                         <img src={{this.thumbnail}} alt={{this.title}} style="max-height: 100%; width: auto;">
                     </a>
                     <span class="text-center fw-bold">${{this.price}}</span>
-
                     {{#if ../usuario}}
                     <div class="product-action">
                         <div class="product-action-style d-flex justify-content-around">
@@ -39,7 +38,9 @@
                     {{else}}
                     <div class="product-action">
                         <div class="product-action-style d-flex justify-content-around">
-                            <a href="/sessions/login" class="text-decoration-none text-danger fw-bold"><p>Iniciar Sesión</p></a>
+                            <a href="/sessions/login" class="text-decoration-none text-danger fw-bold">
+                                <p>Iniciar Sesión</p>
+                            </a>
                         </div>
                     </div>
                     {{/if}}

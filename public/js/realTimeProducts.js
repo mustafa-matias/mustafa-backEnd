@@ -62,36 +62,27 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   function imprimir(product) {
     const contenedorProducts = document.getElementById("contenedorProducts");
-    const divProduct = document.createElement("div");
-    divProduct.classList.add(
-      "card",
-      "shadow-sm",
-      "border-dark",
-      "rounded",
-      "w-25",
-      "mx-auto",
-      "mb-2",
-      "mt-2"
-    );
+    const trProduct = document.createElement("tr");
+    // divProduct.classList.add(
+    //   "card",
+    //   "shadow-sm",
+    //   "border-dark",
+    //   "rounded",
+    //   "w-25",
+    //   "mx-auto",
+    //   "mb-2",
+    //   "mt-2"
+    // );
 
     const estructuraProducto = `
-        <img src=${product.thumbnail} alt=${product.title} srcset="">
-        <div class="card-body bg-secondary-subtle text-center">
-            <div class="d-flex justify-content-between">
-                <p class="text-center fw-bold text-uppercase">${product.title}</p>
-            </div>
-            <p class="card-text">${product.description}</p>
-            <div class="d-flex justify-content-between align-items-center">
-                <small class="text-body-secondary fw-bold">${product.price}}</small>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Eliminar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <td>${product.code}</td>
+    <td>${product.title}</td>
+    <td>${product.price}</td>
+    <td>${product.category}</td>
+    <td>${product.stock} unidad/es</td>
 `;
-    divProduct.innerHTML = estructuraProducto;
-    contenedorProducts.appendChild(divProduct);
+    trProduct.innerHTML = estructuraProducto;
+    contenedorProducts.appendChild(trProduct);
   }
 
   socket.on("imprimir", (product) => {
