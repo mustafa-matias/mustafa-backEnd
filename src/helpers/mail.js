@@ -11,6 +11,7 @@ export default class Mail {
         user: config.userGmail,
         pass: config.passGmail,
       },
+      authMethod: 'PLAIN',
     });
   }
   send = async (user, subject, url) => {
