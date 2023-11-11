@@ -99,7 +99,7 @@ export default class UsersService {
       }
       const fotoPerfil = {
         name: files.fotoPerfil[0].filename,
-        reference: files.fotoPerfil[0].path.split("public\\")[1],
+        reference: files.fotoPerfil[0].path
       };
       const dniFrente = {
         name: files.dniFrente[0].filename,
