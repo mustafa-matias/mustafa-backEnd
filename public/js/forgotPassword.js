@@ -4,11 +4,11 @@ document.addEventListener("DOMContentLoaded", function () {
   forgotPasswordForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const email = forgotPasswordForm.querySelector('input[name="email"]').value;
-    console.log(email)
+    const emailJson = JSON.stringify({ email })
 
     fetch("/api/sessions/forgotPassword", {
       method: "POST",
-      body: JSON.stringify({ email }),
+      body: emailJson,
       headers: {
         "Content-Type": "application/json",
       },
