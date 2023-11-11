@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import config from "../config/config.js";
 import __dirname from "../../utils.js";
 import SMTPTransport from "nodemailer/lib/smtp-transport/index.js";
-const smtpTransport = new smtpTransport()
+const smtpTransport = new SMTPTransport()
 export default class Mail {
   constructor() {
     this.transport = nodemailer.createTransport(smtpTransport({
