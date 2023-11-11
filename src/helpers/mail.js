@@ -90,7 +90,7 @@ export default class Mail {
         },
         {
           filename: "headerMail.JPG",
-          path: __dirname + "/src/images/headerMail.JPG",
+          path: __dirname + "/src/images/headerMail.jpg",
           cid: "headerMail",
         },
       ],
