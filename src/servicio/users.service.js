@@ -97,17 +97,26 @@ export default class UsersService {
       if (!files.dniDorso) {
         throw new Error("No se cargo la foto DNI Dorso");
       }
+      let urlFotoPerfil = files.fotoPerfil[0].path;
+      let urlFotoPerfilUpdate = urlFotoPerfil.substring(urlFotoPerfil.indexOf("/uploads"));
+      
+      let urlDniFrente = files.dniFrente[0].path;
+      let urlDniFrenteUpdate = urlDniFrente.substring(urlDniFrente.indexOf("/uploads"));
+      
+      let urlDniDorso = files.dniDorso[0].path;
+      let urlDniDorsoUpdate = urlDniDorso.substring(urlDniDorso.indexOf("/uploads"));
+
       const fotoPerfil = {
         name: files.fotoPerfil[0].filename,
-        reference: files.fotoPerfil[0].path
+        reference: urlFotoPerfilUpdate
       };
       const dniFrente = {
         name: files.dniFrente[0].filename,
-        reference: files.dniFrente[0].path.split("public\\")[1],
+        reference: urlDniFrenteUpdate
       };
       const dniDorso = {
         name: files.dniDorso[0].filename,
-        reference: files.dniDorso[0].path.split("public\\")[1],
+        reference: urlDniDorsoUpdate
       };
       if (user.documents.length < 3) {
         user.documents.push(fotoPerfil, dniFrente, dniDorso);
