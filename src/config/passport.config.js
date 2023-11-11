@@ -116,7 +116,7 @@ const initializeStrategy = () => {
       {
         clientID: config.githubClientId,
         clientSecret: config.githubSecret,
-        callbackURL: `${config.domain}/api/sessions/githubcallback`,
+        callbackURL: `${config.domainApp}/api/sessions/githubcallback`,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {

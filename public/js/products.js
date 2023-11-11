@@ -1,5 +1,3 @@
-import config from "../../src/config/config";
-
 document.addEventListener("DOMContentLoaded", () => {
   const btEliminarProductAdmins = document.querySelectorAll(
     ".btEliminarProductAdmin"
@@ -54,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const id = btEliminarProductAdmin.getAttribute("data-item-id");
       const confirmation = confirm("¿Estás seguro de que deseas eliminar?");
       if (confirmation) {
-        const url = `${config.domain}/api/products/${id}`;
+        const url = `https://mustafa-backend-production.up.railway.app/api/products/${id}`;
         fetch(url, {
           method: "DELETE",
           headers: {

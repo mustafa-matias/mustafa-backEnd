@@ -16,12 +16,12 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000000;">
-            <div class="container-fluid">
-                <div class="">
+        <nav class="" style="background-color: #000000;">
+            <div>
+                <div class="container-fluid">
                     <div class="d-flex flex-wrap align-items-center justify-content-between">
                         {{#if usuario}}
-                        <a href="#" class="navbar-brandmx-2 my-2 d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                        <a href="#" class="mx-2 my-2 d-block link-body-emphasis text-decoration-none dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             {{#if usuario.documents.[0]}}
                             <div class="image-container"
@@ -64,7 +64,7 @@
                                     </a>
                                 </li>
                                 <li class="mx-2 my-2">
-                                    <form id="premiumForm" action="https://mustafa-backend-production.up.railway.app/users/premium/{{usuario._id}}">
+                                    <form id="premiumForm" data-id-user="{{usuario._id}}">
                                         <button id="userClassicButton" class="btn text-light">
                                             Dejar de ser Premium
                                         </button>

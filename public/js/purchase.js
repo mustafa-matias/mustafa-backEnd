@@ -1,5 +1,3 @@
-import config from "../../src/config/config";
-
 const purchaseButton = document.getElementById("purchaseButton");
 const currentURL = window.location.href;
 const segments = currentURL.split("/");
@@ -39,7 +37,7 @@ purchaseButton.addEventListener("click", function () {
           icon: "success",
         });
         setTimeout(function () {
-          window.location.href = `${config.domain}/purchase`;
+          window.location.href = "https://mustafa-backend-production.up.railway.app/purchase";
         }, 1000);
       } else {
         Swal.fire({

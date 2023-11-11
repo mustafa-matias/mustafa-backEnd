@@ -73,7 +73,7 @@ export default class UsersService {
           mail.sendDeleteUser(
             user,
             "Se ha eliminado su cuenta",
-            `${config.domain}/api/sessions/register`
+            `${config.domainApp}/api/sessions/register`
           );
           await this.usersDao.deleteUsersById(user._id);
         }

@@ -12,7 +12,7 @@ import isCartUser from "./middlewares/isCartUser.middleware.js";
 import isPremium from "./middlewares/isPremium.middleware.js";
 import { calcularTotalProductosCarrrito } from "../../utils.js";
 import config from "../config/config.js";
-const domain = config.domain;
+const domain = config.domainApp;
 
 router.get("/products", async (req, res) => {
   let page = parseInt(req.query.page);
@@ -26,10 +26,10 @@ router.get("/products", async (req, res) => {
   );
 
   products.prevLink = products.hasPrevPage
-    ? `${config.domain}/products?page=${products.prevPage}`
+    ? `${config.domainApp}/products?page=${products.prevPage}`
     : "";
   products.nextLink = products.hasNextPage
-    ? `${config.domain}/products?page=${products.nextPage}`
+    ? `${config.domainApp}/products?page=${products.nextPage}`
     : "";
   products.isValid = !(page <= 0 || page > products.totalPages);
 

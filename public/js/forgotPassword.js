@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         setTimeout(() => {
           window.location.href =
-          `${config.domain}/sessions/login`;
+          `https://mustafa-backend-production.up.railway.app/sessions/login`;
         }, 1000);
       })
       .catch((error) => {
