@@ -4,30 +4,35 @@
 <link rel="stylesheet" href="../css/chat.css">
 <div class="bodyChat">
     <div class="formularioChat">
-        <div class="container w-75" >
-            <h1 id="bienvenida" class="text-dark text-center fw-bold mt-2 mb-4" style="font-size: 20px;">Chat en Tiempo Real
+        <div class="container w-75">
+            <h1 id="bienvenida" class="text-dark text-center fw-bold mt-2 mb-4" style="font-size: 20px;">Chat en Tiempo
+                Real
             </h1>
-            <div class="row">
-                <div class="col-md-8 mx-auto">
-                    <form id="form-chat" action="" method="post">
-                        <div class="input-group mb-3">
-                            <input required type="text" id="chatbox" name="title" class="form-control"
-                                placeholder="Escriba un mensaje..." autofocus aria-label="title" />
-                            <div class="input-group-append">
-                                <button id="botonEnviar" class="btn btn-success fw-bold" type="submit">Enviar</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
         <div class="container mt-2">
             <div class="row">
                 <div class="col-md-8 mx-auto mb-2">
                     <div class="scrollable-chat border border-dark p-3" id="contenedorMensajes">
                     </div>
-                    <a href="/products" class="btn btn-secondary d-block mx-auto mt-4">Volver a Tienda</a>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <form id="form-chat" action="" method="post">
+                    <div class="input-group mb-3">
+                        <input required type="text" id="chatbox" name="title" class="form-control"
+                            placeholder="Escriba un mensaje..." autofocus aria-label="title" />
+                        <div class="input-group-append">
+                            <button id="botonEnviar" class="btn btn-success fw-bold" type="submit">Enviar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <a href="/products" class="btn btn-secondary d-block mx-auto m-2">Volver a Tienda</a>
             </div>
         </div>
     </div>

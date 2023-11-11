@@ -1,3 +1,5 @@
+import config from "../../src/config/config";
+
 const premiumFormUpdate = document.getElementById("premiumFormUpdate");
 
 if (premiumFormUpdate) {
@@ -21,7 +23,7 @@ if (premiumFormUpdate) {
       })
       .then((data) => {
         console.log("Respuesta exitosa:", data);
-        window.location.href = `https://mustafa-backend-production.up.railway.app/users/premium/${id}`;
+        window.location.href = `${config.domain}/users/premium/${id}`;
       })
       .catch((error) => {
         console.error("Error:", error);

@@ -1,3 +1,5 @@
+import config from "../../src/config/config";
+
 const premiumButton = document.getElementById("premiumButton");
 const fotoPerfilInput = document.getElementById("fotoPerfil");
 const dniFrenteInput = document.getElementById("dniFrente");
@@ -40,7 +42,7 @@ premiumButton.addEventListener("click", (e) => {
     })
     .then((data) => {
       console.log("Respuesta exitosa:", data);
-      window.location.href = `https://mustafa-backend-production.up.railway.app/users/premium/${uid}`;
+      window.location.href = `${config.domain}/users/premium/${uid}`;
     })
     .catch((error) => {
       console.error("Error:", error);

@@ -1,3 +1,5 @@
+import config from "../../src/config/config";
+
 document.addEventListener("DOMContentLoaded", function () {
   const forgotPasswordForm = document.getElementById("forgotPassword");
 
@@ -30,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         setTimeout(() => {
           window.location.href =
-            "https://mustafa-backend-production.up.railway.app/sessions/login";
+          `${config.domain}/sessions/login`;
         }, 1000);
       })
       .catch((error) => {

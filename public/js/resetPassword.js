@@ -1,3 +1,5 @@
+import config from "../../src/config/config";
+
 document.addEventListener("DOMContentLoaded", function () {
   const resetPassword = document.getElementById("resetPassword");
   const token = obtenerToken();
@@ -33,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
             icon: "success",
           });
           setTimeout(() => {
-            window.location.href = "https://mustafa-backend-production.up.railway.app/sessions/login";
+            window.location.href = `${config.domain}/sessions/login`;
           }, 1000);
         }
       })

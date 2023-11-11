@@ -13,50 +13,50 @@
             <h4 class='text-dark text-center fw-bold'>CARGA PRODUCTOS - TIEMPO REAL</h4>
             <form class='w-100 mx-auto' id='form-product' action='/api/products/realTimeProducts' method='post'>
                 <div class='input-group mb-3 border border-black rounded'>
-                    <label for="usuario" class='input-group-text fw-bold border border-black w-25 text-light'
+                    <label for="usuario" class='input-group-text fw-bold border border-black w100 text-light'
                         style="background-color: black;">Usuario</label>
                     <input type='text' id='usuario' name='usuario' class='form-control border border-black'
-                        aria-label='title' value={{email}} readonly/>
+                        aria-label='title' value={{email}} readonly />
                 </div>
                 <div class='input-group mb-3 border border-black rounded'>
-                    <label for="producto" class='input-group-text fw-bold border border-black w-25 text-light'
+                    <label for="producto" class='input-group-text fw-bold border border-black w-100 text-light'
                         style="background-color: black;">Producto</label>
                     <input type='text' id='producto' name='title' class='form-control border border-black'
                         placeholder='Nombre del producto' autofocus aria-label='title' />
                 </div>
                 <div class='input-group mb-3 border border-black rounded'>
-                    <label for="Descripción" class='input-group-text fw-bold border border-black w-25 text-light'
+                    <label for="Descripción" class='input-group-text fw-bold border border-black w-100 text-light'
                         style="background-color: black;">Descripción</label>
                     <input type='text' id='Descripción' name='description' class='form-control border border-black'
                         placeholder='Describa el producto...' />
                 </div>
                 <div class='input-group mb-3 border border-black rounded'>
-                    <label for="price" class='input-group-text  fw-bold border border-black w-25 text-light'
+                    <label for="price" class='input-group-text  fw-bold border border-black w-100 text-light'
                         style="background-color: black;">Precio</label>
                     <input type='number' id='price' name='price' class='form-control border border-black'
                         placeholder='$00.00' aria-label='Precio' />
                 </div>
                 <div class='input-group mb-3 border border-black rounded'>
-                    <label for="imagen" class='input-group-text  fw-bold border border-black w-25 text-light'
+                    <label for="imagen" class='input-group-text  fw-bold border border-black w-100 text-light'
                         style="background-color: black;">URL
                         Imagen</label>
                     <input type='text' id='imagen' name='thumbnail' class='form-control border border-black'
                         placeholder='https://.../' />
                 </div>
                 <div class='input-group mb-3 border border-black rounded'>
-                    <label for="Código" class='input-group-text  fw-bold border border-black w-25 text-light'
+                    <label for="Código" class='input-group-text  fw-bold border border-black w-100 text-light'
                         style="background-color: black;">Código</label>
                     <input type='number' id='Código' name='code' class='form-control border border-black '
                         placeholder='0' />
                 </div>
                 <div class='input-group mb-3 border border-black rounded'>
-                    <label for="Stock" class='w-25 input-group-text  fw-bold border border-black w-25 text-light'
+                    <label for="Stock" class='w-25 input-group-text  fw-bold border border-black w-100 text-light'
                         style="background-color: black;">Stock</label>
                     <input type='number' id='Stock' name='stock' class=' form-control border border-black'
                         placeholder='0' />
                 </div>
                 <div class='input-group mb-3 border border-black rounded'>
-                    <label for="Categoría" class='input-group-text fw-bold border border-black w-25 text-light'
+                    <label for="Categoría" class='input-group-text fw-bold border border-black w-100 text-light'
                         style="background-color: black;">Categoría</label>
                     <input type='text' id='Categoría' name='category' class='form-control border border-black'
                         placeholder='Indique la Categoría...' />
@@ -65,42 +65,46 @@
                     <input type='hidden' name='form' value='true' />
                 </div>
                 <div class="d-grid gap-2 border border-black rounded">
-                    <button class='btn btn-success btn-block fw-bold border-black rounded' type='submit'>A G R E G A R</button>
+                    <button class='btn btn-success btn-block fw-bold border-black rounded' type='submit'>A G R E G A
+                        R</button>
                 </div>
             </form>
         </div>
-        <div >
+        <div>
             {{#if userProducts}}
-            <table class="table table-bordered table-striped text-center rounded m-3">
-                <thead>
-                    <tr>
-                        <th colspan="5">PRODUCTOS CARGADOS</th>
-                    </tr>
-                    <tr>
-                        <th scope="col">CÓDIGO</th>
-                        <th scope="col">NOMBRE</th>
-                        <th scope="col">PRICE</th>
-                        <th scope="col">CATEGORÍA</th>
-                        <th scope="col">STOCK</th>
-                    </tr>
-                </thead>
-                <tbody id="contenedorProducts">
-                    {{#each userProducts}}
-                    <tr>
-                        <td>{{this.code}}</td>
-                        <td>{{this.title}}</td>
-                        <td>${{this.price}}</td>
-                        <td>{{this.category}}</td>
-                        <td>{{this.stock}} unidad/es</td>
-                    </tr>
-                    {{/each}}
-            {{/if}}
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped text-center rounded m-3">
+                    <thead>
+                        <tr>
+                            <th colspan="5">PRODUCTOS CARGADOS</th>
+                        </tr>
+                        <tr>
+                            <th scope="col">CÓDIGO</th>
+                            <th scope="col">NOMBRE</th>
+                            <th scope="col">PRICE</th>
+                            <th scope="col">CATEGORÍA</th>
+                            <th scope="col">STOCK</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contenedorProducts">
+                        {{#each userProducts}}
+                        <tr>
+                            <td>{{this.code}}</td>
+                            <td>{{this.title}}</td>
+                            <td>${{this.price}}</td>
+                            <td>{{this.category}}</td>
+                            <td>{{this.stock}} unidad/es</td>
+                        </tr>
+                        {{/each}}
+                        {{/if}}
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="text-center mt-3">
             <div class="d-grid gap-2" style="max-width: 300px; margin: 0 auto;">
-                <a href="/products" class="btn btn-success btn-block fw-bold border-black rounded">VOLVER A LA TIENDA</a>
+                <a href="/products" class="btn btn-success btn-block fw-bold border-black rounded">Volver a la
+                    Tienda</a>
             </div>
         </div>
     </div>

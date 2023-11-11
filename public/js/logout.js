@@ -1,3 +1,5 @@
+import config from "../../src/config/config";
+
 document.addEventListener("DOMContentLoaded", function () {
   const LogoutButton = document.getElementById("LogoutButton");
   if (LogoutButton) {
@@ -18,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then((data) => {
           console.log("Respuesta exitosa:", data);
-          window.location.href = `https://mustafa-backend-production.up.railway.app/sessions/login`;
+          window.location.href = `${config.domain}/sessions/login`;
         })
         .catch((error) => {
           console.error("Error:", error);

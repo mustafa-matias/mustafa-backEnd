@@ -2,6 +2,8 @@ import UsersDao from "../persistencia/mongoDb/users.dao.js";
 import userModel from "../persistencia/mongoDb/models/users.model.js";
 import { CurrentUserDTO } from "../controller/DTO/user.dto.js";
 import Mail from "../helpers/mail.js";
+import config from "../config/config.js";
+
 const mail = new Mail();
 export default class UsersService {
   constructor() {
@@ -71,7 +73,7 @@ export default class UsersService {
           mail.sendDeleteUser(
             user,
             "Se ha eliminado su cuenta",
-            `https://mustafa-backend-production.up.railway.app/api/sessions/register`
+            `${config.domain}/api/sessions/register`
           );
           await this.usersDao.deleteUsersById(user._id);
         }

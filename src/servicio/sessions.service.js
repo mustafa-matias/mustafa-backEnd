@@ -2,8 +2,7 @@ import SessionsDao from "../persistencia/mongoDb/sessions.dao.js";
 import userModel from "../persistencia/mongoDb/models/users.model.js";
 import { generateRandomCode } from "../../utils.js";
 import Mail from "../helpers/mail.js";
-import { isValidPassword, createHash } from "../../utils.js";
-
+import config from "../config/config.js";
 export default class SessionsService {
   constructor() {
     this.sessionDao = new SessionsDao();
@@ -23,7 +22,7 @@ export default class SessionsService {
       user.resetPasswordExpires = expirationDate;
 
       const mailer = new Mail();
-      const resetUrl = `https://mustafa-backend-production.up.railway.app/sessions/resetPassword/${token}`;
+      const resetUrl = `${config.domain}/sessions/resetPassword/${token}`;
 
       mailer.send(user, "Restablecer Contraseña", resetUrl);
 

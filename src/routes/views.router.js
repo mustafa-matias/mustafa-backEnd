@@ -12,6 +12,7 @@ import isCartUser from "./middlewares/isCartUser.middleware.js";
 import isPremium from "./middlewares/isPremium.middleware.js";
 import { calcularTotalProductosCarrrito } from "../../utils.js";
 import config from "../config/config.js";
+const domain = config.domain;
 
 router.get("/products", async (req, res) => {
   let page = parseInt(req.query.page);
@@ -25,14 +26,14 @@ router.get("/products", async (req, res) => {
   );
 
   products.prevLink = products.hasPrevPage
-    ? `${config.domain}products?page=${products.prevPage}`
+    ? `${config.domain}/products?page=${products.prevPage}`
     : "";
   products.nextLink = products.hasNextPage
-    ? `${config.domain}products?page=${products.nextPage}`
+    ? `${config.domain}/products?page=${products.nextPage}`
     : "";
   products.isValid = !(page <= 0 || page > products.totalPages);
 
-  res.render("products", { products, title: "Products", usuario });
+  res.render("products", { products, title: "Products", usuario, domain });
 });
 
 router.get("/products/realTimeProducts", isPremium, async (req, res) => {
@@ -63,7 +64,7 @@ router.get("/products/:pid", async (req, res, next) => {
   req.logger.info({ message: `id: ${pid}`, fecha: new Date() });
   try {
     let product = await productsModel.findOne({ _id: pid }).lean();
-    res.render("product", { product, title: product.title, usuario });
+    res.render("product", { product, title: product.title, usuario, domain });
   } catch (error) {
     next(error);
     req.logger.error({ message: `${error}`, fecha: new Date() });
@@ -80,7 +81,7 @@ router.get("/carts/:cid", isCartUser, async (req, res, next) => {
       .populate("products.product")
       .lean();
     const totalProductos = calcularTotalProductosCarrrito(cart);
-    res.render("cart", { title: "Cart", cart, totalProductos, usuario });
+    res.render("cart", { title: "Cart", cart, totalProductos, usuario, domain });
   } catch (error) {
     next(error);
     req.logger.error({ message: `${error}`, fecha: new Date() });
