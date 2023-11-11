@@ -4,13 +4,16 @@ document.addEventListener("DOMContentLoaded", function () {
   forgotPasswordForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const email = forgotPasswordForm.querySelector('input[name="email"]').value;
-    const emailJson = JSON.stringify({ email });
+    const emailJson = JSON.stringify({ email })
 
     fetch("/api/sessions/forgotPassword", {
       method: "POST",
-      body: emailJson
+      body: emailJson,
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
-      .then((response) => {
+    .then((response) => {
         if (response.status === 200) {
           return response.json();
         } else {
@@ -27,7 +30,8 @@ document.addEventListener("DOMContentLoaded", function () {
           icon: "success",
         });
         setTimeout(() => {
-          window.location.href = `https://mustafa-backend-production.up.railway.app/sessions/login`;
+          window.location.href =
+          `https://mustafa-backend-production.up.railway.app/sessions/login`;
         }, 1000);
       })
       .catch((error) => {

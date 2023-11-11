@@ -156,6 +156,6 @@ const specs = swaggerJSDoc(swaggerOptions);
 
 app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
-app.get("*", (req, res) => {
-  res.redirect("/products");
-});
+// app.get("*", (req, res) => {
+//   res.redirect("/products");
+// });
