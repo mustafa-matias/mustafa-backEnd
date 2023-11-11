@@ -1,5 +1,3 @@
-import config from "../../src/config/config";
-
 document.addEventListener("DOMContentLoaded", function () {
   const forgotPasswordForm = document.getElementById("forgotPassword");
 
