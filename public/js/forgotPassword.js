@@ -13,7 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => {
+    .then((response) => {
+        console.log(emailJson);
         if (response.status === 200) {
           return response.json();
         } else {
@@ -21,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       })
       .then((data) => {
+        console.log(emailJson);
         Swal.fire({
           toast: true,
           position: "top-end",
@@ -35,6 +37,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 1000);
       })
       .catch((error) => {
+        console.log(emailJson);
+
         Swal.fire({
           icon: "error",
           position: "top-end",
