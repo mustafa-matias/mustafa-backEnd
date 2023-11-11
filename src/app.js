@@ -45,7 +45,7 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 app.use(
   cors({
-    origin: "http://localhost:5050",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
@@ -88,22 +88,22 @@ socketServer.on("connection", (socket) => {
       category,
       owner,
     } = data;
-    try{
-    await productController.addProductController({
-      title,
-      description,
-      price,
-      thumbnail,
-      code,
-      stock,
-      status: true,
-      category,
-      owner,
-    });
-    socketServer.emit("imprimir", data);
-  }catch(error){
-    error: error.message
-  }
+    try {
+      await productController.addProductController({
+        title,
+        description,
+        price,
+        thumbnail,
+        code,
+        stock,
+        status: true,
+        category,
+        owner,
+      });
+      socketServer.emit("imprimir", data);
+    } catch (error) {
+      error: error.message;
+    }
   });
   socket.on("newProductRouter", async (data) => {
     socketServer.emit("postNewProduct", data);
@@ -156,6 +156,6 @@ const specs = swaggerJSDoc(swaggerOptions);
 
 app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
-app.get('*', (req, res) => {
-  res.redirect('/products');
+app.get("*", (req, res) => {
+  res.redirect("/products");
 });
