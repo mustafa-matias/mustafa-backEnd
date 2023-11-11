@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
   if (premiumForm) {
     premiumForm.addEventListener("click", (e) => {
       e.preventDefault();
-      const uid =  premiumForm.data-id-user;
-      console.log(uid)
+      const actionUrl = premiumForm.getAttribute("action");
+      const uid = actionUrl.split("/").pop();
 
       fetch(`/api/users/premium/${uid}`, {
         method: "PUT",

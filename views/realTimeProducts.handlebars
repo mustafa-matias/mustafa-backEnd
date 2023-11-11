@@ -87,6 +87,7 @@
                         </tr>
                     </thead>
                     <tbody id="contenedorProducts">
+                        {{#if userProducts}}
                         {{#each userProducts}}
                         <tr>
                             <td>{{this.code}}</td>
