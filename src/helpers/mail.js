@@ -8,6 +8,9 @@ export default class Mail {
       service: "gmail",
       port: 465,
       secure: true,
+      tls: {
+        rejectUnauthorized: false,
+      },
       auth: {
         user: config.userGmail,
         pass: config.passGmail,
