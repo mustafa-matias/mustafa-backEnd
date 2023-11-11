@@ -4,7 +4,7 @@ import __dirname from "../../utils.js";
 
 export default class Mail {
   constructor() {
-    this.transport = nodemailer.createTransport({
+    this.transport = nodemailer.createTransport(smtpTransport({
       service: "gmail",
       port: 465,
       secure: true,
@@ -12,7 +12,7 @@ export default class Mail {
         user: config.userGmail,
         pass: config.passGmail,
       },
-    });
+    }));
   }
   send = async (user, subject, url) => {
     const result = await this.transport.sendMail({
