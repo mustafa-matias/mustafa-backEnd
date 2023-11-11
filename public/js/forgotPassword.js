@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   forgotPasswordForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const email = forgotPasswordForm.querySelector('input[name="email"]').value;
+    console.log(email)
 
     fetch("/api/sessions/forgotPassword", {
       method: "POST",
