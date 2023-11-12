@@ -11,9 +11,6 @@ export default class Mail {
         user: config.userGmail,
         pass: config.passGmail,
       },
-      tls: {
-      rejectUnauthorized: false,
-    },
     });
   }
   send = async (user, subject, url) => {
