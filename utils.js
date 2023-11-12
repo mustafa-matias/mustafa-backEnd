@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 import { faker } from "@faker-js/faker";
 import path from "path";
 import fs from "fs";
-import { createHash } from "crypto";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

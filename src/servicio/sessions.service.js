@@ -4,6 +4,7 @@ import { generateRandomCode } from "../../utils.js";
 import Mail from "../helpers/mail.js";
 import config from "../config/config.js";
 import { isValidPassword } from "../../utils.js";
+import { createHash } from "../../utils.js";
 export default class SessionsService {
   constructor() {
     this.sessionDao = new SessionsDao();
