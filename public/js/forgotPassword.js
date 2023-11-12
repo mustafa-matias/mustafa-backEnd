@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
           position: "top-end",
           showConfirmButton: false,
           timer: 5000,
-          title: "Verifique su casilla de correo",
+          title: "Verifique su casilla de correo (no deseado)",
           icon: "success",
         });
         setTimeout(() => {
