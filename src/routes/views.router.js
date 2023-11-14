@@ -133,8 +133,9 @@ router.get("/users/:uid/documents", (req, res) => {
 });
 
 router.get("/users/details", isAdmin, async (req, res) => {
+  let usuario = req.session.user;
   let users = await usersController.getUsersController()
-  res.render("users", { title: "Users", users, domain });
+  res.render("users", { title: "Users", users, usuario });
 });
 
 
