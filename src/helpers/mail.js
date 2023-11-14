@@ -180,10 +180,10 @@ export default class Mail {
     });
     return result;
   };
-  sendDeleteProduct = async (subject, product) => {
+  sendDeleteProduct = async (subject, email, product) => {
     const result = await this.transport.sendMail({
       from: config.userGmail,
-      to: product.owner,
+      to: email,
       subject,
       html: `<html>
       <head>

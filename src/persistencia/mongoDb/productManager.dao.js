@@ -56,7 +56,7 @@ export default class ProductDao {
       }
       if (product.owner != "admin") {
         mail.sendDeleteProduct(
-          "Se ha elimanado su producto",
+          "Producto eliminado", product.owner,
           product
         );
       }
