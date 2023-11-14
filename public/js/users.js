@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
               window.location.replace(
                 "https://mustafa-backend-production.up.railway.app/users/details"
               );
-            }, 1000);
+            }, 200);
           } else {
             Swal.fire({
               toast: true,
