@@ -14,6 +14,18 @@ export default class UsersDao {
     }
   };
 
+  updateAdminUserPremiumDao = async (user) => {
+    try {
+      const result = await user.save();
+      return result;
+    } catch (error) {
+      throw new Error(
+        "Error al guardar en base de datos"
+      );
+    }
+  };
+
+
   deleteUsersById = async (id) => {
   try {
     const result = await userModel.findByIdAndRemove(id);

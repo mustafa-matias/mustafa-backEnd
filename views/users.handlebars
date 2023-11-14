@@ -1,0 +1,46 @@
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="../css/chat.css">
+<div class="">
+    <div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center rounded m-3">
+                <thead>
+                    <tr>
+                        <th colspan="6">Usuarios</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Rol</th>
+                        <th scope="col">Premium</th>
+                        <th scope="col">Cambiar a Premium / Clasicc</th>
+                        <th scope="col">Ult. Conexión</th>
+                        <th scope="col">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="contenedorProducts">
+                    {{#if users}}
+                    {{#each users}}
+                    <tr>
+                        <td>{{this.email}}</td>
+                        <td>{{this.role}}</td>
+                        <td>{{this.premium}}</td>
+                        <td><button class="btn btn-success btn-update-user" data-update-id="{{this._id}}"><i class="fa fa-check"></i></button></td>
+                        <td>${{this.last_connection}}</td>
+                        <td><button class="btn btn-danger btn-delete-user" data-user-id="{{this._id}}"><i class="fa fa-trash"></i></button></td>
+                    </tr>
+                    {{/each}}
+                    {{/if}}
+                </tbody>
+            </table>
+            <div class="text-center">
+                <button class="btn btn-danger" id="eliminarInactivos">Eliminar usuarios inactivos (2 días)</button>
+                <a href="/products">
+                    <button class="btn btn-secondary">Volver a la tienda</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/users.js"></script>

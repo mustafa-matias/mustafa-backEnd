@@ -39,6 +39,24 @@ export default class UsersService {
     }
   }
 
+  async updateAdminUserPremiumService(req, userID) {
+    try {
+      const user = await userModel.findOne({ _id: userID });
+      if (!user) {
+        throw new Error("Usuario no encontrado");
+      }
+      if (user.premium === true && user.role != "admin") {
+        user.premium = false;
+      }else{
+        user.premium =true;
+      }
+      return await this.usersDao.updateAdminUserPremiumDao(user);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+
   async getUsersService() {
     try {
       const users = await userModel.find();
@@ -59,8 +77,8 @@ export default class UsersService {
     const currentTime = new Date();
     try {
       let users = await userModel.find();
-      if(!users){
-        throw new Error('Error al obtener los usuarios en la base de datos')
+      if (!users) {
+        throw new Error("Error al obtener los usuarios en la base de datos");
       }
       if (users.length > 0) {
         const usersToDelete = users.filter((user) => {
@@ -86,6 +104,19 @@ export default class UsersService {
     }
   }
 
+  async deleteUserService(userID) {
+    try {
+      const user = await userModel.findOne({ _id: userID });
+      if (!user) {
+        throw new Error("Usuario no encontrado");
+      }
+      let result = await userModel.deleteOne({ _id: userID });
+      return result;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
   async documentsService(req, files, user) {
     try {
       if (!files.fotoPerfil) {
@@ -98,25 +129,31 @@ export default class UsersService {
         throw new Error("No se cargo la foto DNI Dorso");
       }
       let urlFotoPerfil = files.fotoPerfil[0].path;
-      let urlFotoPerfilUpdate = urlFotoPerfil.substring(urlFotoPerfil.indexOf("/uploads"));
-      
+      let urlFotoPerfilUpdate = urlFotoPerfil.substring(
+        urlFotoPerfil.indexOf("/uploads")
+      );
+
       let urlDniFrente = files.dniFrente[0].path;
-      let urlDniFrenteUpdate = urlDniFrente.substring(urlDniFrente.indexOf("/uploads"));
-      
+      let urlDniFrenteUpdate = urlDniFrente.substring(
+        urlDniFrente.indexOf("/uploads")
+      );
+
       let urlDniDorso = files.dniDorso[0].path;
-      let urlDniDorsoUpdate = urlDniDorso.substring(urlDniDorso.indexOf("/uploads"));
+      let urlDniDorsoUpdate = urlDniDorso.substring(
+        urlDniDorso.indexOf("/uploads")
+      );
 
       const fotoPerfil = {
         name: files.fotoPerfil[0].filename,
-        reference: urlFotoPerfilUpdate
+        reference: urlFotoPerfilUpdate,
       };
       const dniFrente = {
         name: files.dniFrente[0].filename,
-        reference: urlDniFrenteUpdate
+        reference: urlDniFrenteUpdate,
       };
       const dniDorso = {
         name: files.dniDorso[0].filename,
-        reference: urlDniDorsoUpdate
+        reference: urlDniDorsoUpdate,
       };
       if (user.documents.length < 3) {
         user.documents.push(fotoPerfil, dniFrente, dniDorso);

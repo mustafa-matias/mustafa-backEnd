@@ -4,19 +4,34 @@ import UsersController from "../controller/users.controller.js";
 const usersController = new UsersController();
 import { uploader } from "../../utils.js";
 import checkDocuments from "./middlewares/checkDocuments.js";
+import isAdmin from "./middlewares/isAdmin.middleware.js";
 
 router.put("/premium/:id", checkDocuments, async (req, res) => {
   try {
     const result = await usersController.updateUserPremiumController(req);
     res.send({
       message: "La actualización se realizó correctamente",
-      status: "éxito",
+      status: "success",
       premium: result.premium,
     });
   } catch (error) {
     res.status(500).send({ error: error.message });
   }
 });
+
+router.put("/premium/admin/:id", isAdmin , async (req, res) => {
+  try {
+    const result = await usersController.updateAdminUserPremiumController(req);
+    res.send({
+      message: "La actualización se realizó correctamente",
+      status: "success",
+      premium: result.premium,
+    });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+});
+
 
 router.post(
   "/:uid/documents",
@@ -35,7 +50,7 @@ router.post(
   }
 );
 
-router.get("/", async (req, res) => {
+router.get("/", isAdmin, async (req, res) => {
   try {
     const users = await usersController.getUsersController();
     res.send({ status: "success", payload: users });
@@ -44,7 +59,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/", isAdmin, async (req, res) => {
   try {
     const users = await usersController.deleteUsersController();
     if (users) {
@@ -56,5 +71,17 @@ router.delete("/", async (req, res) => {
     res.status(500).send({ error: error.message });
   }
 });
+
+router.delete("/:id", isAdmin, async (req, res) => {
+  try {
+    const user = await usersController.deleteUserController(req);
+    if (user) {
+      res.status(200).send({ status: "success", payload: user });
+    } 
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+});
+
 
 export default router;

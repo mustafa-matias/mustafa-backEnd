@@ -21,6 +21,21 @@ export default class UsersController {
     }
   }
 
+  async updateAdminUserPremiumController(req) {
+    const userID = req.params.id;
+    try {
+      if (!mongoose.Types.ObjectId.isValid(userID)) {
+        throw new Error(
+          "Id usuario invalido"
+        );
+      }
+      return await this.usersService.updateAdminUserPremiumService(req, userID);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+
   async getUsersController() {
       return await this.usersService.getUsersService();
   }
@@ -28,6 +43,21 @@ export default class UsersController {
   async deleteUsersController() {
       return await this.usersService.deleteUsersService();
   }
+
+  async deleteUserController(req){
+    const userID = req.params.id;
+    try {
+      if (!mongoose.Types.ObjectId.isValid(userID)) {
+        throw new Error(
+          "Id usuario invalido"
+        );
+      }
+      return await this.usersService.deleteUserService(userID);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
 
   async documentsController(req) {
     const files = req.files;

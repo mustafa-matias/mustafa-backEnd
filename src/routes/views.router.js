@@ -13,6 +13,9 @@ import isPremium from "./middlewares/isPremium.middleware.js";
 import { calcularTotalProductosCarrrito } from "../../utils.js";
 import config from "../config/config.js";
 const domain = config.domainApp;
+import UsersController from "../controller/users.controller.js";
+import isAdmin from "./middlewares/isAdmin.middleware.js";
+const usersController = new UsersController();
 
 router.get("/products", async (req, res) => {
   let page = parseInt(req.query.page);
@@ -128,5 +131,11 @@ router.get("/users/:uid/documents", (req, res) => {
   let usuario = req.session.user;
   res.render("addDocuments", { title: "Add Documents", usuario });
 });
+
+router.get("/users/details", isAdmin, async (req, res) => {
+  let users = await usersController.getUsersController()
+  res.render("users", { title: "Users", users, domain });
+});
+
 
 export default router;

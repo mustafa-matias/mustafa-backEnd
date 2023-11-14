@@ -61,7 +61,7 @@ export default class ProductService {
       if (!product) {
         throw new Error("No se encontro el producto a eliminar");
       }
-      return await this.productDao.deleteProductByid(id);
+      return await this.productDao.deleteProductByid(id, product);
     } catch (error) {
       throw new Error(error.message);
     }
