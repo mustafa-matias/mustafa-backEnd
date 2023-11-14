@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const elimanarInactivosButtom = document.getElementById("eliminarInactivos");
 
-  if (elimanarInactivosButton) {
+  if (elimanarInactivosButtom) {
     elimanarInactivosButtom.addEventListener("click", function () {
       fetch(`/api/users`, {
         method: "DELETE",
