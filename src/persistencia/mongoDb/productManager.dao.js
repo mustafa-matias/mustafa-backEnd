@@ -1,6 +1,7 @@
 import { productsModel } from "./models/products.model.js";
 import Mail from "../../helpers/mail.js";
 const mail = new Mail();
+import config from "../../config/config.js";
 
 export default class ProductDao {
   async getProducts() {
@@ -54,9 +55,10 @@ export default class ProductDao {
       if (!result) {
         throw new Error("No se pudo eliminar el producto de la base de datos");
       }
-      if (product.owner != "admin") {
+      if (product.owner != config.adminEmail) {
+        const email = product.owner
         mail.sendDeleteProduct(
-          "Producto eliminado", product.owner,
+          "Producto eliminado", email,
           product
         );
       }
