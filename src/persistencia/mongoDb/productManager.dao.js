@@ -47,7 +47,7 @@ export default class ProductDao {
     }
   }
 
-  async deleteProductByid(id, product) {
+  async deleteProductByid(id) {
     try {
       let product = await productsModel.deleteOne({ _id: id });
       if (!product) {
