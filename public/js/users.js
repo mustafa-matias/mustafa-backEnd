@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
         confirmButtonText: "Sí",
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch(`/api/users/premium/admin/${userId}`, {
+          fetch(`/api/users/role/${userId}`, {
             method: "PUT",
           })
             .then((response) => response.json())

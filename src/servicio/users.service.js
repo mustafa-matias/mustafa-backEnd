@@ -45,10 +45,10 @@ export default class UsersService {
       if (!user) {
         throw new Error("Usuario no encontrado");
       }
-      if (user.premium === true && user.role != "admin") {
-        user.premium = false;
+      if (user.role === "user") {
+        user.role = "admin";
       }else{
-        user.premium =true;
+        user.role = "user";
       }
       return await this.usersDao.updateAdminUserPremiumDao(user);
     } catch (error) {

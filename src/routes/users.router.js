@@ -19,13 +19,13 @@ router.put("/premium/:id", checkDocuments, async (req, res) => {
   }
 });
 
-router.put("/premium/admin/:id", isAdmin , async (req, res) => {
+router.put("/role/:id", isAdmin , async (req, res) => {
   try {
     const result = await usersController.updateAdminUserPremiumController(req);
     res.send({
       message: "La actualización se realizó correctamente",
       status: "success",
-      premium: result.premium,
+      premium: result.role,
     });
   } catch (error) {
     res.status(500).send({ error: error.message });
