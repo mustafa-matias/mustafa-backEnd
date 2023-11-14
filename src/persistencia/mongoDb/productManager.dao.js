@@ -1,7 +1,8 @@
 import { productsModel } from "./models/products.model.js";
 import Mail from "../../helpers/mail.js";
+const mail = new Mail();
+
 export default class ProductDao {
-  
   async getProducts() {
     let products = await productsModel.find().lean();
     return products;
@@ -47,15 +48,17 @@ export default class ProductDao {
     }
   }
 
-  async deleteProductByid(id) {
+  async deleteProductByid(id, product) {
     try {
-      let product = await productsModel.deleteOne({ _id: id });
-      if (!product) {
+      let result = await productsModel.deleteOne({ _id: id });
+      if (!result) {
         throw new Error("No se pudo eliminar el producto de la base de datos");
       }
-      if(product.owner != 'admin'){
-        const mail = new Mail();
-        mail.sendMail("Se ha elimanado su producto",product);
+      if (product.owner != "admin") {
+        mail.sendDeleteProduct(
+          "Se ha elimanado su producto",
+          product
+        );
       }
       return;
     } catch (error) {
